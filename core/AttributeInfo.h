@@ -1,8 +1,6 @@
 #ifndef _ATTRIBUTEINFO_
 #define _ATTRIBUTEINFO_
 
-
-
 /// <summary>
 /// Interface implemented by classes that store information for a particular attribute
 /// type.
@@ -10,9 +8,8 @@
 class AttributeInfo
 {
 
-    /// <summary>
-    /// Methods depend on the information that is stored. </summary>
+	/// <summary>
+	/// Methods depend on the information that is stored. </summary>
 };
-
 
 #endif	// _ATTRIBUTEINFO_

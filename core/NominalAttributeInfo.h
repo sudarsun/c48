@@ -1,7 +1,7 @@
 #ifndef _NOMINALATTRIBUTEINFO_
 #define _NOMINALATTRIBUTEINFO_
 
-#include "core/AttributeInfo.h"
+#include "AttributeInfo.h"
 #include <string>
 #include <unordered_map>
 #include <vector>

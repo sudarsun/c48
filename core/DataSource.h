@@ -12,9 +12,9 @@ class Instance;
 class Instances;
 
 
-    /// <summary>
-    /// Utility routines for the converter package.
-    /// </summary>
+/// <summary>
+/// Utility routines for the converter package.
+/// </summary>
 class DataSource {
 	/// <summary>
 	/// Helper class for loading data from files. Before the data can be read again, one has to
@@ -22,7 +22,7 @@ class DataSource {
 	/// with an Instances object, in order to provide a unified interface to files
 	/// and already loaded datasets.
 	/// </summary>
-	private:
+private:
 	/// <summary>
 	/// Describe variable <code>msourceFileData</code> here.
 	/// </summary>
@@ -57,22 +57,22 @@ class DataSource {
 
 	Instances *mStructure;
 
-	Instances *getInstance( std::fstream& );
-	Instance *getInstance( std::string );
-	std::string removeTrailingPeriod( std::string &val );
-	void readHeader( std::fstream&);
+	Instances *getInstance(std::fstream&);
+	Instance *getInstance(std::string);
+	std::string removeTrailingPeriod(std::string &val);
+	void readHeader(std::fstream&);
 
-    public:
+public:
 
-	DataSource( const std::string &location );
-	Instances *getDataSet( int classIndex );
-	Instances *getStructure( int classIndex );
-	bool hasElements( Instances *structure );
-	Instance *nextElement( Instances *dataset );
+	DataSource(const std::string &location);
+	Instances *getDataSet(int classIndex);
+	Instances *getStructure(int classIndex);
+	bool hasElements(Instances *structure);
+	Instance *nextElement(Instances *dataset);
 	void reset();
 	Instances *getStructure();
 	Instances *getDataSet();
-	Instance *getNextInstance( Instances *structure );
-      };
+	Instance *getNextInstance(Instances *structure);
+};
 
 #endif	// _DATASOURCE_

@@ -1,0 +1,4 @@
+[Project]
+Name=C48
+Manager=KDevCMakeManager
+VersionControl=kdevgit
