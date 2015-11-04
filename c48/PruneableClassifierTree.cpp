@@ -42,7 +42,7 @@ void PruneableClassifierTree::prune()
 	{
 
 		// Prune all subtrees.
-		for (int i = 0; i < msons::length; i++)
+		for (int i = 0; i < msons.size(); i++)
 		{
 			son(i)->prune();
 		}
@@ -52,7 +52,7 @@ void PruneableClassifierTree::prune()
 		{
 
 			// Free son Trees
-			msons = nullptr;
+			msons.clear();
 			misLeaf = true;
 
 			// Get NoSplit Model for node.
@@ -84,7 +84,7 @@ double PruneableClassifierTree::errorsForTree()
 		{
 			if (Utils::eq(localModel()->distribution()->perBag(i), 0))
 			{
-				errors += mtest.perBag(i) - mtest.perClassPerBag(i, localModel()->distribution()->maxClass());
+				errors += mtest->perBag(i) - mtest->perClassPerBag(i, localModel()->distribution()->maxClass());
 			}
 			else
 			{

@@ -62,13 +62,19 @@ public:
 	virtual void setWeight(double weight);
 	virtual bool isMissing(int attIndex);
 	virtual Instance *lastInstance();
+	virtual double value(int attIndex);
 
 	virtual void Sort(int attIndex);
 	virtual void Sort(Attribute *att);
+	virtual void sortBasedOnNominalAttribute(int attIndex);
 	void deleteWithMissingClass();
 	void deleteWithMissing(Attribute *att);
 	void deleteWithMissing(int attIndex);
 	double sumOfWeights();
+	std::string toString();
+	virtual Instances *trainCV(int numFolds, int numFold);
+	virtual Instances *testCV(int numFolds, int numFold);
+
 };
 
 

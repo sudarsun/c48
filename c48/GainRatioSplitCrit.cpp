@@ -14,7 +14,8 @@ double GainRatioSplitCrit::splitCritValue(Distribution *bags) {
 	if (Utils::eq(numerator, 0)) {
 		return std::numeric_limits<double>::max();
 	}
-	denumerator = splitEnt(bags);
+	// !Need to check here!
+	denumerator = splitEnt(bags, 0);
 
 	// Test if split is trivial.
 	if (Utils::eq(denumerator, 0)) {
@@ -55,5 +56,5 @@ double GainRatioSplitCrit::splitEnt(Distribution *bags, double totalnoInst) {
 		returnValue = returnValue - lnFunc(noUnknown);
 		returnValue = returnValue + lnFunc(totalnoInst);
 	}
-	return returnValue / ContingencyTables::log2;
+	return returnValue / log(2);
 }

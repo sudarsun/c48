@@ -22,7 +22,7 @@ double EntropyBasedSplitCrit::oldEnt(Distribution *bags) {
 	for (j = 0; j < bags->numClasses(); j++) {
 		returnValue = returnValue + lnFunc(bags->perClass(j));
 	}
-	return (lnFunc(bags->total()) - returnValue) / ContingencyTables::log2;
+	return (lnFunc(bags->total()) - returnValue) / log(2);
 }
 
 double EntropyBasedSplitCrit::newEnt(Distribution *bags) {
@@ -36,7 +36,7 @@ double EntropyBasedSplitCrit::newEnt(Distribution *bags) {
 		}
 		returnValue = returnValue - lnFunc(bags->perBag(i));
 	}
-	return -(returnValue / ContingencyTables::log2);
+	return -(returnValue / log(2));
 }
 
 double EntropyBasedSplitCrit::splitEnt(Distribution *bags) {
@@ -47,5 +47,5 @@ double EntropyBasedSplitCrit::splitEnt(Distribution *bags) {
 	for (i = 0; i < bags->numBags(); i++) {
 		returnValue = returnValue + lnFunc(bags->perBag(i));
 	}
-	return (lnFunc(bags->total()) - returnValue) / ContingencyTables::log2;
+	return (lnFunc(bags->total()) - returnValue) / log(2);
 }

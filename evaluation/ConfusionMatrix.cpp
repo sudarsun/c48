@@ -21,7 +21,7 @@ namespace weka {
             ConfusionMatrix *ConfusionMatrix::makeWeighted( CostMatrix *costs ) throw( std::exception ) {
 
               if( costs->size() != size() ) {
-                throw std::exception( L"Cost and confusion matrices must be the same size" );
+                throw std::exception( "Cost and confusion matrices must be the same size" );
               }
               ConfusionMatrix *weighted = new ConfusionMatrix( m_ClassNames );
               for( int row = 0; row < size(); row++ ) {
@@ -52,10 +52,10 @@ namespace weka {
             void ConfusionMatrix::addPrediction( NominalPrediction *pred ) throw( std::exception ) {
 
               if( pred->predicted() == NominalPrediction::MISSING_VALUE ) {
-                throw std::exception( L"No predicted value given." );
+                throw std::exception( "No predicted value given." );
               }
               if( pred->actual() == NominalPrediction::MISSING_VALUE ) {
-                throw std::exception( L"No actual value given." );
+                throw std::exception( "No actual value given." );
               }
               set( static_cast<int>( pred->actual() ), static_cast<int>(pred->predicted()), get(static_cast<int>(pred->actual()), static_cast<int>(pred->predicted())) + pred->weight() );
 
@@ -131,12 +131,12 @@ namespace weka {
 
             std::wstring ConfusionMatrix::toString() {
 
-              return toString( L"=== Confusion Matrix ===\n" );
+              return toString( "=== Confusion Matrix ===\n" );
             }
 
             std::wstring ConfusionMatrix::toString( const std::wstring &title ) {
 
-              StringBuffer *text = new StringBuffer();
+              std::string text = "";
               std::vector<wchar_t> IDChars = { L'a', L'b', L'c', L'd', L'e', L'f', L'g', L'h', L'i', L'j', L'k', L'l', L'm', L'n', L'o', L'p', L'q', L'r', L's', L't', L'u', L'v', L'w', L'x', L'y', L'z' };
               int IDWidth;
               bool fractional = false;
@@ -161,23 +161,23 @@ namespace weka {
               }
 
               IDWidth = 1 + std::max( static_cast<int>( log( maxval ) / log( 10 ) + ( fractional ? 3 : 0 ) ), static_cast<int>( log( size() ) / log(IDChars.size()) ) );
-              text->append( title )->append( L"\n" );
+              text.append( title ).append( "\n" );
               for( int i = 0; i < size(); i++ ) {
                 if( fractional ) {
-                  text->append( L" " )->append( num2ShortID( i, IDChars, IDWidth - 3 ) )->append( L"   " );
+                  text.append( " " ).append( num2ShortID( i, IDChars, IDWidth - 3 ) ).append( "   " );
                 } else {
-                  text->append( L" " )->append( num2ShortID( i, IDChars, IDWidth ) );
+                  text.append( " " ).append( num2ShortID( i, IDChars, IDWidth ) );
                 }
               }
-              text->append( L"     actual class\n" );
+              text.append( "     actual class\n" );
               for( int i = 0; i < size(); i++ ) {
                 for( int j = 0; j < size(); j++ ) {
-                  text->append( L" " )->append( Utils::doubleToString( get( i, j ), IDWidth, ( fractional ? 2 : 0 ) ) );
+                  text.append( " " ).append( Utils::doubleToString( get( i, j ), IDWidth, ( fractional ? 2 : 0 ) ) );
                 }
-                text->append( L" | " )->append( num2ShortID( i, IDChars, IDWidth ) )->append( L" = " )->append( m_ClassNames[i] )->append( L"\n" );
+                text.append( " | " ).append( num2ShortID( i, IDChars, IDWidth ) ).append( " = " ).append( m_ClassNames[i] ).append( "\n" );
               }
 //JAVA TO C++ CONVERTER TODO TASK: There is no native C++ equivalent to 'toString':
-              return text->toString();
+              return text.toString();
             }
 
             std::wstring ConfusionMatrix::num2ShortID( int num, std::vector<wchar_t> &IDChars, int IDWidth ) {
@@ -200,7 +200,7 @@ namespace weka {
             }
 
             std::wstring ConfusionMatrix::getRevision() {
-              return RevisionUtils::extract( L"$Revision: 10169 $" );
+              return RevisionUtils::extract( "$Revision: 10169 $" );
             }
         }
     }

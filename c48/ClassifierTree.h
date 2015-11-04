@@ -6,7 +6,7 @@
 #include <list>
 #include <stdexcept>
 
-//JAVA TO C++ CONVERTER NOTE: Forward class declarations:
+// Forward class declarations:
 class ModelSelection;
 class ClassifierSplitModel;
 class Instances;
@@ -17,8 +17,6 @@ class Instance;
 /// <summary>
 /// Class for handling a tree structure used for classification.
 ///
-/// @author Eibe Frank (eibe@cs.waikato.ac.nz)
-/// @version $Revision$
 /// </summary>
 class ClassifierTree  {
 
@@ -156,19 +154,6 @@ public:
 	virtual std::string prefix();
 
 	/// <summary>
-	/// Returns source code for the tree as an if-then statement. The class is
-	/// assigned to variable "p", and assumes the tested instance is named "i". The
-	/// results are returned as two stringbuffers: a section of code for assignment
-	/// of the class, and a section of code containing support code (eg: other
-	/// support methods).
-	/// </summary>
-	/// <param name="className"> the classname that this static classifier has </param>
-	/// <returns> an array containing two stringbuffers, the first string containing
-	///         assignment code, and the second containing source for support code. </returns>
-	/// <exception cref="Exception"> if something goes wrong </exception>
-	virtual std::vector<std::string*> toSource(const std::string &className);
-
-	/// <summary>
 	/// Returns number of leaves in tree structure.
 	/// </summary>
 	/// <returns> the number of leaves </returns>
@@ -211,21 +196,21 @@ protected:
 	/// <param name="text"> for outputting the structure </param>
 	/// <exception cref="Exception"> if something goes wrong </exception>
 private:
-	void dumpTree(int depth, std::string *text);
+	void dumpTree(int depth, std::string text);
 
 	/// <summary>
 	/// Help method for printing tree structure as a graph.
 	/// </summary>
 	/// <param name="text"> for outputting the tree </param>
 	/// <exception cref="Exception"> if something goes wrong </exception>
-	void graphTree(std::string *text);
+	void graphTree(std::string text);
 
 	/// <summary>
 	/// Prints the tree in prefix form
 	/// </summary>
 	/// <param name="text"> the buffer to output the prefix form to </param>
 	/// <exception cref="Exception"> if something goes wrong </exception>
-	void prefixTree(std::string *text);
+	void prefixTree(std::string text);
 
 	/// <summary>
 	/// Help method for computing class probabilities of a given instance.

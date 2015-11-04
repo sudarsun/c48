@@ -72,7 +72,7 @@ void ClassifierTree::buildTree(Instances *data, bool keepData) throw(std::except
 
 void ClassifierTree::buildTree(Instances *train, Instances *test, bool keepData) throw(std::exception) {
 
-	std::vector<Instances*> localTrain, *localTest;
+	std::vector<Instances*> localTrain, localTest;
 	int i;
 
 	if (keepData) {
@@ -178,26 +178,26 @@ int ClassifierTree::graphType() {
 
 std::string ClassifierTree::graph() throw(std::exception) {
 
-	StringBuffer *text = new StringBuffer();
+	std::string text = "";
 
 	assignIDs(-1);
-	text->append(L"digraph J48Tree {\n");
+	text.append("digraph J48Tree {\n");
 	if (misLeaf) {
-		text->append(std::string(L"N") + mid + std::string(L" [label=\"") + Utils::backQuoteChars(mlocalModel->dumpLabel(0, mtrain)) + std::string(L"\" ") + std::string(L"shape=box style=filled "));
+		text.append(std::string("N") + std::to_string(mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->dumpLabel(0, mtrain)) + std::string("\" ") + std::string("shape=box style=filled "));
 		if (mtrain != nullptr && mtrain->numInstances() > 0) {
-			text->append(std::string(L"data =\n") + mtrain + std::string(L"\n"));
-			text->append(L",\n");
+			text.append(std::string("data =\n") + mtrain->toString()+ std::string("\n"));
+			text.append(",\n");
 
 		}
-		text->append(L"]\n");
+		text.append("]\n");
 	}
 	else {
-		text->append(std::string(L"N") + mid + std::string(L" [label=\"") + Utils::backQuoteChars(mlocalModel->leftSide(mtrain)) + std::string(L"\" "));
+		text.append(std::string("N") + std::to_string(mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->leftSide(mtrain)) + std::string("\" "));
 		if (mtrain != nullptr && mtrain->numInstances() > 0) {
-			text->append(std::string(L"data =\n") + mtrain + std::string(L"\n"));
-			text->append(L",\n");
+			text.append(std::string("data =\n") + mtrain->toString() + std::string("\n"));
+			text.append(",\n");
 		}
-		text->append(L"]\n");
+		text.append("]\n");
 		graphTree(text);
 	}
 
@@ -221,48 +221,6 @@ std::string ClassifierTree::prefix() throw(std::exception) {
 	return text;
 }
 
-std::vector<std::string> ClassifierTree::toSource(const std::string &className)  {
-
-	std::vector<StringBuffer*> result(2);
-	if (misLeaf) {
-		result[0] = new StringBuffer(std::string(L"    p = ") + mlocalModel->distribution().maxClass(0) + std::string(L";\n"));
-		result[1] = new StringBuffer(L"");
-	}
-	else {
-		StringBuffer *text = new StringBuffer();
-		StringBuffer *atEnd = new StringBuffer();
-
-		long long printID = ClassifierTree::nextID();
-
-		text->append(L"  static double N")->append(int::toHexString(mlocalModel->hashCode()) + printID)->append(L"(Object []i) {\n")->append(L"    double p = Double.NaN;\n");
-
-		text->append(L"    if (")->append(mlocalModel->sourceExpression(-1, mtrain))->append(L") {\n");
-		text->append(L"      p = ")->append(mlocalModel->distribution().maxClass(0))->append(L";\n");
-		text->append(L"    } ");
-		for (int i = 0; i < msons.size(); i++) {
-			text->append(std::string(L"else if (") + mlocalModel->sourceExpression(i, mtrain) + std::string(L") {\n"));
-			if (msons[i]->misLeaf) {
-				text->append(std::string(L"      p = ") + mlocalModel->distribution().maxClass(i) + std::string(L";\n"));
-			}
-			else {
-				std::vector<StringBuffer*> sub = msons[i]->toSource(className);
-				text->append(sub[0]);
-				atEnd->append(sub[1]);
-			}
-			text->append(L"    } ");
-			if (i == msons.size() - 1) {
-				text->append(L'\n');
-			}
-		}
-
-		text->append(L"    return p;\n  }\n");
-
-		result[0] = new StringBuffer(std::string(L"    p = ") + className + std::string(L".N"));
-		result[0]->append(int::toHexString(mlocalModel->hashCode()) + printID)->append(L"(i);\n");
-		result[1] = text->append(atEnd);
-	}
-	return result;
-}
 
 int ClassifierTree::numLeaves() {
 
@@ -298,23 +256,22 @@ int ClassifierTree::numNodes() {
 std::string ClassifierTree::toString() {
 
 	try {
-		StringBuffer *text = new StringBuffer();
+		std::string text = "";
 
 		if (misLeaf) {
-			text->append(L": ");
-			text->append(mlocalModel->dumpLabel(0, mtrain));
+			text.append(": ");
+			text.append(mlocalModel->dumpLabel(0, mtrain));
 		}
 		else {
 			dumpTree(0, text);
 		}
-		text->append(std::string(L"\n\nNumber of Leaves  : \t") + numLeaves() + std::string(L"\n"));
-		text->append(std::string(L"\nSize of the tree : \t") + numNodes() + std::string(L"\n"));
+		text.append(std::string("\n\nNumber of Leaves  : \t") + std::to_string(numLeaves()) + std::string("\n"));
+		text.append(std::string("\nSize of the tree : \t") + std::to_string(numNodes()) + std::string("\n"));
 
-		//JAVA TO C++ CONVERTER TODO TASK: There is no native C++ equivalent to 'toString':
-		return text->toString();
+		return text;
 	}
 	catch (std::exception &e) {
-		return L"Can't print classification tree.";
+		return "Can't print classification tree.";
 	}
 }
 
@@ -334,21 +291,21 @@ ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) th
 	return newTree;
 }
 
-void ClassifierTree::dumpTree(int depth, StringBuffer *text) throw(std::exception) {
+void ClassifierTree::dumpTree(int depth, std::string text) throw(std::exception) {
 
 	int i, j;
 
 	for (i = 0; i < msons.size(); i++) {
-		text->append(L"\n");
+		text.append("\n");
 		;
 		for (j = 0; j < depth; j++) {
-			text->append(L"|   ");
+			text.append("|   ");
 		}
-		text->append(mlocalModel->leftSide(mtrain));
-		text->append(mlocalModel->rightSide(i, mtrain));
+		text.append(mlocalModel->leftSide(mtrain));
+		text.append(mlocalModel->rightSide(i, mtrain));
 		if (msons[i]->misLeaf) {
-			text->append(L": ");
-			text->append(mlocalModel->dumpLabel(i, mtrain));
+			text.append(": ");
+			text.append(mlocalModel->dumpLabel(i, mtrain));
 		}
 		else {
 			msons[i]->dumpTree(depth + 1, text);
@@ -356,51 +313,51 @@ void ClassifierTree::dumpTree(int depth, StringBuffer *text) throw(std::exceptio
 	}
 }
 
-void ClassifierTree::graphTree(StringBuffer *text) throw(std::exception) {
+void ClassifierTree::graphTree(std::string text) {
 
 	for (int i = 0; i < msons.size(); i++) {
-		text->append(std::string(L"N") + mid + std::string(L"->") + std::string(L"N") + msons[i]->mid + std::string(L" [label=\"") + Utils::backQuoteChars(mlocalModel->rightSide(i, mtrain)->trim()) + std::string(L"\"]\n"));
+		text.append(std::string("N") + std::to_string(mid) + std::string("->") + std::string("N") + std::to_string(msons[i]->mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->rightSide(i, mtrain)) + std::string("\"]\n"));
 		if (msons[i]->misLeaf) {
-			text->append(std::string(L"N") + msons[i]->mid + std::string(L" [label=\"") + Utils::backQuoteChars(mlocalModel->dumpLabel(i, mtrain)) + std::string(L"\" ") + std::string(L"shape=box style=filled "));
+			text.append(std::string("N") + std::to_string(msons[i]->mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->dumpLabel(i, mtrain)) + std::string("\" ") + std::string("shape=box style=filled "));
 			if (mtrain != nullptr && mtrain->numInstances() > 0) {
-				text->append(std::string(L"data =\n") + msons[i]->mtrain + std::string(L"\n"));
-				text->append(L",\n");
+				text.append(std::string("data =\n") + msons[i]->mtrain->toString() + std::string("\n"));
+				text.append(",\n");
 			}
-			text->append(L"]\n");
+			text.append("]\n");
 		}
 		else {
-			text->append(std::string(L"N") + msons[i]->mid + std::string(L" [label=\"") + Utils::backQuoteChars(msons[i]->mlocalModel.leftSide(mtrain)) + std::string(L"\" "));
+			text.append(std::string("N") + std::to_string(msons[i]->mid) + std::string(" [label=\"") + Utils::backQuoteChars(msons[i]->mlocalModel->leftSide(mtrain)) + std::string("\" "));
 			if (mtrain != nullptr && mtrain->numInstances() > 0) {
-				text->append(std::string(L"data =\n") + msons[i]->mtrain + std::string(L"\n"));
-				text->append(L",\n");
+				text.append(std::string("data =\n") + msons[i]->mtrain->toString() + std::string("\n"));
+				text.append(",\n");
 			}
-			text->append(L"]\n");
+			text.append("]\n");
 			msons[i]->graphTree(text);
 		}
 	}
 }
 
-void ClassifierTree::prefixTree(StringBuffer *text) throw(std::exception) {
+void ClassifierTree::prefixTree(std::string text) throw(std::exception) {
 
-	text->append(L"[");
-	text->append(mlocalModel->leftSide(mtrain) + std::string(L":"));
+	text.append("[");
+	text.append(mlocalModel->leftSide(mtrain) + std::string(":"));
 	for (int i = 0; i < msons.size(); i++) {
 		if (i > 0) {
-			text->append(L",\n");
+			text.append(",\n");
 		}
-		text->append(mlocalModel->rightSide(i, mtrain));
+		text.append(mlocalModel->rightSide(i, mtrain));
 	}
 	for (int i = 0; i < msons.size(); i++) {
 		if (msons[i]->misLeaf) {
-			text->append(L"[");
-			text->append(mlocalModel->dumpLabel(i, mtrain));
-			text->append(L"]");
+			text.append("[");
+			text.append(mlocalModel->dumpLabel(i, mtrain));
+			text.append("]");
 		}
 		else {
 			msons[i]->prefixTree(text);
 		}
 	}
-	text->append(L"]");
+	text.append("]");
 }
 
 double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, double weight) throw(std::exception) {
@@ -471,7 +428,7 @@ ClassifierTree *ClassifierTree::son(int index) {
 	return msons[index];
 }
 
-std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) throw(std::exception) {
+std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) {
 
 	// Set up array for membership values
 	std::vector<double> a(numNodes());
@@ -486,8 +443,10 @@ std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) thro
 	// While the queue is not empty
 	while (!queueOfNodes.empty()) {
 
-		a[index++] = queueOfWeights.pop_front();
-		ClassifierTree *node = queueOfNodes.pop_front();
+		a[index++] = queueOfWeights.front();
+		queueOfWeights.pop_front();
+		ClassifierTree *node = queueOfNodes.front();
+		queueOfNodes.pop_front();
 
 		// Is node a leaf?
 		if (node->misLeaf) {

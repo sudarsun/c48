@@ -110,7 +110,7 @@ void C45PruneableClassifierTree::prune()
 		{
 
 			// Free son Trees
-			//msons = nullptr;
+			msons.clear();
 			misLeaf = true;
 
 			// Get NoSplit Model for node.

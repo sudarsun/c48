@@ -219,7 +219,7 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
 	// Compute modified information gain for best split.
 	if (museMDLcorrection)
 	{
-		minfoGain = minfoGain - (Utils::log2(mindex) / msumOfWeights);
+		minfoGain = minfoGain - (Utils::getLog2(mindex) / msumOfWeights);
 	}
 	if (Utils::smOrEq(minfoGain, 0))
 	{
@@ -289,23 +289,23 @@ std::string C45Split::sourceExpression(int index, Instances *data)
 	{
 		return std::string("i[") + std::to_string(mattIndex) + std::string("] == null");
 	}
-	if (data->attribute(mattIndex).isNominal())
+	if (data->attribute(mattIndex)->isNominal())
 	{
-		expr = new StringBuffer("i[");
-		expr.append(mattIndex).append("]");
+		expr = "i[";
+		expr.append(std::to_string(mattIndex)).append("]");
 		expr.append(".equals(\"").append(data->attribute(mattIndex)->value(index)).append("\")");
 	}
 	else
 	{
 		expr = "((Double) i[";
-		expr.append(mattIndex).append("])");
+		expr.append(std::to_string(mattIndex)).append("])");
 		if (index == 0)
 		{
-			expr.append(".doubleValue() <= ").append(msplitPoint);
+			expr.append(".doubleValue() <= ").append(std::to_string(msplitPoint));
 		}
 		else
 		{
-			expr.append(".doubleValue() > ").append(msplitPoint);
+			expr.append(".doubleValue() > ").append(std::to_string(msplitPoint));
 		}
 	}
 
@@ -341,9 +341,7 @@ void C45Split::setSplitPoint(Instances *allInstances)
 std::vector<std::vector<double>> C45Split::minsAndMaxs(Instances *data, std::vector<std::vector<double>> &minsAndMaxs, int index)
 {
 
-	//JAVA TO C++ CONVERTER NOTE: The following call to the 'RectangularVectors' helper class reproduces the rectangular array initialization that is automatic in Java:
-	//ORIGINAL LINE: double[][] newMinsAndMaxs = new double[data.numAttributes()][2];
-	std::vector<std::vector<double>> newMinsAndMaxs = RectangularVectors::ReturnRectangularDoubleVector(data->numAttributes(), 2);
+	std::vector<std::vector<double>> newMinsAndMaxs(data->numAttributes(), std::vector<double>(2, 0));
 
 	for (int i = 0; i < data->numAttributes(); i++)
 	{
@@ -398,7 +396,7 @@ std::vector<double> C45Split::weights(Instance *instance)
 	}
 	else
 	{
-		return (0);
+		return{ 0 } ;
 	}
 }
 

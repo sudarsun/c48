@@ -33,6 +33,6 @@ double EntropySplitCrit::splitCritValue(Distribution *train, Distribution *test)
 		}
 	}
 
-	return result / ContingencyTables::log2;
+	return result / log(2);
 }
 

@@ -103,6 +103,9 @@
       <Filter>c48</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="core\ContingencyTables.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Attribute.h">
@@ -212,6 +215,12 @@
     </ClInclude>
     <ClInclude Include="c48\Stats.h">
       <Filter>c48</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Typedefs.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ContingencyTables.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

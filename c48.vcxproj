@@ -136,6 +136,7 @@
     <ClCompile Include="core\Attribute.cpp" />
     <ClCompile Include="core\AttributeMetaInfo.cpp" />
     <ClCompile Include="core\AttributeStats.cpp" />
+    <ClCompile Include="core\ContingencyTables.cpp" />
     <ClCompile Include="core\DataSource.cpp" />
     <ClCompile Include="core\DenseInstance.cpp" />
     <ClCompile Include="core\Instances.cpp" />
@@ -172,12 +173,14 @@
     <ClInclude Include="core\AttributeMetaInfo.h" />
     <ClInclude Include="core\AttributeStats.h" />
     <ClInclude Include="core\Consts.h" />
+    <ClInclude Include="core\ContingencyTables.h" />
     <ClInclude Include="core\DataSource.h" />
     <ClInclude Include="core\DenseInstance.h" />
     <ClInclude Include="core\Instance.h" />
     <ClInclude Include="core\Instances.h" />
     <ClInclude Include="core\NominalAttributeInfo.h" />
     <ClInclude Include="core\statistics.h" />
+    <ClInclude Include="core\Typedefs.h" />
     <ClInclude Include="core\Utils.h" />
     <ClInclude Include="evaluation\BatchPredictor.h" />
     <ClInclude Include="evaluation\ConfusionMatrix.h" />

@@ -234,3 +234,156 @@ double Instances::sumOfWeights()
 	return sum;
 }
 
+double Instances::value(int attIndex)
+{
+	std::cout << "should call DenseInstance value()";
+	return 0;
+}
+std::string Instances::toString()
+{
+	return "";
+}
+
+Instances *Instances::trainCV(int numFolds, int numFold)
+{
+
+	int numInstForFold, first, offset;
+	Instances *train;
+
+	if (numFolds < 2)
+	{
+		throw std::invalid_argument("Number of folds must be at least 2!");
+	}
+	if (numFolds > numInstances())
+	{
+		throw "Can't have more folds than instances!";
+	}
+	numInstForFold = numInstances() / numFolds;
+	if (numFold < numInstances() % numFolds)
+	{
+		numInstForFold++;
+		offset = numFold;
+	}
+	else
+	{
+		offset = numInstances() % numFolds;
+	}
+	train = new Instances( this, numInstances() - numInstForFold );
+	first = numFold * (numInstances() / numFolds) + offset;
+	copyInstances(0, train, first);
+	copyInstances(first + numInstForFold, train, numInstances() - first - numInstForFold);
+
+	return train;
+}
+
+Instances *Instances::testCV(int numFolds, int numFold)
+{
+
+	int numInstForFold, first, offset;
+	Instances *test;
+
+	if (numFolds < 2)
+	{
+		throw std::invalid_argument("Number of folds must be at least 2!");
+	}
+	if (numFolds > numInstances())
+	{
+		throw "Can't have more folds than instances!";
+	}
+	numInstForFold = numInstances() / numFolds;
+	if (numFold < numInstances() % numFolds)
+	{
+		numInstForFold++;
+		offset = numFold;
+	}
+	else
+	{
+		offset = numInstances() % numFolds;
+	}
+	test = new Instances( this, numInstForFold );
+	first = numFold * (numInstances() / numFolds) + offset;
+	copyInstances(first, test, numInstForFold);
+	return test;
+}
+
+void Instances::Sort(int attIndex)
+{
+
+	if (!attribute(attIndex)->isNominal())
+	{
+
+		// Use quicksort from Utils class for sorting
+		std::vector<double> vals(numInstances());
+		std::vector<Instance*> backup(vals.size());
+		for (int i = 0; i < vals.size(); i++)
+		{
+			Instance *inst = instance(i);
+			backup[i] = inst;
+			double val = inst->value(attIndex);
+			if (Utils::isMissingValue(val))
+			{
+				vals[i] = std::numeric_limits<double>::max();
+			}
+			else
+			{
+				vals[i] = val;
+			}
+		}
+
+		std::vector<int> sortOrder = Utils::sortWithNoMissingValues(vals);
+		for (int i = 0; i < vals.size(); i++)
+		{
+			mInstances[i] = backup[sortOrder[i]];
+		}
+	}
+	else
+	{
+		sortBasedOnNominalAttribute(attIndex);
+	}
+}
+
+void Instances::Sort(Attribute *att)
+{
+
+	Sort(att->index());
+}
+
+
+void Instances::sortBasedOnNominalAttribute(int attIndex)
+{
+
+	// Figure out number of instances for each attribute value
+	// and store original list of instances away
+	std::vector<int> counts((attribute(attIndex))->numValues());
+	std::vector<Instance*> backup(numInstances());
+	int j = 0;
+	for (auto inst : mInstances)
+	{
+		backup[j++] = inst;
+		if (!inst->isMissing(attIndex))
+		{
+			counts[static_cast<int>(inst->value(attIndex))]++;
+		}
+	}
+
+	// Indices to figure out where to add instances
+	std::vector<int> indices(counts.size());
+	int start = 0;
+	for (int i = 0; i < counts.size(); i++)
+	{
+		indices[i] = start;
+		start += counts[i];
+	}
+	for (auto inst : backup)
+	{
+		// Use backup here
+		if (!inst->isMissing(attIndex))
+		{
+			mInstances[indices[static_cast<int>(inst->value(attIndex))]++] = inst;
+		}
+		else
+		{
+			mInstances[start++] = inst;
+		}
+	}
+}
