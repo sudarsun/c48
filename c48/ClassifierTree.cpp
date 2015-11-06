@@ -25,7 +25,7 @@ ClassifierTree::ClassifierTree(ModelSelection *toSelectLocModel) {
 
 
 
-void ClassifierTree::buildClassifier(Instances *data) throw(std::exception) {
+void ClassifierTree::buildClassifier(Instances *data) {
 
 
 	// remove instances with missing class
@@ -35,7 +35,7 @@ void ClassifierTree::buildClassifier(Instances *data) throw(std::exception) {
 	buildTree(data, false);
 }
 
-void ClassifierTree::buildTree(Instances *data, bool keepData) throw(std::exception) {
+void ClassifierTree::buildTree(Instances *data, bool keepData) {
 
 	std::vector<Instances*> localInstances;
 
@@ -70,7 +70,7 @@ void ClassifierTree::buildTree(Instances *data, bool keepData) throw(std::except
 	}
 }
 
-void ClassifierTree::buildTree(Instances *train, Instances *test, bool keepData) throw(std::exception) {
+void ClassifierTree::buildTree(Instances *train, Instances *test, bool keepData) {
 
 	std::vector<Instances*> localTrain, localTest;
 	int i;
@@ -113,7 +113,7 @@ void ClassifierTree::buildTree(Instances *train, Instances *test, bool keepData)
 	}
 }
 
-double ClassifierTree::classifyInstance(Instance *instance) throw(std::exception) {
+double ClassifierTree::classifyInstance(Instance *instance) {
 
 	double maxProb = -1;
 	double currentProb;
@@ -143,7 +143,7 @@ void ClassifierTree::cleanup(Instances *justHeaderInfo) {
 	}
 }
 
-std::vector<double> ClassifierTree::distributionForInstance(Instance *instance, bool useLaplace) throw(std::exception) {
+std::vector<double> ClassifierTree::distributionForInstance(Instance *instance, bool useLaplace) {
 
 	std::vector<double> doubles(instance->numClasses());
 
@@ -176,7 +176,7 @@ int ClassifierTree::graphType() {
 	return 0;
 }
 
-std::string ClassifierTree::graph() throw(std::exception) {
+std::string ClassifierTree::graph() {
 
 	std::string text = "";
 
@@ -205,7 +205,7 @@ std::string ClassifierTree::graph() throw(std::exception) {
 	return text.append("}\n");
 }
 
-std::string ClassifierTree::prefix() throw(std::exception) {
+std::string ClassifierTree::prefix() {
 
 	std::string text;
 
@@ -275,7 +275,7 @@ std::string ClassifierTree::toString() {
 	}
 }
 
-ClassifierTree *ClassifierTree::getNewTree(Instances *data) throw(std::exception) {
+ClassifierTree *ClassifierTree::getNewTree(Instances *data) {
 
 	ClassifierTree *newTree = new ClassifierTree(mtoSelectModel);
 	newTree->buildTree(data, false);
@@ -283,7 +283,7 @@ ClassifierTree *ClassifierTree::getNewTree(Instances *data) throw(std::exception
 	return newTree;
 }
 
-ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) throw(std::exception) {
+ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) {
 
 	ClassifierTree *newTree = new ClassifierTree(mtoSelectModel);
 	newTree->buildTree(train, test, false);
@@ -291,7 +291,7 @@ ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) th
 	return newTree;
 }
 
-void ClassifierTree::dumpTree(int depth, std::string text) throw(std::exception) {
+void ClassifierTree::dumpTree(int depth, std::string text) {
 
 	int i, j;
 
@@ -337,7 +337,7 @@ void ClassifierTree::graphTree(std::string text) {
 	}
 }
 
-void ClassifierTree::prefixTree(std::string text) throw(std::exception) {
+void ClassifierTree::prefixTree(std::string text) {
 
 	text.append("[");
 	text.append(mlocalModel->leftSide(mtrain) + std::string(":"));
@@ -360,7 +360,7 @@ void ClassifierTree::prefixTree(std::string text) throw(std::exception) {
 	text.append("]");
 }
 
-double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, double weight) throw(std::exception) {
+double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, double weight) {
 
 	double prob = 0;
 
@@ -389,7 +389,7 @@ double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, doubl
 	}
 }
 
-double ClassifierTree::getProbs(int classIndex, Instance *instance, double weight) throw(std::exception) {
+double ClassifierTree::getProbs(int classIndex, Instance *instance, double weight) {
 
 	double prob = 0;
 

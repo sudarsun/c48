@@ -147,8 +147,3 @@ void DenseInstance::setWeight(double weight)
 
 	mWeight = weight;
 }
-
-double DenseInstance::value(int attIndex)
-{
-	return mAttValues[attIndex];
-}

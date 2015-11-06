@@ -44,7 +44,6 @@ public:
 	virtual int numClasses();
 	virtual bool isMissing(int attIndex);
 	virtual void setWeight(double weight);
-	virtual double value(int attIndex);
 	
 protected:
 	std::vector<double> mAttValues;
