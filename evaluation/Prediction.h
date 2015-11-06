@@ -14,7 +14,11 @@ class Prediction {
   /// as weka.core.Instance.MISSING_VALUE
   /// </summary>
   public:
+#ifdef _WIN64
+	  static const double MISSING_VALUE;
+#else
   static constexpr double MISSING_VALUE = std::numeric_limits<double>::quiet_NaN();
+#endif
 
   /// <summary>
   /// Gets the weight assigned to this prediction. This is typically the weight

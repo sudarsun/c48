@@ -14,8 +14,8 @@ double GainRatioSplitCrit::splitCritValue(Distribution *bags) {
 	if (Utils::eq(numerator, 0)) {
 		return std::numeric_limits<double>::max();
 	}
-	// !Need to check here!
-	denumerator = splitEnt(bags, 0);
+	// !Need to check here! - ok now
+	denumerator = EntropyBasedSplitCrit::splitEnt(bags);
 
 	// Test if split is trivial.
 	if (Utils::eq(denumerator, 0)) {
