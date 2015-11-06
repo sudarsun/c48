@@ -299,7 +299,7 @@ void *Distribution::clone()
 
 	int i, j;
 
-	Distribution *newDistribution = new Distribution(mperBag.size(), mperClass.size());
+	Distribution *newDistribution = new Distribution((int)mperBag.size(), (int)mperClass.size());
 	for (i = 0; i < (int)mperBag.size(); i++)
 	{
 		newDistribution->mperBag[i] = mperBag[i];
@@ -563,7 +563,7 @@ double Distribution::prob(int classIndex, int intIndex)
 Distribution *Distribution::subtract(Distribution *toSubstract)
 {
 
-	Distribution *newDist = new Distribution(1, mperClass.size());
+	Distribution *newDist = new Distribution(1, (int)mperClass.size());
 
 	newDist->mperBag[0] = totaL - toSubstract->totaL;
 	newDist->totaL = newDist->mperBag[0];

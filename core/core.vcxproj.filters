@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Attribute.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributeMetaInfo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributeStats.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ContingencyTables.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="DataSource.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="DenseInstance.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Instances.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="NominalAttributeInfo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="statistics.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Attribute.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeInfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeMetaInfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeStats.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Consts.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ContingencyTables.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="DataSource.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseInstance.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Instances.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="NominalAttributeInfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="statistics.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Typedefs.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -9,6 +9,7 @@ class CostMatrix;
 class UnivariateKernelEstimator;
 class Prediction;
 class Instances;
+class Instance;
 class AbstractEvaluationMetric;
 class Classifier;
 
@@ -22,7 +23,7 @@ public:
 	double evaluateModelOnceAndRecordPrediction(double[] dist, Instance instance);
 	double evaluationForSingleInstance(double[] dist, Instance instance, bool storePredictions);
 protected:
-	double evaluationForSingleInstance(Classifier classifier, Instance instance, bool storePredictions)
+	double evaluationForSingleInstance(Classifier classifier, Instance instance, bool storePredictions);
 
 		/// <summary>
 		/// The number of classes. </summary>
@@ -215,7 +216,7 @@ protected:
 
 	/// <summary>
 	/// The list of metrics to display in the output </summary>
-	std::vector<std::wstring> mmetricsToDisplay;
+	std::vector<std::string> mmetricsToDisplay;
 
 
 };

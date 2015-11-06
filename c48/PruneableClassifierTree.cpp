@@ -99,7 +99,7 @@ double PruneableClassifierTree::errorsForTree()
 double PruneableClassifierTree::errorsForLeaf()
 {
 
-	return mtest->total() - mtest->perClass(localModel()->distribution().maxClass());
+	return mtest->total() - mtest->perClass(localModel()->distribution()->maxClass());
 }
 
 ClassifierSplitModel *PruneableClassifierTree::localModel()

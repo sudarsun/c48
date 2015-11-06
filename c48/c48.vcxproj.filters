@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{8dd43c2c-6277-47f9-acc9-6ca6bb920a04}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AbstractClassifier.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C45ModelSelection.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C45PruneableClassifierTree.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C45Split.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassifierSplitModel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassifierTree.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Distribution.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="EntropyBasedSplitCrit.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="EntropySplitCrit.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="GainRatioSplitCrit.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoGainSplitCrit.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelSelection.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="NoSplit.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="SplitCriterion.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Stats.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="C48.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AbstractClassifier.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C45ModelSelection.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C45PruneableClassifierTree.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C45Split.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Classifier.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassifierSplitModel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassifierTree.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Distribution.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="EntropyBasedSplitCrit.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="EntropySplitCrit.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="GainRatioSplitCrit.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoGainSplitCrit.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelSelection.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="NoSplit.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="SplitCriterion.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Stats.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="C48.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
