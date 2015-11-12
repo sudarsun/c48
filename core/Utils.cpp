@@ -94,7 +94,7 @@ std::string Utils::padRightAndAllowOverflow(const std::string &inString, int len
 std::string Utils::padLeft(const std::string &inString, int length) {
 
 	char* format = new char[inString.length() + sizeof(length)];
-	sprintf(format, "%1$.s", length, inString.c_str());
+	sprintf(format, "%1s", length, inString.c_str());
 	std::string str = format;
 	delete[] format;
 	return str;
@@ -102,7 +102,7 @@ std::string Utils::padLeft(const std::string &inString, int length) {
 
 std::string Utils::padRight(const std::string &inString, int length) {
 	char* format = new char[inString.length() + sizeof(length)];
-	sprintf(format, "%1$-.s", length, inString.c_str());
+	sprintf(format, "%1-.s", length, inString.c_str());
 	std::string str = format;
 	delete[] format;
 	return str;
@@ -748,3 +748,33 @@ int Utils::select(std::vector<int> &array_Renamed, std::vector<int> &index, int 
 	}
 }
 
+std::string Utils::backQuoteChars(std::string &inString)
+{ // @pure@
+
+	int index;
+	std::string stringbuf;
+
+	// replace each of the following characters with the backquoted version
+	std::vector<char> charsFind = { '\\', '\'', '\t', '\n', '\r', '"', '%', '\u001E' };
+	std::vector<std::string> charsReplace = { "\\\\", "\\'", "\\t", "\\n", "\\r", "\\\"", "\\%", "\\u001E" };
+	for (int i = 0; i < charsFind.size(); i++) {
+		if (inString.find(charsFind[i]) != -1) {
+			stringbuf = "";
+			while ((index = inString.find(charsFind[i])) != -1) {
+				if (index > 0) {
+					stringbuf.append(inString.substr(0, index));
+				}
+				stringbuf.append(charsReplace[i]);
+				if ((index + 1) < inString.length()) {
+					inString = inString.substr(index + 1);
+				}
+				else {
+					inString = "";
+				}
+			}
+			stringbuf.append(inString);
+		}
+	}
+
+	return stringbuf;
+}

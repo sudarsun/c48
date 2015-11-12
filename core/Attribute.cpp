@@ -11,7 +11,7 @@ Attribute::Attribute( const std::string &attributeName, std::vector<std::string>
 {
 
 	mAttributeInfo = new NominalAttributeInfo( attributeValues, attributeName );
-	std::cout << (static_cast<NominalAttributeInfo*>(mAttributeInfo))->getSize() << std::endl;
+	//std::cout << (static_cast<NominalAttributeInfo*>(mAttributeInfo))->getSize() << std::endl;
 	if( attributeValues.empty() )
 	{
 		mType = ATTRIBUTE::STRING;

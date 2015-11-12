@@ -16,48 +16,63 @@ class C45ModelSelection;
 class C48 : public AbstractClassifier
 {
 
-	/// <summary>
-	/// The decision tree </summary>
 protected:
+
+	/// <summary>
+	/// The decision tree 
+	/// </summary>
 	ClassifierTree *mroot;
+
 	/// <summary>
 	/// Unpruned tree? </summary>
 	bool munpruned = false;
+
 	/// <summary>
 	/// Collapse tree? </summary>
 	bool mcollapseTree = true;
+
 	/// <summary>
 	/// Confidence level </summary>
 	float mCF = 0.25f;
+
 	/// <summary>
 	/// Minimum number of instances </summary>
 	int mminNumObj = 2;
+
 	/// <summary>
 	/// Use MDL correction? </summary>
 	bool museMDLcorrection = true;
+
 	/// <summary>
 	/// Determines whether probabilities are smoothed using Laplace correction when
 	/// predictions are generated
 	/// </summary>
 	bool museLaplace = false;
+
 	/// <summary>
 	/// Use reduced error pruning? </summary>
 	bool mreducedErrorPruning = false;
+
 	/// <summary>
 	/// Number of folds for reduced error pruning. </summary>
 	int mnumFolds = 3;
+
 	/// <summary>
 	/// Binary splits on nominal attributes? </summary>
 	bool mbinarySplits = false;
+
 	/// <summary>
 	/// Subtree raising to be performed? </summary>
 	bool msubtreeRaising = true;
+
 	/// <summary>
 	/// Cleanup after the tree has been built. </summary>
 	bool mnoCleanup = false;
+
 	/// <summary>
 	/// Random number seed for reduced-error pruning. </summary>
 	int mSeed = 1;
+
 	/// <summary>
 	/// Do not relocate split point to actual data value </summary>
 	bool mdoNotMakeSplitPointActualValue = false;
@@ -70,6 +85,7 @@ public:
 	/// <param name="instances"> the data to train the classifier with </param>
 	/// <exception cref="Exception"> if classifier can't be built successfully </exception>
 	virtual void buildClassifier(Instances *instances);
+
 	/// <summary>
 	/// Classifies an instance.
 	/// </summary>
@@ -77,6 +93,7 @@ public:
 	/// <returns> the classification for the instance </returns>
 	/// <exception cref="Exception"> if instance can't be classified successfully </exception>
 	virtual double classifyInstance(Instance *instance);
+
 	/// <summary>
 	/// Returns class probabilities for an instance.
 	/// </summary>
@@ -84,12 +101,14 @@ public:
 	/// <returns> the class probabilities </returns>
 	/// <exception cref="Exception"> if distribution can't be computed successfully </exception>
 	std::vector<double> distributionForInstance(Instance *instance);
+
 	/// <summary>
 	/// Returns graph describing the tree.
 	/// </summary>
 	/// <returns> the graph describing the tree </returns>
 	/// <exception cref="Exception"> if graph can't be computed </exception>
 	virtual std::string graph();
+
 	/// <summary>
 	/// Returns tree in prefix order.
 	/// </summary>

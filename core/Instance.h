@@ -5,6 +5,7 @@
 #include <vector>
 
 class Attribute;
+class Instances;
 
 class Instance
 {
@@ -23,6 +24,7 @@ public:
 	virtual void setWeight(double weight) = 0;
 	virtual bool isMissing(int attIndex) = 0;
 	virtual double value(int attIndex) = 0;
+	virtual void setDataset(Instances *data) = 0;
 	
 
 };

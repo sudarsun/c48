@@ -362,7 +362,7 @@ public:
 	/// <param name="string"> the string </param>
 	/// <returns> the converted string </returns>
 	/// <seealso cref= #unbackQuoteChars(String) </seealso>
-	static std::string backQuoteChars(const std::string &string);
+	static std::string backQuoteChars(std::string &string);
 
 	/// <summary>
 	/// Converts carriage returns and new lines in a string into \r and \n.

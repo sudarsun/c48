@@ -18,7 +18,7 @@ DataSource::DataSource(const std::string &location)
 		throw  "Source file is not found";
 	}
 
-	std::string fname = location.substr(location.find_last_of("/\\"), location.length());
+	std::string fname = location.substr(location.find_last_of("/\\")+1, location.length());
 	std::string fileStem;
 	std::string path = location.substr(0, location.find_last_of("/\\"));
 
@@ -33,24 +33,24 @@ DataSource::DataSource(const std::string &location)
 		fname = fileStem + std::string(".names");
 	}
 	mFileStem = fileStem;
-	mSourceFileName = path + fname;
+	mSourceFileName = path + "/" + fname;
 	try
 	{
 		mNamesReader.open(mSourceFileName, std::ios_base::in);
 	}
 	catch (std::exception ex)
 	{
-		throw std::string("File not found : ") + (path + fname);
+		throw std::string("File not found : ") + (path + "/" + fname);
 	}
 
-	mSourceFileData = path + fileStem + std::string(".data");
+	mSourceFileData = path + "/" + fileStem + std::string(".data");
 	try
 	{
 		mDataReader.open(mSourceFileData, std::ios_base::in);
 	}
 	catch (std::exception ex)
 	{
-		throw std::string("File not found : ") + (path + fname);
+		throw std::string("File not found : ") + (path + "/" + fname);
 	}
 }
 

@@ -184,7 +184,7 @@ std::vector<Instances*> ClassifierSplitModel::split(Instances *data)
 	std::vector<Instances*> instances(mnumSubsets);
 	for (int j = 0; j < mnumSubsets; j++)
 	{
-		instances[j] = new Instances(data, subsetSize[j]);
+		instances[j] = new Instances(data, 0);
 	}
 	for (auto i = 0; i < data->numInstances(); i++)
 	{

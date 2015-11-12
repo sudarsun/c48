@@ -1,12 +1,13 @@
 #ifndef _DENSEINSTANCE_
 #define _DENSEINSTANCE_
 
-#include "Instance.h"
-#include "Attribute.h"
 #include <string>
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include "Instance.h"
+#include "Instances.h"
+#include "Attribute.h"
 
 class DenseInstance : public Instance
 {
@@ -24,6 +25,7 @@ public:
 	virtual void setMissing(int attIndex);
 	virtual void setValue(int attIndex, const std::string &value);
 	virtual void setValue(int attIndex, double value);
+	virtual  void setDataset(Instances* data);
 	/*
 	virtual void *copy();
 	virtual int index( int position );
@@ -48,6 +50,7 @@ public:
 protected:
 	std::vector<double> mAttValues;
 	double mWeight;
+	Instances *mDataset;
 	/*virtual void forceDeleteAttributeAt( int position );
 	virtual void forceInsertAttributeAt( int position );*/
 

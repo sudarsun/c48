@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-//JAVA TO C++ CONVERTER NOTE: Forward class declarations:
+// Forward class declarations:
 class CostMatrix;
 class UnivariateKernelEstimator;
 class Prediction;
@@ -12,18 +12,27 @@ class Instances;
 class Instance;
 class AbstractEvaluationMetric;
 class Classifier;
+class CostMatrix;
 
+/// <summary>
+// Class for evaluating machine learning models.
+/// </summary>
 class Evaluation
 {
 public:
 	Evaluation();
+	Evaluation(Instances data);
+	Evaluation(Instances data, CostMatrix costMatrix);
 	~Evaluation();
-	double[] evaluateModel(Classifier classifier, Instances data);
-	double evaluateModelOnceAndRecordPrediction(Classifier classifier, Instances data);
-	double evaluateModelOnceAndRecordPrediction(double[] dist, Instance instance);
-	double evaluationForSingleInstance(double[] dist, Instance instance, bool storePredictions);
+
+	std::vector<double> evaluateModel(Classifier *classifier, Instances *data);
+	void setPriors(Instances train);
+	double evaluateModelOnceAndRecordPrediction(Classifier * classifier, Instances * data);
+	double evaluateModelOnceAndRecordPrediction(std::vector<double> dist, Instance *instance);
+	double evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions);
+
 protected:
-	double evaluationForSingleInstance(Classifier classifier, Instance instance, bool storePredictions);
+	double evaluationForSingleInstance(Classifier *classifier, Instance *instance, bool storePredictions);
 
 		/// <summary>
 		/// The number of classes. </summary>
@@ -158,7 +167,7 @@ protected:
 	/// The minimum probablility accepted from an estimator to avoid taking log(0)
 	/// in Sf calculations.
 	/// </summary>
-	static const double MIN_SF_PROB = Prediction::MISSING_VALUE;
+	static const double MIN_SF_PROB;
 
 	/// <summary>
 	/// Total entropy of prior predictions. </summary>

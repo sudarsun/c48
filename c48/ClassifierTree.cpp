@@ -43,21 +43,18 @@ void ClassifierTree::buildTree(Instances *data, bool keepData) {
 		mtrain = data;
 	}
 	//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-	delete mtest;
+	mtest = nullptr;;
 	misLeaf = false;
 	misEmpty = false;
 	msons.clear();
 	mlocalModel = mtoSelectModel->selectModel(data);
 	if (mlocalModel->numSubsets() > 1) {
-		//JAVA TO C++ CONVERTER TODO TASK: There is no direct native C++ equivalent to the Java String 'split' method:
 		localInstances = mlocalModel->split(data);
-		//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-		delete data;
+		
 		msons = std::vector<ClassifierTree*>(mlocalModel->numSubsets());
 		for (int i = 0; i < msons.size(); i++) {
 			msons[i] = getNewTree(localInstances[i]);
-			//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-			delete localInstances[i];
+			//delete localInstances[i];
 		}
 	}
 	else {
@@ -65,8 +62,6 @@ void ClassifierTree::buildTree(Instances *data, bool keepData) {
 		if (Utils::eq(data->sumOfWeights(), 0)) {
 			misEmpty = true;
 		}
-		//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-		delete data;
 	}
 }
 
@@ -201,7 +196,6 @@ std::string ClassifierTree::graph() {
 		graphTree(text);
 	}
 
-	//JAVA TO C++ CONVERTER TODO TASK: There is no native C++ equivalent to 'toString':
 	return text.append("}\n");
 }
 
@@ -217,7 +211,6 @@ std::string ClassifierTree::prefix() {
 		prefixTree(text);
 	}
 
-	//JAVA TO C++ CONVERTER TODO TASK: There is no native C++ equivalent to 'toString':
 	return text;
 }
 
@@ -291,7 +284,7 @@ ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) {
 	return newTree;
 }
 
-void ClassifierTree::dumpTree(int depth, std::string text) {
+void ClassifierTree::dumpTree(int depth, std::string &text) {
 
 	int i, j;
 
@@ -313,7 +306,7 @@ void ClassifierTree::dumpTree(int depth, std::string text) {
 	}
 }
 
-void ClassifierTree::graphTree(std::string text) {
+void ClassifierTree::graphTree(std::string &text) {
 
 	for (int i = 0; i < msons.size(); i++) {
 		text.append(std::string("N") + std::to_string(mid) + std::string("->") + std::string("N") + std::to_string(msons[i]->mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->rightSide(i, mtrain)) + std::string("\"]\n"));
@@ -337,7 +330,7 @@ void ClassifierTree::graphTree(std::string text) {
 	}
 }
 
-void ClassifierTree::prefixTree(std::string text) {
+void ClassifierTree::prefixTree(std::string &text) {
 
 	text.append("[");
 	text.append(mlocalModel->leftSide(mtrain) + std::string(":"));

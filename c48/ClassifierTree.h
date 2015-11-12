@@ -196,21 +196,21 @@ protected:
 	/// <param name="text"> for outputting the structure </param>
 	/// <exception cref="Exception"> if something goes wrong </exception>
 private:
-	void dumpTree(int depth, std::string text);
+	void dumpTree(int depth, std::string &text);
 
 	/// <summary>
 	/// Help method for printing tree structure as a graph.
 	/// </summary>
 	/// <param name="text"> for outputting the tree </param>
 	/// <exception cref="Exception"> if something goes wrong </exception>
-	void graphTree(std::string text);
+	void graphTree(std::string &text);
 
 	/// <summary>
 	/// Prints the tree in prefix form
 	/// </summary>
 	/// <param name="text"> the buffer to output the prefix form to </param>
 	/// <exception cref="Exception"> if something goes wrong </exception>
-	void prefixTree(std::string text);
+	void prefixTree(std::string &text);
 
 	/// <summary>
 	/// Help method for computing class probabilities of a given instance.
@@ -247,12 +247,6 @@ private:
 	/// </summary>
 public:
 	virtual std::vector<double> getMembershipValues(Instance *instance);
-
-	/// <summary>
-	/// Returns the revision string.
-	/// </summary>
-	/// <returns> the revision </returns>
-	virtual std::string getRevision();
 };
 
 #endif	//#ifndef _CLASSIFIERTREE_

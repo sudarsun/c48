@@ -74,6 +74,9 @@ public:
 	std::string toString();
 	virtual Instances *trainCV(int numFolds, int numFold);
 	virtual Instances *testCV(int numFolds, int numFold);
+	virtual void setDataset(Instances *data);
+	std::string getRelationName();
+	void setRelationName(const std::string name);
 
 };
 

@@ -3,21 +3,27 @@
 #include "ClassifierSplitModel.h"
 #include "core/Instance.h"
 #include "core/Utils.h"
+#include <iterator>
 
-
-Distribution::Distribution(int numBags, int numClasses) : mperClassPerBag(std::vector<std::vector<double>>(0)), mperBag(std::vector<double>(numBags)), mperClass(std::vector<double>(numClasses))
+Distribution::Distribution(int numBags, int numClasses) :
+	//mperClassPerBag(std::vector<std::vector<double>>(1)),
+	mperBag(std::vector<double>(numBags)),
+	mperClass(std::vector<double>(numClasses))
 {
 
 	int i;
 
 	for (i = 0; i < numBags; i++)
 	{
-		this->mperClassPerBag[i] = std::vector<double>(numClasses);
+		this->mperClassPerBag.push_back( std::vector<double>(numClasses));
 	}
 	totaL = 0;
 }
 
-Distribution::Distribution(std::vector<std::vector<double>> &table) : mperClassPerBag(table), mperBag(std::vector<double>(table.size())), mperClass(std::vector<double>(table[0].size()))
+Distribution::Distribution(std::vector<std::vector<double>> &table) :
+	mperClassPerBag(table),
+	mperBag(std::vector<double>(table.size())),
+	mperClass(std::vector<double>(table[0].size()))
 {
 
 	int i, j;
@@ -33,11 +39,16 @@ Distribution::Distribution(std::vector<std::vector<double>> &table) : mperClassP
 	}
 }
 
-Distribution::Distribution(Instances *source) : mperClassPerBag(std::vector<std::vector<double>>(0)), mperBag(std::vector<double>(1)), mperClass(std::vector<double>(source->numClasses()))
+Distribution::Distribution(Instances *source) :
+	//mperClassPerBag(std::vector<std::vector<double>>(1)),
+	mperBag(std::vector<double>(1)),
+	mperClass(std::vector<double>(source->numClasses()))
 {
+	// Clear 
+	mperClassPerBag.clear();
 
 	totaL = 0;
-	mperClassPerBag[0] = std::vector<double>(source->numClasses());
+	mperClassPerBag.push_back(std::vector<double>(source->numClasses()));
 	int totalnum = source->numInstances();
 	for (int i = 0; i < totalnum; i++)
 	{
@@ -45,15 +56,20 @@ Distribution::Distribution(Instances *source) : mperClassPerBag(std::vector<std:
 	}
 }
 
-Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) : mperClassPerBag(std::vector<std::vector<double>>(0)), mperBag(std::vector<double>(modelToUse->numSubsets())), mperClass(std::vector<double>(source->numClasses())) {
+Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) :
+	//mperClassPerBag(std::vector<std::vector<double>>(1)),
+	mperBag(std::vector<double>(modelToUse->numSubsets())),
+	mperClass(std::vector<double>(source->numClasses())) {
 
 	int index;
 
 	std::vector<double> weights;
 
+	// Clear 
+	mperClassPerBag.clear();
 	totaL = 0;
 	for (int i = 0; i < modelToUse->numSubsets(); i++) {
-		mperClassPerBag[i] = std::vector<double>(source->numClasses());
+		mperClassPerBag.push_back(std::vector<double>(source->numClasses()));
 	}
 	int totalnum = source->numInstances();
 	for (int i = 0; i < totalnum; i++)
@@ -69,17 +85,25 @@ Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) 
 	}
 }
 
-Distribution::Distribution(Distribution *toMerge) : mperClassPerBag(std::vector<std::vector<double>>(0)), mperBag(std::vector<double>(1)), mperClass(std::vector<double>(toMerge->numClasses()))
+Distribution::Distribution(Distribution *toMerge) // :
+	//mperClassPerBag(std::vector<std::vector<double>>(1)),
+	//mperBag(std::vector<double>(1)),
+	//mperClass(std::vector<double>(toMerge->numClasses()))
 {
-
+	mperClassPerBag.clear();
+	mperBag.clear();
+	mperClass.clear();
 	totaL = toMerge->totaL;
 	std::copy(toMerge->mperClass.begin(), toMerge->mperClass.end(), std::back_inserter(mperClass));
-	mperClassPerBag[0] = std::vector<double>(toMerge->numClasses());
+	mperClassPerBag.push_back(std::vector<double>(toMerge->numClasses()));
 	std::copy(toMerge->mperClass.begin(), toMerge->mperClass.end(), std::back_inserter(mperClassPerBag[0]));
-	mperBag[0] = totaL;
+	mperBag.push_back(totaL);
 }
 
-Distribution::Distribution(Distribution *toMerge, int index) : mperClassPerBag(std::vector<std::vector<double>>(0)), mperBag(std::vector<double>(2)), mperClass(std::vector<double>(toMerge->numClasses()))
+Distribution::Distribution(Distribution *toMerge, int index) :
+	mperClassPerBag(std::vector<std::vector<double>>(1)),
+	mperBag(std::vector<double>(2)),
+	mperClass(std::vector<double>(toMerge->numClasses()))
 {
 
 	int i;

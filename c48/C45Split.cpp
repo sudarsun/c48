@@ -366,7 +366,7 @@ std::vector<std::vector<double>> C45Split::minsAndMaxs(Instances *data, std::vec
 void C45Split::resetDistribution(Instances *data)
 {
 
-	Instances *insts = new Instances(data, data->numInstances());
+	Instances *insts = new Instances(data, 0);
 	for (int i = 0; i < data->numInstances(); i++)
 	{
 		if (whichSubset(data->instance(i)) > -1)

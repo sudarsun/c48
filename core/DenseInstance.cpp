@@ -1,19 +1,16 @@
 #include "DenseInstance.h"
-#include "Instance.h"
-#include "Attribute.h"
 #include "Utils.h"
 
 DenseInstance::DenseInstance(double weight, std::vector<double> &attValues)
 {
 	mAttValues = attValues;
 	mWeight = weight;
-	//mDataset = nullptr;
+	mDataset = nullptr;
 }
 
 Attribute *DenseInstance::attribute(int index)
 {
-	//return m_Dataset->attribute( index );
-	return nullptr;
+	return mDataset->attribute( index );
 }
 
 int DenseInstance::numAttributes()
@@ -23,7 +20,7 @@ int DenseInstance::numAttributes()
 int DenseInstance::classIndex()
 {
 	// @pure@
-	return 0;
+	return mDataset->classIndex();
 }
 
 void DenseInstance::setValue(int attIndex, double value)
@@ -119,31 +116,25 @@ bool DenseInstance::isMissing(int attIndex)
 
 Attribute *DenseInstance::classAttribute()
 {
-	int classIndexValue = classIndex();
-	if (classIndexValue < 0)
-	{
-		throw "Class index is negative (not set)!";
-	}
-	return attribute(classIndexValue);
+
+	return mDataset->classAttribute();
 }
 int DenseInstance::numClasses()
 {
-	int classIndexValue = classIndex();
-	if (classIndexValue < 0)
-	{
-		throw "Class index is negative (not set)!";
-	}
-	if (!classAttribute()->isNominal())
-	{
-		return 1;
-	}
-	else
-	{
-		return classAttribute()->numValues();
-	}
+	return mDataset->numClasses();
 }
 void DenseInstance::setWeight(double weight)
 {
 
 	mWeight = weight;
 }
+
+void DenseInstance::setDataset(Instances *instances) {
+
+	mDataset = instances;
+}
+
+//Instances DenseInstance::dataset()
+//{
+//	return mDataset;
+//}

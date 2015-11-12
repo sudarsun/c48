@@ -90,7 +90,8 @@ void Instances::setClassIndex(int classIndex)
 
 bool Instances::add(Instance *instance)
 {
-	//Instance *newInstance = static_cast<Instance*>( instance );
+	Instance *newInstance = static_cast<Instance*>( instance );
+	newInstance->setDataset(const_cast<Instances*>(this));
 	mInstances.push_back(instance);
 
 	return true;
@@ -100,10 +101,10 @@ void Instances::add(int index, Instance *instance)
 {
 	// @non_null@
 
-	//Instance *newInstance = static_cast<Instance*>( instance );
+	Instance *newInstance = static_cast<Instance*>( instance );
 
-	//newInstance->setDataset( this );
-	//mInstances.insert( index, instance );
+	newInstance->setDataset( this );
+	mInstances[index] = instance ;
 }
 
 int Instances::numInstances()
@@ -194,9 +195,9 @@ void Instances::setWeight(double weight)
 void Instances::deleteWithMissing(int attIndex)
 {
 
-	std::vector<Instance*> newInstances(numInstances());
-
-	for (int i = 0; i < numInstances(); i++)
+	std::vector<Instance*> newInstances;
+	int totalInst = numInstances();
+	for (int i = 0; i < totalInst; i++)
 	{
 		if (!instance(i)->isMissing(attIndex))
 		{
@@ -386,4 +387,25 @@ void Instances::sortBasedOnNominalAttribute(int attIndex)
 			mInstances[start++] = inst;
 		}
 	}
+}
+
+//Instances Instances::dataset()
+//{
+//	return this;
+//}
+
+std::string Instances::getRelationName()
+{
+	return mRelationName;
+}
+
+void Instances::setRelationName(const std::string name)
+{
+	mRelationName = name;
+	//mRelationName = "sleep";
+}
+
+void Instances::setDataset(Instances *instances) {
+
+	
 }

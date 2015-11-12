@@ -22,6 +22,9 @@
     <ClInclude Include="Prediction.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="CostMatrix.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Evaluation.cpp">
@@ -34,6 +37,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="Prediction.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="CostMatrix.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,5 @@
-#ifndef _STATS_
-#define _STATS_
+#ifndef _STATS_H_
+#define _STATS_H_
 #include <vector>
 
 /// <summary>
@@ -18,29 +18,6 @@ class Stats {
 	/// <param name="CF"> confidence value </param>
 public:
 	static double addErrs(double N, double e, float CF);
-	/// <summary>
-	///***********************************************
-	/// COEFFICIENTS FOR METHOD normalInverse() *
-	///  ************************************************
-	/// </summary>
-	/* approximation for 0 <= |y - 0.5| <= 3/8 */
-	static std::vector<double> const P0;
-	static std::vector<double> const Q0;
-
-	/*
-	 * Approximation for interval z = sqrt(-2 log y ) between 2 and 8 i.e., y
-	 * between exp(-2) = .135 and exp(-32) = 1.27e-14.
-	 */
-	static std::vector<double> const P1;
-	static std::vector<double> const Q1;
-
-	/*
-	 * Approximation for interval z = sqrt(-2 log y ) between 8 and 64 i.e., y
-	 * between exp(-32) = 1.27e-14 and exp(-2048) = 3.67e-890.
-	 */
-	static std::vector<double> const P2;
-	static std::vector<double> const Q2;
-
 
 	/// <summary>
 	/// Returns the value, <tt>x</tt>, for which the area under the Normal
@@ -68,4 +45,4 @@ public:
 };
 
 
-#endif	//#ifndef _STATS_
+#endif	// _STATS_H_
