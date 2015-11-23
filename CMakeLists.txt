@@ -12,8 +12,9 @@ else()
 endif()
 add_subdirectory(core)
 add_subdirectory(c48)
+add_subdirectory(evaluation)
 add_executable(test main.cpp)
 
-target_link_libraries(test LINK_PUBLIC core c48)
+target_link_libraries(test LINK_PUBLIC core c48 evaluation)
 install(TARGETS test RUNTIME DESTINATION bin)
 
