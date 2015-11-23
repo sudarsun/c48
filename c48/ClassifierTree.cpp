@@ -23,10 +23,7 @@ ClassifierTree::ClassifierTree(ModelSelection *toSelectLocModel) {
 	mtoSelectModel = toSelectLocModel;
 }
 
-
-
 void ClassifierTree::buildClassifier(Instances *data) {
-
 
 	// remove instances with missing class
 	data = new Instances(data);
@@ -42,7 +39,6 @@ void ClassifierTree::buildTree(Instances *data, bool keepData) {
 	if (keepData) {
 		mtrain = data;
 	}
-	//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
 	mtest = nullptr;;
 	misLeaf = false;
 	misEmpty = false;

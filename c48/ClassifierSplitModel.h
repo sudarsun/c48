@@ -13,20 +13,17 @@ class Distribution;
 /// <summary>
 /// Abstract class for classification models that can be used
 /// recursively to split the data.
-///
-/// @author Eibe Frank (eibe@cs.waikato.ac.nz)
-/// @version $Revision$
 /// </summary>
 class ClassifierSplitModel
 {
 	/// <summary>
 	/// Distribution of class values. </summary>
 protected:
-	Distribution *mdistribution;
+	Distribution *mDistribution;
 
 	/// <summary>
 	/// Number of created subsets. </summary>
-	int mnumSubsets = 0;
+	int mNumSubsets = 0;
 
 	/// <summary>
 	/// Allows to clone a model (shallow copy).
@@ -38,7 +35,7 @@ public:
 	/// Builds the classifier split model for the given set of instances.
 	/// </summary>
 	/// <exception cref="Exception"> if something goes wrong </exception>
-	virtual void buildClassifier(Instances *instances) = 0;
+	virtual void buildClassifier(Instances instances) = 0;
 
 	/// <summary>
 	/// Checks if generated model is valid.

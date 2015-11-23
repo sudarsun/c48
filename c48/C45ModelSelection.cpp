@@ -9,7 +9,10 @@
 #include <iostream>
 
 
-C45ModelSelection::C45ModelSelection(int minNoObj, Instances *allData, bool useMDLcorrection, bool doNotMakeSplitPointActualValue) : mminNoObj(minNoObj), museMDLcorrection(useMDLcorrection), mdoNotMakeSplitPointActualValue(doNotMakeSplitPointActualValue)
+C45ModelSelection::C45ModelSelection(int minNoObj, Instances *allData, bool useMDLcorrection, bool doNotMakeSplitPointActualValue) :
+	mminNoObj(minNoObj),
+	museMDLcorrection(useMDLcorrection),
+	mdoNotMakeSplitPointActualValue(doNotMakeSplitPointActualValue)
 {
 	mallData = allData;
 }
@@ -76,7 +79,8 @@ ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data)
 
 				// Get models for current attribute.
 				currentModel[i] = new C45Split(i, mminNoObj, sumOfWeights, museMDLcorrection);
-				currentModel[i]->buildClassifier(data);
+				// Check for Dataset assignment
+				currentModel[i]->buildClassifier(*data);
 
 				// Check if useful split for current attribute
 				// exists and check for enumerated attributes with
@@ -100,8 +104,7 @@ ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data)
 			}
 			else
 			{
-				//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-				delete currentModel[i];
+				currentModel[i]= nullptr;
 			}
 		}
 

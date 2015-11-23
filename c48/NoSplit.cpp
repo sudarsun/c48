@@ -7,15 +7,15 @@
 NoSplit::NoSplit(Distribution *distribution)
 {
 
-	mdistribution = new Distribution(distribution);
-	mnumSubsets = 1;
+	mDistribution = new Distribution(distribution);
+	mNumSubsets = 1;
 }
 
-void NoSplit::buildClassifier(Instances *instances)
+void NoSplit::buildClassifier(Instances instances)
 {
 
-	mdistribution = new Distribution(instances);
-	mnumSubsets = 1;
+	mDistribution = new Distribution(&instances);
+	mNumSubsets = 1;
 }
 
 int NoSplit::whichSubset(Instance *instance)

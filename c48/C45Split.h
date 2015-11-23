@@ -16,48 +16,46 @@ class Distribution;
 
 /// <summary>
 /// Class implementing a C4.5-type split on an attribute.
-/// 
-/// @author Eibe Frank (eibe@cs.waikato.ac.nz)
-/// @version $Revision$
 /// </summary>
+
 class C45Split : public ClassifierSplitModel {
 
 	/// <summary>
 	/// Desired number of branches. </summary>
 protected:
-	int mcomplexityIndex = 0;
+	int mComplexityIndex = 0;
 
 	/// <summary>
 	/// Attribute to split on. </summary>
-	const int mattIndex;
+	const int mAttIndex;
 
 	/// <summary>
 	/// Minimum number of objects in a split. </summary>
-	const int mminNoObj;
+	const int mMinNoObj;
 
 	/// <summary>
 	/// Use MDL correction? </summary>
-	const bool museMDLcorrection;
+	const bool mUseMDLcorrection;
 
 	/// <summary>
 	/// Value of split point. </summary>
-	double msplitPoint = 0;
+	double mSplitPoint = 0;
 
 	/// <summary>
 	/// InfoGain of split. </summary>
-	double minfoGain = 0;
+	double mInfoGain = 0;
 
 	/// <summary>
 	/// GainRatio of split. </summary>
-	double mgainRatio = 0;
+	double mGainRatio = 0;
 
 	/// <summary>
 	/// The sum of the weights of the instances. </summary>
-	const double msumOfWeights;
+	const double mSumOfWeights;
 
 	/// <summary>
 	/// Number of split points. </summary>
-	int mindex = 0;
+	int mIndex = 0;
 
 	/// <summary>
 	/// Static reference to splitting criterion. </summary>
@@ -78,7 +76,7 @@ public:
 	/// values is missing.
 	/// </summary>
 	/// <exception cref="Exception"> if something goes wrong </exception>
-	virtual void buildClassifier(Instances *trainInstances);
+	virtual void buildClassifier(Instances trainInstances);
 
 	/// <summary>
 	/// Returns index of attribute for which split was generated.

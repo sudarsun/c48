@@ -219,7 +219,7 @@ void DataSource::readHeader(std::fstream &inNameStream)
 		throw ex;
 	}
 
-	mNumAttribs = mStructure->numAttributes() + ignores.size();
+	mNumAttribs = mStructure->numAttributes() + (int)ignores.size();
 	mIgnore = std::vector<bool>(mNumAttribs);
 	for (int i = 0; i < (int)ignores.size(); i++)
 	{
@@ -281,6 +281,8 @@ Instance *DataSource::getInstance(std::string inData)
 Instances *DataSource::getDataSet()
 {
 	Instances *result = nullptr;
+	if (mStructure == nullptr)
+		getStructure();
 	result = getInstance(mDataReader);
 	try
 	{

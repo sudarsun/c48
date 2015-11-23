@@ -1,6 +1,6 @@
 #include "GainRatioSplitCrit.h"
 #include "Distribution.h"
-#include "core/ContingencyTables.h"
+//#include "core/ContingencyTables.h"
 #include "core/Utils.h"
 
 double GainRatioSplitCrit::splitCritValue(Distribution *bags) {
@@ -56,5 +56,5 @@ double GainRatioSplitCrit::splitEnt(Distribution *bags, double totalnoInst) {
 		returnValue = returnValue - lnFunc(noUnknown);
 		returnValue = returnValue + lnFunc(totalnoInst);
 	}
-	return returnValue / log(2);
+	return returnValue;
 }

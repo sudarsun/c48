@@ -11,13 +11,16 @@ CostMatrix::CostMatrix( int numOfClasses = 0 ) {
   initialize();
 }
 
-CostMatrix::CostMatrix( CostMatrix *toCopy ) : CostMatrix( toCopy->size() ) {
-
-  for( int i = 0; i < m_size; i++ ) {
-    for( int j = 0; j < m_size; j++ ) {
-      setCell( i, j, toCopy->getCell( i, j ) );
-    }
-  }
+CostMatrix::CostMatrix( CostMatrix *toCopy )  {
+	if (toCopy != nullptr)
+	{
+		CostMatrix(toCopy->size());
+		for (int i = 0; i < m_size; i++) {
+			for (int j = 0; j < m_size; j++) {
+				setCell(i, j, toCopy->getCell(i, j));
+			}
+		}
+	}
 }
 
 void CostMatrix::initialize() {

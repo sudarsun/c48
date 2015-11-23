@@ -19,11 +19,15 @@ void classify()
 {
 	
 	time_t startTime, TimeElapsed;
+#ifdef _WIN64
+	std::string path = "E:\\C4.5\\sleep.names";
+#else
+	std::string path = "/opt/c48/sleep.names";
+#endif
 	// Set data source
-	DataSource data("E:\\C4.5\\sleep.names");
+	DataSource data(path);
 	Instances *inst = nullptr;
 	time(&startTime);
-	inst = data.getStructure(); // Read meta information from *.names file
 	inst = data.getDataSet(); // Read data from *.data file
 	time(&TimeElapsed);
 

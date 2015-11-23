@@ -110,7 +110,6 @@ std::string Utils::padRight(const std::string &inString, int length) {
 
 std::string Utils::doubleToString(double value, int afterDecimalPoint)
 { // @pure@
-
 	return std::to_string(value);
 }
 

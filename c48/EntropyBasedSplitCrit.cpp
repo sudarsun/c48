@@ -1,7 +1,6 @@
 #include "EntropyBasedSplitCrit.h"
 #include "Distribution.h"
-
-#include "core/ContingencyTables.h"
+//#include "core/ContingencyTables.h"
 
 double EntropyBasedSplitCrit::lnFunc(double num) {
 
@@ -10,7 +9,8 @@ double EntropyBasedSplitCrit::lnFunc(double num) {
 		return 0;
 	}
 	else {
-		return ContingencyTables::lnFunc(num);
+		//return ContingencyTables::lnFunc(num);
+		return num * log(num) / log(2);
 	}
 }
 
@@ -22,7 +22,7 @@ double EntropyBasedSplitCrit::oldEnt(Distribution *bags) {
 	for (j = 0; j < bags->numClasses(); j++) {
 		returnValue = returnValue + lnFunc(bags->perClass(j));
 	}
-	return (lnFunc(bags->total()) - returnValue) / log(2);
+	return lnFunc(bags->total()) - returnValue;
 }
 
 double EntropyBasedSplitCrit::newEnt(Distribution *bags) {
@@ -36,7 +36,7 @@ double EntropyBasedSplitCrit::newEnt(Distribution *bags) {
 		}
 		returnValue = returnValue - lnFunc(bags->perBag(i));
 	}
-	return -(returnValue / log(2));
+	return -returnValue;
 }
 
 double EntropyBasedSplitCrit::splitEnt(Distribution *bags) {
@@ -47,5 +47,5 @@ double EntropyBasedSplitCrit::splitEnt(Distribution *bags) {
 	for (i = 0; i < bags->numBags(); i++) {
 		returnValue = returnValue + lnFunc(bags->perBag(i));
 	}
-	return (lnFunc(bags->total()) - returnValue) / log(2);
+	return lnFunc(bags->total()) - returnValue;
 }

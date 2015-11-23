@@ -39,7 +39,7 @@ Instances::Instances(const std::string &name, std::vector<Attribute*> &attInfo, 
 	mInstances = std::vector<Instance*>(capacity);
 }
 
-Instances::Instances(Instances *dataset) :Instances(dataset, dataset->numInstances())
+Instances::Instances(Instances *dataset) :Instances(dataset, 0)
 {
 	dataset->copyInstances(0, this, dataset->numInstances());
 }

@@ -14,8 +14,6 @@ class Instance;
 /// <summary>
 /// Class implementing a "no-split"-split.
 /// 
-/// @author Eibe Frank (eibe@cs.waikato.ac.nz)
-/// @version $Revision$
 /// </summary>
 class NoSplit : public ClassifierSplitModel {
 
@@ -29,7 +27,7 @@ public:
 	/// Creates a "no-split"-split for a given set of instances.
 	/// </summary>
 	/// <exception cref="Exception"> if split can't be built successfully </exception>
-	void buildClassifier(Instances *instances);
+	virtual void buildClassifier(Instances instances);
 
 	/// <summary>
 	/// Always returns 0 because only there is only one subset.

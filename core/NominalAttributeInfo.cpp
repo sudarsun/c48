@@ -13,8 +13,8 @@ NominalAttributeInfo::NominalAttributeInfo(std::vector<std::string> &attributeVa
 	}
 	else
 	{
-		mValues = std::vector<std::string>(attributeValues.size());
-		mHashtable = std::unordered_map<std::string, int>(attributeValues.size());
+		//mValues = std::vector<std::string>(attributeValues.size());
+		//mHashtable = std::unordered_map<std::string, int>(attributeValues.size());
 		for (int i = 0; i < (int)attributeValues.size(); i++)
 		{
 			//std::cout << "before" << attributeValues[i] << std::endl;

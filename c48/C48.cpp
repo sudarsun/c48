@@ -34,7 +34,7 @@ void C48::buildClassifier(Instances *instances)
 	}
 	else
 	{
-		(static_cast<C45ModelSelection*>(modSelection))->cleanup();
+		;// (static_cast<C45ModelSelection*>(modSelection))->cleanup();
 	}
 }
 
