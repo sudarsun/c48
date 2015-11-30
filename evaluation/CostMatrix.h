@@ -130,7 +130,7 @@ class CostMatrix {
   /// <param name="classVal"> the class value. </param>
   /// <returns> the maximum cost. </returns>
   /// <exception cref="Exception"> if cost matrix contains non-fixed costs </exception>
-  //double getMaxCost( int classVal, Instance *inst );
+  double getMaxCost( int classVal, Instance *inst );
 
   /// <summary>
   /// Normalizes the matrix so that the diagonal contains zeros.

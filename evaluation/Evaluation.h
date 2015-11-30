@@ -6,7 +6,7 @@
 
 // Forward class declarations:
 class CostMatrix;
-class UnivariateKernelEstimator;
+class Estimator;
 class Prediction;
 class Instances;
 class Instance;
@@ -28,15 +28,39 @@ public:
 	std::vector<double> evaluateModel(Classifier *classifier, Instances *data);
 	void setPriors(Instances train);
 	double evaluateModelOnceAndRecordPrediction(Classifier * classifier, Instances * data);
+	double evaluateModelOnceAndRecordPrediction(Classifier * classifier, Instance * instance);
 	double evaluateModelOnceAndRecordPrediction(std::vector<double> dist, Instance *instance);
 	double evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions);
+	std::string toSummaryString(bool printComplexityStatistics);
+	std::string toSummaryString(std::string title,  bool printComplexityStatistics);
+	const double correct();
+	const double totalCost();
+	const double avgCost();
+	const double kappa();
+	const double inCorrect();
+	const double pctCorrect();
+	const double pctIncorrect();
+	const double KBRelativeInformation();
+	const double KBInformation();
+	const double KBMeanInformation();
+	const double correlationCoefficient();
+	const double SFPriorEntropy();
+	const double SFMeanPriorEntropy();
+	const double SFSchemeEntropy();
+	const double SFMeanSchemeEntropy();
+	const double SFEntropyGain();
+	const double SFMeanEntropyGain();
+	const double meanAbsoluteError();
+	const double rootMeanSquaredError();
+	const double relativeAbsoluteError();
+	const double rootRelativeSquaredError();
+	const double unclassified();
+	const double pctUnclassified();
+
 
 protected:
-	double evaluationForSingleInstance(Classifier *classifier, Instance *instance, bool storePredictions);
-
 		/// <summary>
 		/// The number of classes. </summary>
-protected:
 	int mNumClasses = 0;
 
 	/// <summary>
@@ -85,7 +109,7 @@ protected:
 
 	/// <summary>
 	/// The cost matrix (if given). </summary>
-	//CostMatrix *mCostMatrix;
+	CostMatrix *mCostMatrix;
 
 	/// <summary>
 	/// The total cost of predictions (includes instance weights). </summary>
@@ -137,7 +161,7 @@ protected:
 
 	/// <summary>
 	///* Resolution of the margin histogram. </summary>
-	static int k_MarginResolution;
+	static int kMarginResolution;
 
 	/// <summary>
 	/// Cumulative margin distribution. </summary>
@@ -157,7 +181,11 @@ protected:
 
 	/// <summary>
 	/// Numeric class estimator for prior. </summary>
-	UnivariateKernelEstimator *mPriorEstimator;
+	Estimator *mPriorErrorEstimator;
+
+	/// <summary>
+	/// Numeric class estimator for scheme. </summary>
+	Estimator *mErrorEstimator;
 
 	/// <summary>
 	/// Whether complexity statistics are available. </summary>
@@ -221,12 +249,24 @@ protected:
 
 	/// <summary>
 	/// Holds plugin evaluation metrics </summary>
-	std::vector<AbstractEvaluationMetric*> mpluginMetrics;
+	std::vector<AbstractEvaluationMetric*> mPluginMetrics;
 
 	/// <summary>
 	/// The list of metrics to display in the output </summary>
 	std::vector<std::string> mmetricsToDisplay;
 
+	double evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions);
+	double evaluationForSingleInstance(Classifier *classifier, Instance *instance, bool storePredictions);
+	void updateStatsForClassifier(std::vector<double> predictedDistribution, Instance *instance);
+	void updateStatsForPredictor(double predictedValue, Instance *instance);
+	void updateMargins(std::vector<double> predictedDistribution, int actualClass, double weight);
+	void updateNumericScores(std::vector<double> predicted, std::vector<double> actual, double weight);
+	std::vector<double> makeDistribution(double predictedClass);
+	/// <summary>
+	/// Sets up the priors for numeric class attributes from the training class
+	/// values that have been seen so far.
+	/// </summary>
+	void setNumericPriorsFromBuffer();
 
 };
 

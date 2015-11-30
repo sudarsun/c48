@@ -235,9 +235,9 @@ double CostMatrix::getMaxCost( int classVal ) {
   return maxCost;
 }
 
-/*double CostMatrix::getMaxCost( int classVal, Instance *inst ) {
+double CostMatrix::getMaxCost( int classVal, Instance *inst ) {
 
-  if( !replaceStrings( inst->dataset() ) ) {
+  if( !replaceStrings( inst->getDataset() ) ) {
     return getMaxCost( classVal );
   }
 
@@ -256,7 +256,7 @@ double CostMatrix::getMaxCost( int classVal ) {
   }
 
   return maxCost;
-}*/
+}
 
 void CostMatrix::normalize() {
 
