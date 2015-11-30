@@ -23,8 +23,11 @@ public:
 	virtual double weight() = 0;
 	virtual void setWeight(double weight) = 0;
 	virtual bool isMissing(int attIndex) = 0;
+	virtual double missingValue() = 0;
 	virtual double value(int attIndex) = 0;
 	virtual void setDataset(Instances *data) = 0;
+	virtual  Instances* getDataset() = 0;
+	virtual bool classIsMissing()=0;
 	
 
 };

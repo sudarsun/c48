@@ -1,6 +1,8 @@
 #ifndef _CONSTS_H_
 #define _CONSTS_H_
 
+#include <vector>
+#include <string>
 
 static std::string dummy = "";
 static std::vector<std::string> _dummy = {};

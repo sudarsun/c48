@@ -14,6 +14,7 @@ class Distribution;
 /// Abstract class for classification models that can be used
 /// recursively to split the data.
 /// </summary>
+
 class ClassifierSplitModel
 {
 	/// <summary>

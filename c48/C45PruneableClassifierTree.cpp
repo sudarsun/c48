@@ -5,14 +5,14 @@
 #include "core/Utils.h"
 #include "NoSplit.h"
 #include "Stats.h"
-
+	
 C45PruneableClassifierTree::C45PruneableClassifierTree(ModelSelection *toSelectLocModel, bool pruneTree, float cf, bool raiseTree, bool cleanup, bool collapseTree) : ClassifierTree(toSelectLocModel)
 {
-	mpruneTheTree = pruneTree;
+	mPruneTheTree = pruneTree;
 	mCF = cf;
-	msubtreeRaising = raiseTree;
-	mcleanup = cleanup;
-	mcollapseTheTree = collapseTree;
+	mSubtreeRaising = raiseTree;
+	mCleanup = cleanup;
+	mCollapseTheTree = collapseTree;
 }
 
 
@@ -23,16 +23,16 @@ void C45PruneableClassifierTree::buildClassifier(Instances *data)
 	Instances *dataMissed = data;
 	dataMissed->deleteWithMissingClass();
 
-	buildTree(dataMissed, msubtreeRaising || !mcleanup);
-	if (mcollapseTheTree)
+	buildTree(dataMissed, mSubtreeRaising || !mCleanup);
+	if (mCollapseTheTree)
 	{
 		collapse();
 	}
-	if (mpruneTheTree)
+	if (mPruneTheTree)
 	{
 		prune();
 	}
-	if (mcleanup)
+	if (mCleanup)
 	{
 		;// cleanup(new Instances(dataMissed, 0));
 	}
@@ -45,7 +45,7 @@ void C45PruneableClassifierTree::collapse()
 	double errorsOfTree;
 	int i;
 
-	if (!misLeaf)
+	if (!mIsLeaf)
 	{
 		errorsOfSubtree = getTrainingErrors();
 		errorsOfTree = localModel()->distribution()->numIncorrect();
@@ -53,15 +53,15 @@ void C45PruneableClassifierTree::collapse()
 		{
 
 			// Free adjacent trees
-			//msons = ;
-			misLeaf = true;
+			//mSons = ;
+			mIsLeaf = true;
 
 			// Get NoSplit Model for tree.
-			mlocalModel = new NoSplit(localModel()->distribution());
+			mLocalModel = new NoSplit(localModel()->distribution());
 		}
 		else
 		{
-			for (i = 0; i < (int)msons.size(); i++)
+			for (i = 0; i < (int)mSons.size(); i++)
 			{
 				son(i)->collapse();
 			}
@@ -79,20 +79,20 @@ void C45PruneableClassifierTree::prune()
 	C45PruneableClassifierTree *largestBranch;
 	int i;
 
-	if (!misLeaf)
+	if (!mIsLeaf)
 	{
 
 		// Prune all subtrees.
-		for (i = 0; i < (int)msons.size(); i++)
+		for (i = 0; i < (int)mSons.size(); i++)
 		{
 			son(i)->prune();
 		}
 
 		// Compute error for largest branch
 		indexOfLargestBranch = localModel()->distribution()->maxBag();
-		if (msubtreeRaising)
+		if (mSubtreeRaising)
 		{
-			errorsLargestBranch = son(indexOfLargestBranch)->getEstimatedErrorsForBranch(static_cast<Instances*>(mtrain));
+			errorsLargestBranch = son(indexOfLargestBranch)->getEstimatedErrorsForBranch(static_cast<Instances*>(mTrain));
 		}
 		else
 		{
@@ -110,11 +110,11 @@ void C45PruneableClassifierTree::prune()
 		{
 
 			// Free son Trees
-			msons.clear();
-			misLeaf = true;
+			mSons.clear();
+			mIsLeaf = true;
 
 			// Get NoSplit Model for node.
-			mlocalModel = new NoSplit(localModel()->distribution());
+			mLocalModel = new NoSplit(localModel()->distribution());
 			return;
 		}
 
@@ -123,10 +123,10 @@ void C45PruneableClassifierTree::prune()
 		if (Utils::smOrEq(errorsLargestBranch, errorsTree + 0.1))
 		{
 			largestBranch = son(indexOfLargestBranch);
-			msons = largestBranch->msons;
-			mlocalModel = largestBranch->localModel();
-			misLeaf = largestBranch->misLeaf;
-			newDistribution(mtrain);
+			mSons = largestBranch->mSons;
+			mLocalModel = largestBranch->localModel();
+			mIsLeaf = largestBranch->mIsLeaf;
+			newDistribution(mTrain);
 			prune();
 		}
 	}
@@ -135,8 +135,8 @@ void C45PruneableClassifierTree::prune()
 ClassifierTree *C45PruneableClassifierTree::getNewTree(Instances *data)
 {
 
-	C45PruneableClassifierTree *newTree = new C45PruneableClassifierTree(mtoSelectModel, mpruneTheTree, mCF, msubtreeRaising, mcleanup, mcollapseTheTree);
-	newTree->buildTree(static_cast<Instances*>(data), msubtreeRaising || !mcleanup);
+	C45PruneableClassifierTree *newTree = new C45PruneableClassifierTree(mToSelectModel, mPruneTheTree, mCF, mSubtreeRaising, mCleanup, mCollapseTheTree);
+	newTree->buildTree(static_cast<Instances*>(data), mSubtreeRaising || !mCleanup);
 
 	return newTree;
 }
@@ -147,13 +147,13 @@ double C45PruneableClassifierTree::getEstimatedErrors()
 	double errors = 0;
 	int i;
 
-	if (misLeaf)
+	if (mIsLeaf)
 	{
 		return getEstimatedErrorsForDistribution(localModel()->distribution());
 	}
 	else
 	{
-		for (i = 0; i < (int)msons.size(); i++)
+		for (i = 0; i < (int)mSons.size(); i++)
 		{
 			errors = errors + son(i)->getEstimatedErrors();
 		}
@@ -168,7 +168,7 @@ double C45PruneableClassifierTree::getEstimatedErrorsForBranch(Instances *data)
 	double errors = 0;
 	int i;
 
-	if (misLeaf)
+	if (mIsLeaf)
 	{
 		return getEstimatedErrorsForDistribution(new Distribution(data));
 	}
@@ -179,7 +179,7 @@ double C45PruneableClassifierTree::getEstimatedErrorsForBranch(Instances *data)
 		//JAVA TO C++ CONVERTER TODO TASK: There is no direct native C++ equivalent to the Java String 'split' method:
 		localInstances = static_cast<std::vector<Instances*>>(localModel()->split(data));
 		localModel()->setDistribution(savedDist);
-		for (i = 0; i < (int)msons.size(); i++)
+		for (i = 0; i < (int)mSons.size(); i++)
 		{
 			errors = errors + son(i)->getEstimatedErrorsForBranch(localInstances[i]);
 		}
@@ -206,13 +206,13 @@ double C45PruneableClassifierTree::getTrainingErrors()
 	double errors = 0;
 	int i;
 
-	if (misLeaf)
+	if (mIsLeaf)
 	{
 		return localModel()->distribution()->numIncorrect();
 	}
 	else
 	{
-		for (i = 0; i < (int)msons.size(); i++)
+		for (i = 0; i < (int)mSons.size(); i++)
 		{
 			errors = errors + son(i)->getTrainingErrors();
 		}
@@ -223,7 +223,7 @@ double C45PruneableClassifierTree::getTrainingErrors()
 ClassifierSplitModel *C45PruneableClassifierTree::localModel()
 {
 
-	return static_cast<ClassifierSplitModel*>(mlocalModel);
+	return static_cast<ClassifierSplitModel*>(mLocalModel);
 }
 
 void C45PruneableClassifierTree::newDistribution(Instances *data)
@@ -232,11 +232,11 @@ void C45PruneableClassifierTree::newDistribution(Instances *data)
 	std::vector<Instances*> localInstances;
 
 	localModel()->resetDistribution(data);
-	mtrain = data;
-	if (!misLeaf)
+	mTrain = data;
+	if (!mIsLeaf)
 	{
 		localInstances = static_cast<std::vector<Instances*>>(localModel()->split(data));
-		for (int i = 0; i < (int)msons.size(); i++)
+		for (int i = 0; i < (int)mSons.size(); i++)
 		{
 			son(i)->newDistribution(localInstances[i]);
 		}
@@ -247,7 +247,7 @@ void C45PruneableClassifierTree::newDistribution(Instances *data)
 		// Check whether there are some instances at the leaf now!
 		if (!Utils::eq(data->sumOfWeights(), 0))
 		{
-			misEmpty = false;
+			mIsEmpty = false;
 		}
 	}
 }
@@ -255,5 +255,5 @@ void C45PruneableClassifierTree::newDistribution(Instances *data)
 C45PruneableClassifierTree *C45PruneableClassifierTree::son(int index)
 {
 
-	return static_cast<C45PruneableClassifierTree*>(msons[index]);
+	return static_cast<C45PruneableClassifierTree*>(mSons[index]);
 }

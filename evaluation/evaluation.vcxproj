@@ -119,14 +119,21 @@
   <ItemGroup>
     <ClInclude Include="BatchPredictor.h" />
     <ClInclude Include="CostMatrix.h" />
+    <ClInclude Include="Estimator.h" />
+    <ClInclude Include="EstimatorUtils.h" />
     <ClInclude Include="Evaluation.h" />
+    <ClInclude Include="IncrementalEstimator.h" />
+    <ClInclude Include="KernelEstimator.h" />
     <ClInclude Include="NominalPrediction.h" />
     <ClInclude Include="NumericPrediction.h" />
     <ClInclude Include="Prediction.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CostMatrix.cpp" />
+    <ClCompile Include="Estimator.cpp" />
+    <ClCompile Include="EstimatorUtils.cpp" />
     <ClCompile Include="Evaluation.cpp" />
+    <ClCompile Include="KernelEstimator.cpp" />
     <ClCompile Include="NominalPrediction.cpp" />
     <ClCompile Include="NumericPrediction.cpp" />
     <ClCompile Include="Prediction.cpp" />

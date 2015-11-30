@@ -75,9 +75,11 @@ public:
 	virtual Instances *trainCV(int numFolds, int numFold);
 	virtual Instances *testCV(int numFolds, int numFold);
 	virtual void setDataset(Instances *data);
+	virtual  Instances* getDataset();
 	std::string getRelationName();
 	void setRelationName(const std::string name);
-
+	virtual double missingValue();
+	virtual bool classIsMissing();
 };
 
 

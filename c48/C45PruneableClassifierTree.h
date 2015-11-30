@@ -21,11 +21,11 @@ class C45PruneableClassifierTree : public ClassifierTree
 	/// <summary>
 	/// True if the tree is to be pruned. </summary>
 protected:
-	bool mpruneTheTree = false;
+	bool mPruneTheTree = false;
 
 	/// <summary>
 	/// True if the tree is to be collapsed. </summary>
-	bool mcollapseTheTree = false;
+	bool mCollapseTheTree = false;
 
 	/// <summary>
 	/// The confidence factor for pruning. </summary>
@@ -33,11 +33,11 @@ protected:
 
 	/// <summary>
 	/// Is subtree raising to be performed? </summary>
-	bool msubtreeRaising = true;
+	bool mSubtreeRaising = true;
 
 	/// <summary>
 	/// Cleanup after the tree has been built. </summary>
-	bool mcleanup = true;
+	bool mCleanup = true;
 
 	/// <summary>
 	/// Constructor for pruneable tree structure. Stores reference

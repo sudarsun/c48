@@ -23,35 +23,35 @@ class ClassifierTree  {
 	/// <summary>
 	/// The model selection method. </summary>
 protected:
-	ModelSelection *mtoSelectModel;
+	ModelSelection *mToSelectModel;
 
 	/// <summary>
 	/// Local model at node. </summary>
-	ClassifierSplitModel *mlocalModel;
+	ClassifierSplitModel *mLocalModel;
 
 	/// <summary>
 	/// References to sons. </summary>
-	std::vector<ClassifierTree*> msons;
+	std::vector<ClassifierTree*> mSons;
 
 	/// <summary>
 	/// True if node is leaf. </summary>
-	bool misLeaf = false;
+	bool mIsLeaf = false;
 
 	/// <summary>
 	/// True if node is empty. </summary>
-	bool misEmpty = false;
+	bool mIsEmpty = false;
 
 	/// <summary>
 	/// The training instances. </summary>
-	Instances *mtrain;
+	Instances *mTrain;
 
 	/// <summary>
 	/// The pruning instances. </summary>
-	Distribution *mtest;
+	Distribution *mTest;
 
 	/// <summary>
 	/// The id for the node. </summary>
-	int mid = 0;
+	int mID = 0;
 
 	/// <summary>
 	/// For getting a unique ID when outputting the tree (hashcode isn't guaranteed

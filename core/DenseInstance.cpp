@@ -15,7 +15,7 @@ Attribute *DenseInstance::attribute(int index)
 
 int DenseInstance::numAttributes()
 {
-	return mAttValues.size();
+	return (int)mAttValues.size();
 }
 int DenseInstance::classIndex()
 {
@@ -134,7 +134,22 @@ void DenseInstance::setDataset(Instances *instances) {
 	mDataset = instances;
 }
 
-//Instances DenseInstance::dataset()
-//{
-//	return mDataset;
-//}
+Instances* DenseInstance::getDataset()
+{
+	return mDataset;
+}
+
+double DenseInstance::missingValue()
+{
+	return std::numeric_limits<double>::quiet_NaN();;
+}
+
+bool Instances::classIsMissing()
+{
+	int classIndexValue = classIndex();
+	if (classIndexValue < 0)
+	{
+		throw "Class is not set!";
+	}
+	return isMissing(classIndexValue);
+}

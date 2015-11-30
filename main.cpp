@@ -1,5 +1,6 @@
 #include "core/DataSource.h"
 #include "core/Instances.h"
+#include "core/DenseInstance.h"
 #include "core/Utils.h"
 #include "c48/C48.h"
 #include "evaluation/Evaluation.h"
@@ -32,10 +33,10 @@ void classify()
 	time(&TimeElapsed);
 
 	int num = inst->numAttributes(); // Get total number of attributes
-
+	int totalInst = inst->numInstances();
 	cout << "Schema:       " << "C++ 4.8 Decision Tree Implementation" << endl;
 	cout << "Relation:     " << inst->getRelationName() << endl;
-	cout << "Instances:    " << inst->numInstances() << endl;
+	cout << "Instances:    " << totalInst << endl;
 	cout << "Attributes:   " << endl;
 	for (int i = 0; i<num; i++)
 		cout << "              " << inst->attribute(i)->name() << endl;
@@ -59,5 +60,43 @@ void classify()
 	Evaluation *eval = nullptr;
 	CostMatrix *costMatrix = nullptr;
 	eval = new Evaluation(inst, costMatrix);
-		
+	for (int i = 0; i < totalInst; i++)
+	{
+
+	}
+}
+void processClassifierPrediction(Instance *toPredict,
+	Classifier *classifier, Evaluation eval, Instances *plotInstances)
+{
+	try
+	{
+		double pred = eval.evaluateModelOnceAndRecordPrediction(classifier,	toPredict);
+		if (plotInstances != nullptr) {
+			std::vector<double> values = std::vector<double>(plotInstances->numAttributes());
+			for (int i = 0; i < plotInstances->numAttributes(); i++) {
+				if (i < toPredict->classIndex()) {
+					values[i] = toPredict->value(i);
+				}
+				else if (i == toPredict->classIndex()) {
+					values[i] = pred;
+					values[i + 1] = toPredict->value(i);
+					/*
+					* // if the class value of the instances to predict is missing then
+					* // set it to the predicted value if (toPredict.isMissing(i)) {
+					* values[i+1] = pred; }
+					*/
+					i++;
+				}
+				else {
+					values[i] = toPredict->value(i - 1);
+				}
+			}
+			plotInstances->add(new DenseInstance(1.0, values));
+		}
+
+	}
+	catch (std::exception ex)
+	{
+
+	}
 }

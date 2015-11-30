@@ -41,7 +41,42 @@ public:
 	static double p1evl(double x, const std::vector<double> &coef, int N);
 	static double polevl(double x, const std::vector<double> &coef, int N);
 
+	/// <summary>
+	/// Returns the area under the Normal (Gaussian) probability density
+	/// function, integrated from minus infinity to <tt>x</tt>
+	/// (assumes mean is zero, variance is one).
+	/// <pre>
+	///                            x
+	///                             -
+	///                   1        | |          2
+	///  normal(x)  = ---------    |    exp( - t /2 ) dt
+	///               sqrt(2pi)  | |
+	///                           -
+	///                          -inf.
+	///   
+	///             =  ( 1 + erf(z) ) / 2
+	///             =  erfc(z) / 2
+	/// </pre>
+	/// where <tt>z = x/sqrt(2)</tt>.
+	/// Computation is via the functions <tt>errorFunction</tt> and <tt>errorFunctionComplement</tt>.
+	/// </summary>
+	/// <param name="a"> the z-value </param>
+	/// <returns> the probability of the z value according to the normal pdf </returns>
+	static double normalProbability(double a);
 
+
+	/*
+	Returns the error function of the normal distribution.
+	*/
+	static double errorFunction(double x);
+	/*
+	Returns the complementary Error function of the normal distribution.
+	*/
+	static double errorFunctionComplemented(double a);
+
+protected:
+	static const double SQRTH;
+	static const double MAXLOG;
 };
 
 

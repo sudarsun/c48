@@ -20,7 +20,7 @@ void ClassifierTree::resetID() {
 
 ClassifierTree::ClassifierTree(ModelSelection *toSelectLocModel) {
 
-	mtoSelectModel = toSelectLocModel;
+	mToSelectModel = toSelectLocModel;
 }
 
 void ClassifierTree::buildClassifier(Instances *data) {
@@ -37,26 +37,27 @@ void ClassifierTree::buildTree(Instances *data, bool keepData) {
 	std::vector<Instances*> localInstances;
 
 	if (keepData) {
-		mtrain = data;
+		mTrain = data;
 	}
-	mtest = nullptr;;
-	misLeaf = false;
-	misEmpty = false;
-	msons.clear();
-	mlocalModel = mtoSelectModel->selectModel(data);
-	if (mlocalModel->numSubsets() > 1) {
-		localInstances = mlocalModel->split(data);
+	mTest = nullptr;;
+	mIsLeaf = false;
+	mIsEmpty = false;
+	mSons.clear();
+	mLocalModel = mToSelectModel->selectModel(data);
+	if (mLocalModel->numSubsets() > 1) {
+		localInstances = mLocalModel->split(data);
 		
-		msons = std::vector<ClassifierTree*>(mlocalModel->numSubsets());
-		for (int i = 0; i < msons.size(); i++) {
-			msons[i] = getNewTree(localInstances[i]);
+		mSons = std::vector<ClassifierTree*>(mLocalModel->numSubsets());
+		int totalSons = mSons.size();
+		for (int i = 0; i < totalSons; i++) {
+			mSons[i] = getNewTree(localInstances[i]);
 			//delete localInstances[i];
 		}
 	}
 	else {
-		misLeaf = true;
+		mIsLeaf = true;
 		if (Utils::eq(data->sumOfWeights(), 0)) {
-			misEmpty = true;
+			mIsEmpty = true;
 		}
 	}
 }
@@ -67,40 +68,30 @@ void ClassifierTree::buildTree(Instances *train, Instances *test, bool keepData)
 	int i;
 
 	if (keepData) {
-		mtrain = train;
+		mTrain = train;
 	}
-	misLeaf = false;
-	misEmpty = false;
-	msons.clear();
-	mlocalModel = mtoSelectModel->selectModel(train, test);
-	mtest = new Distribution(test, mlocalModel);
-	if (mlocalModel->numSubsets() > 1) {
-		//JAVA TO C++ CONVERTER TODO TASK: There is no direct native C++ equivalent to the Java String 'split' method:
-		localTrain = mlocalModel->split(train);
-		//JAVA TO C++ CONVERTER TODO TASK: There is no direct native C++ equivalent to the Java String 'split' method:
-		localTest = mlocalModel->split(test);
-		//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-		delete train;
-		//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-		delete test;
-		msons = std::vector<ClassifierTree*>(mlocalModel->numSubsets());
-		for (i = 0; i < msons.size(); i++) {
-			msons[i] = getNewTree(localTrain[i], localTest[i]);
-			//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-			delete localTrain[i];
-			//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-			delete localTest[i];
+	mIsLeaf = false;
+	mIsEmpty = false;
+	mSons.clear();
+	mLocalModel = mToSelectModel->selectModel(train, test);
+	mTest = new Distribution(test, mLocalModel);
+	if (mLocalModel->numSubsets() > 1) {
+		localTrain = mLocalModel->split(train);
+		localTest = mLocalModel->split(test);
+		//delete train;
+		//delete test;
+		mSons = std::vector<ClassifierTree*>(mLocalModel->numSubsets());
+		for (i = 0; i < mSons.size(); i++) {
+			mSons[i] = getNewTree(localTrain[i], localTest[i]);
+			//delete localTrain[i];
+			//delete localTest[i];
 		}
 	}
 	else {
-		misLeaf = true;
+		mIsLeaf = true;
 		if (Utils::eq(train->sumOfWeights(), 0)) {
-			misEmpty = true;
+			mIsEmpty = true;
 		}
-		//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-		delete train;
-		//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-		delete test;
 	}
 }
 
@@ -124,12 +115,10 @@ double ClassifierTree::classifyInstance(Instance *instance) {
 
 void ClassifierTree::cleanup(Instances *justHeaderInfo) {
 
-	mtrain = justHeaderInfo;
-	//JAVA TO C++ CONVERTER WARNING: Java to C++ Converter converted the original 'null' assignment to a call to 'delete', but you should review memory allocation of all pointer variables in the converted code:
-	delete mtest;
-	if (!misLeaf) {
-		for (auto mson : msons) {
-			mson->cleanup(justHeaderInfo);
+	mTrain = justHeaderInfo;
+	if (!mIsLeaf) {
+		for (auto mSon : mSons) {
+			mSon->cleanup(justHeaderInfo);
 		}
 	}
 }
@@ -154,10 +143,10 @@ int ClassifierTree::assignIDs(int lastID) {
 
 	int currLastID = lastID + 1;
 
-	mid = currLastID;
-	if (msons.size() > 0) {
-		for (auto mson : msons) {
-			currLastID = mson->assignIDs(currLastID);
+	mID = currLastID;
+	if (mSons.size() > 0) {
+		for (auto mSon : mSons) {
+			currLastID = mSon->assignIDs(currLastID);
 		}
 	}
 	return currLastID;
@@ -173,19 +162,19 @@ std::string ClassifierTree::graph() {
 
 	assignIDs(-1);
 	text.append("digraph J48Tree {\n");
-	if (misLeaf) {
-		text.append(std::string("N") + std::to_string(mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->dumpLabel(0, mtrain)) + std::string("\" ") + std::string("shape=box style=filled "));
-		if (mtrain != nullptr && mtrain->numInstances() > 0) {
-			text.append(std::string("data =\n") + mtrain->toString()+ std::string("\n"));
+	if (mIsLeaf) {
+		text.append(std::string("N") + std::to_string(mID) + std::string(" [label=\"") + Utils::backQuoteChars(mLocalModel->dumpLabel(0, mTrain)) + std::string("\" ") + std::string("shape=box style=filled "));
+		if (mTrain != nullptr && mTrain->numInstances() > 0) {
+			text.append(std::string("data =\n") + mTrain->toString()+ std::string("\n"));
 			text.append(",\n");
 
 		}
 		text.append("]\n");
 	}
 	else {
-		text.append(std::string("N") + std::to_string(mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->leftSide(mtrain)) + std::string("\" "));
-		if (mtrain != nullptr && mtrain->numInstances() > 0) {
-			text.append(std::string("data =\n") + mtrain->toString() + std::string("\n"));
+		text.append(std::string("N") + std::to_string(mID) + std::string(" [label=\"") + Utils::backQuoteChars(mLocalModel->leftSide(mTrain)) + std::string("\" "));
+		if (mTrain != nullptr && mTrain->numInstances() > 0) {
+			text.append(std::string("data =\n") + mTrain->toString() + std::string("\n"));
 			text.append(",\n");
 		}
 		text.append("]\n");
@@ -200,8 +189,8 @@ std::string ClassifierTree::prefix() {
 	std::string text;
 
 	text = "";
-	if (misLeaf) {
-		text.append(std::string("[") + mlocalModel->dumpLabel(0, mtrain) + std::string("]"));
+	if (mIsLeaf) {
+		text.append(std::string("[") + mLocalModel->dumpLabel(0, mTrain) + std::string("]"));
 	}
 	else {
 		prefixTree(text);
@@ -216,12 +205,12 @@ int ClassifierTree::numLeaves() {
 	int num = 0;
 	int i;
 
-	if (misLeaf) {
+	if (mIsLeaf) {
 		return 1;
 	}
 	else {
-		for (i = 0; i < msons.size(); i++) {
-			num = num + msons[i]->numLeaves();
+		for (i = 0; i < mSons.size(); i++) {
+			num = num + mSons[i]->numLeaves();
 		}
 	}
 
@@ -233,9 +222,9 @@ int ClassifierTree::numNodes() {
 	int no = 1;
 	int i;
 
-	if (!misLeaf) {
-		for (i = 0; i < msons.size(); i++) {
-			no = no + msons[i]->numNodes();
+	if (!mIsLeaf) {
+		for (i = 0; i < mSons.size(); i++) {
+			no = no + mSons[i]->numNodes();
 		}
 	}
 
@@ -247,9 +236,9 @@ std::string ClassifierTree::toString() {
 	try {
 		std::string text = "";
 
-		if (misLeaf) {
+		if (mIsLeaf) {
 			text.append(": ");
-			text.append(mlocalModel->dumpLabel(0, mtrain));
+			text.append(mLocalModel->dumpLabel(0, mTrain));
 		}
 		else {
 			dumpTree(0, text);
@@ -266,7 +255,7 @@ std::string ClassifierTree::toString() {
 
 ClassifierTree *ClassifierTree::getNewTree(Instances *data) {
 
-	ClassifierTree *newTree = new ClassifierTree(mtoSelectModel);
+	ClassifierTree *newTree = new ClassifierTree(mToSelectModel);
 	newTree->buildTree(data, false);
 
 	return newTree;
@@ -274,7 +263,7 @@ ClassifierTree *ClassifierTree::getNewTree(Instances *data) {
 
 ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) {
 
-	ClassifierTree *newTree = new ClassifierTree(mtoSelectModel);
+	ClassifierTree *newTree = new ClassifierTree(mToSelectModel);
 	newTree->buildTree(train, test, false);
 
 	return newTree;
@@ -284,44 +273,44 @@ void ClassifierTree::dumpTree(int depth, std::string &text) {
 
 	int i, j;
 
-	for (i = 0; i < msons.size(); i++) {
+	for (i = 0; i < mSons.size(); i++) {
 		text.append("\n");
 		;
 		for (j = 0; j < depth; j++) {
 			text.append("|   ");
 		}
-		text.append(mlocalModel->leftSide(mtrain));
-		text.append(mlocalModel->rightSide(i, mtrain));
-		if (msons[i]->misLeaf) {
+		text.append(mLocalModel->leftSide(mTrain));
+		text.append(mLocalModel->rightSide(i, mTrain));
+		if (mSons[i]->mIsLeaf) {
 			text.append(": ");
-			text.append(mlocalModel->dumpLabel(i, mtrain));
+			text.append(mLocalModel->dumpLabel(i, mTrain));
 		}
 		else {
-			msons[i]->dumpTree(depth + 1, text);
+			mSons[i]->dumpTree(depth + 1, text);
 		}
 	}
 }
 
 void ClassifierTree::graphTree(std::string &text) {
 
-	for (int i = 0; i < msons.size(); i++) {
-		text.append(std::string("N") + std::to_string(mid) + std::string("->") + std::string("N") + std::to_string(msons[i]->mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->rightSide(i, mtrain)) + std::string("\"]\n"));
-		if (msons[i]->misLeaf) {
-			text.append(std::string("N") + std::to_string(msons[i]->mid) + std::string(" [label=\"") + Utils::backQuoteChars(mlocalModel->dumpLabel(i, mtrain)) + std::string("\" ") + std::string("shape=box style=filled "));
-			if (mtrain != nullptr && mtrain->numInstances() > 0) {
-				text.append(std::string("data =\n") + msons[i]->mtrain->toString() + std::string("\n"));
+	for (int i = 0; i < mSons.size(); i++) {
+		text.append(std::string("N") + std::to_string(mID) + std::string("->") + std::string("N") + std::to_string(mSons[i]->mID) + std::string(" [label=\"") + Utils::backQuoteChars(mLocalModel->rightSide(i, mTrain)) + std::string("\"]\n"));
+		if (mSons[i]->mIsLeaf) {
+			text.append(std::string("N") + std::to_string(mSons[i]->mID) + std::string(" [label=\"") + Utils::backQuoteChars(mLocalModel->dumpLabel(i, mTrain)) + std::string("\" ") + std::string("shape=box style=filled "));
+			if (mTrain != nullptr && mTrain->numInstances() > 0) {
+				text.append(std::string("data =\n") + mSons[i]->mTrain->toString() + std::string("\n"));
 				text.append(",\n");
 			}
 			text.append("]\n");
 		}
 		else {
-			text.append(std::string("N") + std::to_string(msons[i]->mid) + std::string(" [label=\"") + Utils::backQuoteChars(msons[i]->mlocalModel->leftSide(mtrain)) + std::string("\" "));
-			if (mtrain != nullptr && mtrain->numInstances() > 0) {
-				text.append(std::string("data =\n") + msons[i]->mtrain->toString() + std::string("\n"));
+			text.append(std::string("N") + std::to_string(mSons[i]->mID) + std::string(" [label=\"") + Utils::backQuoteChars(mSons[i]->mLocalModel->leftSide(mTrain)) + std::string("\" "));
+			if (mTrain != nullptr && mTrain->numInstances() > 0) {
+				text.append(std::string("data =\n") + mSons[i]->mTrain->toString() + std::string("\n"));
 				text.append(",\n");
 			}
 			text.append("]\n");
-			msons[i]->graphTree(text);
+			mSons[i]->graphTree(text);
 		}
 	}
 }
@@ -329,21 +318,21 @@ void ClassifierTree::graphTree(std::string &text) {
 void ClassifierTree::prefixTree(std::string &text) {
 
 	text.append("[");
-	text.append(mlocalModel->leftSide(mtrain) + std::string(":"));
-	for (int i = 0; i < msons.size(); i++) {
+	text.append(mLocalModel->leftSide(mTrain) + std::string(":"));
+	for (int i = 0; i < mSons.size(); i++) {
 		if (i > 0) {
 			text.append(",\n");
 		}
-		text.append(mlocalModel->rightSide(i, mtrain));
+		text.append(mLocalModel->rightSide(i, mTrain));
 	}
-	for (int i = 0; i < msons.size(); i++) {
-		if (msons[i]->misLeaf) {
+	for (int i = 0; i < mSons.size(); i++) {
+		if (mSons[i]->mIsLeaf) {
 			text.append("[");
-			text.append(mlocalModel->dumpLabel(i, mtrain));
+			text.append(mLocalModel->dumpLabel(i, mTrain));
 			text.append("]");
 		}
 		else {
-			msons[i]->prefixTree(text);
+			mSons[i]->prefixTree(text);
 		}
 	}
 	text.append("]");
@@ -353,22 +342,22 @@ double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, doubl
 
 	double prob = 0;
 
-	if (misLeaf) {
+	if (mIsLeaf) {
 		return weight * localModel()->classProbLaplace(classIndex, instance, -1);
 	}
 	else {
 		int treeIndex = localModel()->whichSubset(instance);
 		if (treeIndex == -1) {
 			std::vector<double> weights = localModel()->weights(instance);
-			for (int i = 0; i < msons.size(); i++) {
-				if (!son(i)->misEmpty) {
+			for (int i = 0; i < mSons.size(); i++) {
+				if (!son(i)->mIsEmpty) {
 					prob += son(i)->getProbsLaplace(classIndex, instance, weights[i] * weight);
 				}
 			}
 			return prob;
 		}
 		else {
-			if (son(treeIndex)->misEmpty) {
+			if (son(treeIndex)->mIsEmpty) {
 				return weight * localModel()->classProbLaplace(classIndex, instance, treeIndex);
 			}
 			else {
@@ -382,22 +371,22 @@ double ClassifierTree::getProbs(int classIndex, Instance *instance, double weigh
 
 	double prob = 0;
 
-	if (misLeaf) {
+	if (mIsLeaf) {
 		return weight * localModel()->classProb(classIndex, instance, -1);
 	}
 	else {
 		int treeIndex = localModel()->whichSubset(instance);
 		if (treeIndex == -1) {
 			std::vector<double> weights = localModel()->weights(instance);
-			for (int i = 0; i < msons.size(); i++) {
-				if (!son(i)->misEmpty) {
+			for (int i = 0; i < mSons.size(); i++) {
+				if (!son(i)->mIsEmpty) {
 					prob += son(i)->getProbs(classIndex, instance, weights[i] * weight);
 				}
 			}
 			return prob;
 		}
 		else {
-			if (son(treeIndex)->misEmpty) {
+			if (son(treeIndex)->mIsEmpty) {
 				return weight * localModel()->classProb(classIndex, instance, treeIndex);
 			}
 			else {
@@ -409,12 +398,12 @@ double ClassifierTree::getProbs(int classIndex, Instance *instance, double weigh
 
 ClassifierSplitModel *ClassifierTree::localModel() {
 
-	return mlocalModel;
+	return mLocalModel;
 }
 
 ClassifierTree *ClassifierTree::son(int index) {
 
-	return msons[index];
+	return mSons[index];
 }
 
 std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) {
@@ -438,7 +427,7 @@ std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) {
 		queueOfNodes.pop_front();
 
 		// Is node a leaf?
-		if (node->misLeaf) {
+		if (node->mIsLeaf) {
 			continue;
 		}
 
@@ -446,7 +435,7 @@ std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) {
 		int treeIndex = node->localModel()->whichSubset(instance);
 
 		// Space for weight distribution
-		std::vector<double> weights(node->msons.size());
+		std::vector<double> weights(node->mSons.size());
 
 		// Check for missing value
 		if (treeIndex == -1) {
@@ -455,7 +444,7 @@ std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) {
 		else {
 			weights[treeIndex] = 1.0;
 		}
-		for (int i = 0; i < node->msons.size(); i++) {
+		for (int i = 0; i < node->mSons.size(); i++) {
 			queueOfNodes.push_back(node->son(i));
 			queueOfWeights.push_back(a[index - 1] * weights[i]);
 		}

@@ -389,10 +389,10 @@ void Instances::sortBasedOnNominalAttribute(int attIndex)
 	}
 }
 
-//Instances Instances::dataset()
-//{
-//	return this;
-//}
+Instances* Instances::getDataset()
+{
+	return this;
+}
 
 std::string Instances::getRelationName()
 {
@@ -407,5 +407,14 @@ void Instances::setRelationName(const std::string name)
 
 void Instances::setDataset(Instances *instances) {
 
-	
+}
+
+bool Instances::classIsMissing()
+{
+	return false;
+}
+
+double Instances:: missingValue()
+{
+	return 0.0;
 }

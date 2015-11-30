@@ -19,33 +19,7 @@ class Utils
 
 public:
 
-	/// <summary>
-	/// Generates a commandline of the given object. If the object is not
-	/// implementing OptionHandler, then it will only return the classname,
-	/// otherwise also the options.
-	/// </summary>
-	/// <param name="obj"> the object to turn into a commandline </param>
-	/// <returns> the commandline </returns>
-
-	static std::string toCommandLine(void *obj);
-	/// <summary>
-	/// Split up a string containing options into an array of strings, one for each
-	/// option.
-	/// </summary>
-	/// <param name="quotedOptionString"> the string containing the options </param>
-	/// <returns> the array of options </returns>
-	/// <exception cref="Exception"> in case of an unterminated string, unknown character or a
-	///           parse error </exception>
-
-	static std::vector<std::string> splitOptions(const std::string &quotedOptionString);
-
-	/// <summary>
-	/// Joins all the options in an option array into a single string, as might be
-	/// used on the command line.
-	/// </summary>
-	/// <param name="optionArray"> the array of options </param>
-	/// <returns> the string containing all options. </returns>
-	static std::string joinOptions(std::vector<std::string> &optionArray);
+	static const double SMALL;
 
 	/// <summary>
 	/// Computes entropy for an array of integers.

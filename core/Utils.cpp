@@ -1,6 +1,7 @@
 #include "Utils.h"
 
-static double SMALL = 1e-6;
+const double Utils::SMALL = 1e-6;
+
 bool Utils::isMissingValue(double val) {
 
 	return std::isnan(val);

@@ -26,6 +26,7 @@ public:
 	virtual void setValue(int attIndex, const std::string &value);
 	virtual void setValue(int attIndex, double value);
 	virtual  void setDataset(Instances* data);
+	virtual  Instances* getDataset();
 	/*
 	virtual void *copy();
 	virtual int index( int position );
@@ -46,6 +47,8 @@ public:
 	virtual int numClasses();
 	virtual bool isMissing(int attIndex);
 	virtual void setWeight(double weight);
+	virtual double missingValue();
+	virtual bool classIsMissing();
 	
 protected:
 	std::vector<double> mAttValues;

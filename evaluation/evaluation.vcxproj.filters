@@ -25,6 +25,18 @@
     <ClInclude Include="CostMatrix.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="IncrementalEstimator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Estimator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="KernelEstimator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="EstimatorUtils.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Evaluation.cpp">
@@ -40,6 +52,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="CostMatrix.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Estimator.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="KernelEstimator.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="EstimatorUtils.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
