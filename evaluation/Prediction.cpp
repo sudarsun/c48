@@ -1,3 +1,3 @@
 #include "Prediction.h"
 
-const double MISSING_VALUE = std::numeric_limits<double>::quiet_NaN();
+const double Prediction::MISSING_VALUE = std::numeric_limits<double>::quiet_NaN();

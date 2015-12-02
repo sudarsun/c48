@@ -48,7 +48,7 @@ void ClassifierTree::buildTree(Instances *data, bool keepData) {
 		localInstances = mLocalModel->split(data);
 		
 		mSons = std::vector<ClassifierTree*>(mLocalModel->numSubsets());
-		int totalSons = mSons.size();
+		int totalSons = (int)mSons.size();
 		for (int i = 0; i < totalSons; i++) {
 			mSons[i] = getNewTree(localInstances[i]);
 			//delete localInstances[i];

@@ -56,7 +56,7 @@ void KernelEstimator::addValue( double data, double weight ) {
   if( ( m_NumValues <= insertIndex ) || ( m_Values[insertIndex] != data ) ) {
     if( m_NumValues < m_Values.size() ) {
       int left = m_NumValues - insertIndex;
-#warning "Please cross-check here tfor array copy"
+	  std::cout << "Please cross-check here tfor array copy";
 	  std::copy(m_Values.begin() + insertIndex, m_Values.begin() +left, m_Values.begin()+ insertIndex + 1);
 	  std::copy(m_Weights.begin() + insertIndex, m_Weights.begin() + left, m_Weights.begin() + insertIndex + 1);
 
@@ -70,8 +70,8 @@ void KernelEstimator::addValue( double data, double weight ) {
       std::vector<double> newValues( m_Values.size() * 2 );
       std::vector<double> newWeights( m_Values.size() * 2 );
       int left = m_NumValues - insertIndex;
-	  std::copy(m_Values.begin(), m_Values.begin() + insertIndex, newValues);
-	  std::copy(m_Weights.begin(), m_Weights.begin() + insertIndex, newWeights);
+	  std::copy(m_Values.begin(), m_Values.begin() + insertIndex, newValues.begin());
+	  std::copy(m_Weights.begin(), m_Weights.begin() + insertIndex, newWeights.begin());
       //std::copy( m_Values, 0, newValues, 0, insertIndex );
       //std::copy( m_Weights, 0, newWeights, 0, insertIndex );
       newValues[insertIndex] = data;

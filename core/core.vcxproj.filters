@@ -37,6 +37,9 @@
     <ClCompile Include="Utils.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attribute.h">
@@ -79,6 +82,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractInstance.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

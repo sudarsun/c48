@@ -408,7 +408,6 @@ void Instances::setRelationName(const std::string name)
 void Instances::setDataset(Instances *instances) {
 
 }
-
 bool Instances::classIsMissing()
 {
 	return false;
@@ -417,4 +416,14 @@ bool Instances::classIsMissing()
 double Instances:: missingValue()
 {
 	return 0.0;
+}
+
+std::vector<double> Instances::attributeToDoubleArray(int index)
+{
+	int totalInst = numInstances();
+	std::vector<double> result;
+	for (int i = 0; i < totalInst; i++) {
+		result.push_back(instance(i)->value(index));
+	}
+	return result;
 }

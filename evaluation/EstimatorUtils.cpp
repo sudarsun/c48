@@ -35,7 +35,7 @@ double EstimatorUtils::findMinDistance( Instances *inst, int attrIndex ) {
   return min;
 }
 
-int EstimatorUtils::getMinMax( Instances *inst, int attrIndex, std::vector<double> &minMax ) throw( std::exception ) {
+int EstimatorUtils::getMinMax( Instances *inst, int attrIndex, std::vector<double> &minMax ) {
   double min = std::numeric_limits<double>::quiet_NaN();;
   double max = std::numeric_limits<double>::quiet_NaN();;
   Instance *instance = nullptr;

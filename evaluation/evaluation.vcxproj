@@ -118,6 +118,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BatchPredictor.h" />
+    <ClInclude Include="ConfusionMatrix.h" />
     <ClInclude Include="CostMatrix.h" />
     <ClInclude Include="Estimator.h" />
     <ClInclude Include="EstimatorUtils.h" />
@@ -127,8 +128,11 @@
     <ClInclude Include="NominalPrediction.h" />
     <ClInclude Include="NumericPrediction.h" />
     <ClInclude Include="Prediction.h" />
+    <ClInclude Include="ThresholdCurve.h" />
+    <ClInclude Include="TwoClassStats.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConfusionMatrix.cpp" />
     <ClCompile Include="CostMatrix.cpp" />
     <ClCompile Include="Estimator.cpp" />
     <ClCompile Include="EstimatorUtils.cpp" />
@@ -137,6 +141,8 @@
     <ClCompile Include="NominalPrediction.cpp" />
     <ClCompile Include="NumericPrediction.cpp" />
     <ClCompile Include="Prediction.cpp" />
+    <ClCompile Include="ThresholdCurve.cpp" />
+    <ClCompile Include="TwoClassStats.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

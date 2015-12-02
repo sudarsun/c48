@@ -37,6 +37,15 @@
     <ClInclude Include="EstimatorUtils.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="ThresholdCurve.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoClassStats.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfusionMatrix.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Evaluation.cpp">
@@ -61,6 +70,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="EstimatorUtils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ThresholdCurve.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoClassStats.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfusionMatrix.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

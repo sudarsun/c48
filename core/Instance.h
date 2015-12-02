@@ -3,11 +3,12 @@
 
 #include <string>
 #include <vector>
+//#include "AbstractInstance.h"
 
 class Attribute;
 class Instances;
 
-class Instance
+class Instance //: AbstractInstance 
 {
 
 public:

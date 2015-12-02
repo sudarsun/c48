@@ -80,6 +80,7 @@ public:
 	void setRelationName(const std::string name);
 	virtual double missingValue();
 	virtual bool classIsMissing();
+	std::vector<double> attributeToDoubleArray(int index);
 };
 
 

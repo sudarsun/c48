@@ -125,11 +125,13 @@
     <ClCompile Include="DataSource.cpp" />
     <ClCompile Include="DenseInstance.cpp" />
     <ClCompile Include="Instances.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="NominalAttributeInfo.cpp" />
     <ClCompile Include="statistics.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractInstance.h" />
     <ClInclude Include="Attribute.h" />
     <ClInclude Include="AttributeInfo.h" />
     <ClInclude Include="AttributeMetaInfo.h" />
@@ -140,6 +142,7 @@
     <ClInclude Include="DenseInstance.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="Instances.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="NominalAttributeInfo.h" />
     <ClInclude Include="statistics.h" />
     <ClInclude Include="Typedefs.h" />

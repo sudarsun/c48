@@ -234,7 +234,7 @@ int Attribute::addStringValue( const std::string &value )
 	}
 	catch(std::exception &ex)
 	{
-		intIndex = nominalPtr->getSize();
+		intIndex = (int)nominalPtr->getSize();
 		nominalPtr->addAttribute(value.c_str(),intIndex);
 		return intIndex;
 	}
@@ -269,7 +269,7 @@ int Attribute::addStringValue( Attribute *src, int index )
 	}
 	catch(std::exception &ex)
 	{
-		int intIndex = ( static_cast<NominalAttributeInfo*>( mAttributeInfo ) )->getSize();
+		int intIndex = (int)( static_cast<NominalAttributeInfo*>( mAttributeInfo ) )->getSize();
 		( static_cast<NominalAttributeInfo*>( mAttributeInfo ) )->addAttribute(store,intIndex);
 		return intIndex;
 	}

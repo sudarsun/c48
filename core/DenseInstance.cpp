@@ -144,7 +144,7 @@ double DenseInstance::missingValue()
 	return std::numeric_limits<double>::quiet_NaN();;
 }
 
-bool Instances::classIsMissing()
+bool DenseInstance::classIsMissing()
 {
 	int classIndexValue = classIndex();
 	if (classIndexValue < 0)

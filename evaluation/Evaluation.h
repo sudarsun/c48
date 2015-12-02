@@ -10,7 +10,7 @@ class Estimator;
 class Prediction;
 class Instances;
 class Instance;
-class AbstractEvaluationMetric;
+//class AbstractEvaluationMetric;
 class Classifier;
 class CostMatrix;
 
@@ -20,7 +20,6 @@ class CostMatrix;
 class Evaluation
 {
 public:
-	Evaluation();
 	Evaluation(Instances data);
 	Evaluation(Instances data, CostMatrix costMatrix);
 	~Evaluation();
@@ -33,6 +32,10 @@ public:
 	double evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions);
 	std::string toSummaryString(bool printComplexityStatistics);
 	std::string toSummaryString(std::string title,  bool printComplexityStatistics);
+	std::string toClassDetailsString(std::string title);
+	std::string toClassDetailsString();
+	std::string  toMatrixString();
+	std::string  toMatrixString(std::string title);
 	const double correct();
 	const double totalCost();
 	const double avgCost();
@@ -56,7 +59,22 @@ public:
 	const double rootRelativeSquaredError();
 	const double unclassified();
 	const double pctUnclassified();
-
+	const double meanPriorAbsoluteError();
+	const double priorEntropy();
+	const double rootMeanPriorSquaredError();
+	double truePositiveRate(int classIndex);
+	double falsePositiveRate(int classIndex);
+	double precision(int classIndex);
+	double recall(int classIndex);
+	double fMeasure(int classIndex);
+	double areaUnderROC(int classIndex);
+	double weightedTruePositiveRate();
+	double weightedFalsePositiveRate();
+	double weightedPrecision();
+	double weightedRecall();
+	double weightedFMeasure();
+	double weightedAreaUnderROC();
+	
 
 protected:
 		/// <summary>
@@ -249,14 +267,14 @@ protected:
 
 	/// <summary>
 	/// Holds plugin evaluation metrics </summary>
-	std::vector<AbstractEvaluationMetric*> mPluginMetrics;
+	//std::vector<AbstractEvaluationMetric*> mPluginMetrics;
 
 	/// <summary>
 	/// The list of metrics to display in the output </summary>
 	std::vector<std::string> mmetricsToDisplay;
 
-	double evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions);
-	double evaluationForSingleInstance(Classifier *classifier, Instance *instance, bool storePredictions);
+	//double evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions);
+	//double evaluationForSingleInstance(Classifier *classifier, Instance *instance, bool storePredictions);
 	void updateStatsForClassifier(std::vector<double> predictedDistribution, Instance *instance);
 	void updateStatsForPredictor(double predictedValue, Instance *instance);
 	void updateMargins(std::vector<double> predictedDistribution, int actualClass, double weight);
@@ -267,6 +285,8 @@ protected:
 	/// values that have been seen so far.
 	/// </summary>
 	void setNumericPriorsFromBuffer();
+	void addNumericTrainClass(double classValue, double weight);
+	std::string num2ShortID(int num, std::vector<char> &IDChars, int IDWidth);
 
 };
 

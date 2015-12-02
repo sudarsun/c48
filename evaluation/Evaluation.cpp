@@ -1,8 +1,5 @@
 #include "Evaluation.h"
 
-class UnivariateKernelEstimator;
-class AbstractEvaluationMetric;
-
 #include "CostMatrix.h"
 #include "Prediction.h"
 #include "core/Instances.h"
@@ -12,26 +9,53 @@ class AbstractEvaluationMetric;
 #include "NominalPrediction.h"
 #include "Estimator.h"
 #include "KernelEstimator.h"
+#include "ThresholdCurve.h"
 #include <exception>
 
-Evaluation::Evaluation()
-{
-    //ctor
-}
+const double Evaluation::MIN_SF_PROB = std::numeric_limits<double>::min();
+int Evaluation::kMarginResolution = 500;
 
-Evaluation::~Evaluation()
+Evaluation::Evaluation(Instances data):Evaluation(data, nullptr)
 {
-    //dtor
-}
-
-Evaluation::Evaluation(Instances data)
-{
-
+	
 }
 
 Evaluation::Evaluation(Instances data, CostMatrix costMatrix)
 {
+	mNumClasses = data.numClasses();
+	mNumFolds = 1;
+	mClassIsNominal = data.classAttribute()->isNominal();
 
+	if (mClassIsNominal) {
+		mConfusionMatrix.resize(mNumClasses, std::vector<double>(mNumClasses,0) );
+		mClassNames = std::vector<std::string>(mNumClasses);
+		for (int i = 0; i < mNumClasses; i++) {
+			mClassNames[i] = data.classAttribute()->value(i);
+		}
+	}
+	mCostMatrix = &costMatrix;
+	if (mCostMatrix != nullptr) {
+		if (!mClassIsNominal) {
+			throw new std::exception("Class has to be nominal if cost matrix given!");
+		}
+		if (mCostMatrix->size() != mNumClasses) {
+			throw new std::exception("Cost matrix not compatible with data!");
+		}
+	}
+	mClassPriors = std::vector<double>(mNumClasses);
+	setPriors(data);
+	mMarginCounts = std::vector<double>(kMarginResolution + 1);
+
+}
+
+Evaluation::~Evaluation()
+{
+	//dtor
+}
+
+double Evaluation::evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions)
+{
+	return 0.0;
 }
 
 std::vector<double> Evaluation::evaluateModel(Classifier *classifier, Instances *data)
@@ -41,7 +65,37 @@ std::vector<double> Evaluation::evaluateModel(Classifier *classifier, Instances 
 
 void Evaluation::setPriors(Instances train)
 {
+	mNoPriors = false;
 
+	if (!mClassIsNominal) {
+
+		mNumTrainClassVals = 0;
+		mTrainClassVals.clear();
+		mTrainClassWeights.clear();
+		mPriorErrorEstimator = nullptr;
+		mErrorEstimator = nullptr;
+
+		for (int i = 0; i < train.numInstances(); i++) {
+			Instance *currentInst = train.instance(i);
+			if (!currentInst->classIsMissing()) {
+				addNumericTrainClass(currentInst->classValue(), currentInst->weight());
+			}
+		}
+
+	}
+	else {
+		for (int i = 0; i < mNumClasses; i++) {
+			mClassPriors[i] = 1;
+		}
+		mClassPriorsSum = mNumClasses;
+		for (int i = 0; i < train.numInstances(); i++) {
+			if (!train.instance(i)->classIsMissing()) {
+				mClassPriors[(int)train.instance(i)->classValue()] +=
+					train.instance(i)->weight();
+				mClassPriorsSum += train.instance(i)->weight();
+			}
+		}
+	}
 }
 
 double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, Instances *data)
@@ -57,8 +111,8 @@ double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, 
 {
 	Instance *classMissing = instance;
 	double pred = 0;
-	//classMissing.setDataset(instance.dataset());
-	//classMissing.setClassMissing();
+	classMissing->setDataset(instance->getDataset());
+	//classMissing->setClassMissing();
 	if (mClassIsNominal) {
 		std::vector<double> dist = classifier->distributionForInstance(classMissing);
 		pred = Utils::maxIndex(dist);
@@ -72,16 +126,6 @@ double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, 
 		pred = classifier->classifyInstance(classMissing);
 		updateStatsForPredictor(pred, instance);
 	}
-	return 0.0;
-}
-
-double Evaluation::evaluationForSingleInstance(Classifier * classifier, Instance *instance, bool storePredictions)
-{
-	return 0.0;
-}
-
-double Evaluation::evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions)
-{
 	return 0.0;
 }
 
@@ -258,7 +302,7 @@ void Evaluation::setNumericPriorsFromBuffer() {
 	double numPrecision = 0.01; // Default value
 	if (mNumTrainClassVals > 1) {
 		std::vector<double> temp(mNumTrainClassVals);
-		std::copy(mTrainClassVals.begin(), mTrainClassVals.begin()+mNumTrainClassVals, temp);
+		std::copy(mTrainClassVals.begin(), mTrainClassVals.begin()+mNumTrainClassVals, temp.begin());
 		std::vector<int> index = Utils::sort(temp);
 		double lastVal = temp[index[0]];
 		double deltaSum = 0;
@@ -302,7 +346,6 @@ std::string Evaluation::toSummaryString(std::string title, bool printComplexityS
 	try {
 		if (mWithClass > 0) {
 			if (mClassIsNominal) {
-
 				text.append("Correctly Classified Instances     ");
 				text.append(Utils::doubleToString(correct(), 12, 4) + "     "
 					+ Utils::doubleToString(pctCorrect(), 12, 4) + " %\n");
@@ -380,6 +423,25 @@ std::string Evaluation::toSummaryString(std::string title, bool printComplexityS
 	return text;
 }
 
+void Evaluation::addNumericTrainClass(double classValue, double weight)
+{
+	if (mTrainClassVals.empty()) {
+		mTrainClassVals = std::vector<double>(100);
+		mTrainClassWeights = std::vector<double>(100);
+	}
+	if (mNumTrainClassVals == mTrainClassVals.size()) {
+		std::vector<double> temp = std::vector<double>(mTrainClassVals.size() * 2);
+		std::copy(mTrainClassVals.begin(), mTrainClassVals.end(), temp.begin());
+		mTrainClassVals = temp;
+
+		temp = std::vector<double>(mTrainClassWeights.size() * 2);
+		std::copy(mTrainClassWeights.begin(), mTrainClassWeights.end(), temp.begin());
+		mTrainClassWeights = temp;
+	}
+	mTrainClassVals[mNumTrainClassVals] = classValue;
+	mTrainClassWeights[mNumTrainClassVals] = weight;
+	mNumTrainClassVals++;
+}
 const double Evaluation::correct()
 {
 	return mCorrect;
@@ -435,4 +497,497 @@ const double Evaluation::pctCorrect()
 const double Evaluation::pctIncorrect()
 {
 	return 100 * mIncorrect / mWithClass;;
+}
+
+const double Evaluation::KBRelativeInformation()
+{
+	if (!mClassIsNominal) {
+		throw new std::exception("Can't compute K&B Info score: class numeric!");
+	}
+
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return 100.0 * KBInformation() / priorEntropy();
+}
+
+const double Evaluation::KBInformation()
+{
+	if (!mClassIsNominal) {
+		throw new std::exception("Can't compute K&B Info score: class numeric!");
+	}
+
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return mSumKBInfo;
+}
+const double Evaluation::KBMeanInformation()
+{
+	if (!mClassIsNominal) {
+		throw new std::exception("Can't compute K&B Info score: class numeric!");
+	}
+
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return mSumKBInfo / (mWithClass - mUnclassified);
+}
+
+const double Evaluation::correlationCoefficient()
+{
+	if (mClassIsNominal) {
+		throw new std::exception("Can't compute correlation coefficient: class is nominal!");
+	}
+
+	double correlation = 0;
+	double varActual =
+		mSumSqrClass - mSumClass * mSumClass / (mWithClass - mUnclassified);
+	double varPredicted =
+		mSumSqrPredicted - mSumPredicted * mSumPredicted
+		/ (mWithClass - mUnclassified);
+	double varProd =
+		mSumClassPredicted - mSumClass * mSumPredicted
+		/ (mWithClass - mUnclassified);
+
+	if (varActual * varPredicted <= 0) {
+		correlation = 0.0;
+	}
+	else {
+		correlation = varProd / std::sqrt(varActual * varPredicted);
+	}
+
+	return correlation;
+}
+
+const double Evaluation::SFPriorEntropy()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return mSumPriorEntropy;
+}
+
+const double Evaluation::SFMeanPriorEntropy()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return mSumPriorEntropy / mWithClass;
+}
+const double Evaluation::SFSchemeEntropy()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return mSumSchemeEntropy;
+}
+
+const double Evaluation::SFMeanSchemeEntropy()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return mSumSchemeEntropy / (mWithClass - mUnclassified);
+}
+
+const double Evaluation::SFEntropyGain()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return mSumPriorEntropy - mSumSchemeEntropy;
+}
+
+const double Evaluation::SFMeanEntropyGain()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return (mSumPriorEntropy - mSumSchemeEntropy)
+		/ (mWithClass - mUnclassified);
+}
+const double Evaluation::meanAbsoluteError()
+{
+	return mSumAbsErr / (mWithClass - mUnclassified);
+}
+const double Evaluation::rootMeanSquaredError()
+{
+	return std::sqrt(mSumSqrErr / (mWithClass - mUnclassified));
+}
+const double Evaluation::relativeAbsoluteError()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return 100 * meanAbsoluteError() / meanPriorAbsoluteError();
+}
+const double Evaluation::rootRelativeSquaredError()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return 100.0 * rootMeanSquaredError() / rootMeanPriorSquaredError();
+}
+const double Evaluation::unclassified()
+{
+	return mUnclassified;
+}
+const double Evaluation::pctUnclassified()
+{
+	return 100 * mUnclassified / mWithClass;
+}
+const double Evaluation::meanPriorAbsoluteError()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return mSumPriorAbsErr / mWithClass;
+}
+const double Evaluation::priorEntropy()
+{
+	if (!mClassIsNominal) {
+		throw new std::exception("Can't compute entropy of class prior: class numeric!");
+	}
+
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	double entropy = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		entropy -=
+			mClassPriors[i] / mClassPriorsSum
+			* Utils::getLog2(mClassPriors[i] / mClassPriorsSum);
+	}
+	return entropy;
+}
+const double Evaluation::rootMeanPriorSquaredError()
+{
+	if (mNoPriors) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
+	return std::sqrt(mSumPriorSqrErr / mWithClass);
+}
+
+std::string Evaluation::toClassDetailsString(std::string title)
+{
+	if (!mClassIsNominal) {
+		throw new std::exception("Evaluation: No confusion matrix possible!");
+	}
+
+	std::string text = title + "\n               TP Rate   FP Rate"
+			+ "   Precision   Recall" + "  F-Measure   ROC Area  Class\n";
+	for (int i = 0; i < mNumClasses; i++) {
+		text.append(
+			"               " + Utils::doubleToString(truePositiveRate(i), 7, 3))
+			.append("   ");
+		text.append(Utils::doubleToString(falsePositiveRate(i), 7, 3)).append(
+			"    ");
+		text.append(Utils::doubleToString(precision(i), 7, 3)).append("   ");
+		text.append(Utils::doubleToString(recall(i), 7, 3)).append("   ");
+		text.append(Utils::doubleToString(fMeasure(i), 7, 3)).append("    ");
+
+		double rocVal = areaUnderROC(i);
+		if (Utils::isMissingValue(rocVal)) {
+			text.append("  ?    ").append("    ");
+		}
+		else {
+			text.append(Utils::doubleToString(rocVal, 7, 3)).append("    ");
+		}
+		text.append(mClassNames[i]).append("\n");
+	}
+
+	text.append("Weighted Avg.  "
+		+ Utils::doubleToString(weightedTruePositiveRate(), 7, 3));
+	text
+		.append("   " + Utils::doubleToString(weightedFalsePositiveRate(), 7, 3));
+	text.append("    " + Utils::doubleToString(weightedPrecision(), 7, 3));
+	text.append("   " + Utils::doubleToString(weightedRecall(), 7, 3));
+	text.append("   " + Utils::doubleToString(weightedFMeasure(), 7, 3));
+	text.append("    " + Utils::doubleToString(weightedAreaUnderROC(), 7, 3));
+	text.append("\n");
+
+	return text;
+}
+
+std::string Evaluation::toClassDetailsString()
+{
+	return toClassDetailsString("=== Detailed Accuracy By Class ===\n");
+}
+
+std::string Evaluation::toMatrixString()
+{
+	return toMatrixString("=== Confusion Matrix ===\n");
+}
+std::string Evaluation::toMatrixString(std::string title)
+{
+	std::string text = "";
+	std::vector<char> IDChars =
+	{ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+		'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+	int IDWidth;
+	bool fractional = false;
+
+	if (!mClassIsNominal) {
+		throw new std::exception("Evaluation: No confusion matrix possible!");
+	}
+
+	// Find the maximum value in the matrix
+	// and check for fractional display requirement
+	double maxval = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		for (int j = 0; j < mNumClasses; j++) {
+			double current = mConfusionMatrix[i][j];
+			if (current < 0) {
+				current *= -10;
+			}
+			if (current > maxval) {
+				maxval = current;
+			}
+			double fract = current - std::rint(current);
+			if (!fractional && ((std::log(fract) / std::log(10)) >= -2)) {
+				fractional = true;
+			}
+		}
+	}
+
+	int val1 = std::log(maxval) / std::log(10) + (fractional ? 3 : 0);
+	int val2 = std::log(mNumClasses) / std::log(IDChars.size());
+	IDWidth = 1 + val1 > val2 ? val1 : val2;
+	text.append(title).append("\n");
+	for (int i = 0; i < mNumClasses; i++) {
+		if (fractional) {
+			text.append(" ").append(num2ShortID(i, IDChars, IDWidth - 3))
+				.append("   ");
+		}
+		else {
+			text.append(" ").append(num2ShortID(i, IDChars, IDWidth));
+		}
+	}
+	text.append("   <-- classified as\n");
+	for (int i = 0; i < mNumClasses; i++) {
+		for (int j = 0; j < mNumClasses; j++) {
+			text.append(" ").append(
+				Utils::doubleToString(mConfusionMatrix[i][j], IDWidth,
+					(fractional ? 2 : 0)));
+		}
+		text.append(" | ").append(num2ShortID(i, IDChars, IDWidth)).append(" = ")
+			.append(mClassNames[i]).append("\n");
+	}
+	return text;
+}
+
+double Evaluation::truePositiveRate(int classIndex)
+{
+	double correct = 0, total = 0;
+	for (int j = 0; j < mNumClasses; j++) {
+		if (j == classIndex) {
+			correct += mConfusionMatrix[classIndex][j];
+		}
+		total += mConfusionMatrix[classIndex][j];
+	}
+	if (total == 0) {
+		return 0;
+	}
+	return correct / total;
+}
+
+double Evaluation::falsePositiveRate(int classIndex)
+{
+	double incorrect = 0, total = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		if (i != classIndex) {
+			for (int j = 0; j < mNumClasses; j++) {
+				if (j == classIndex) {
+					incorrect += mConfusionMatrix[i][j];
+				}
+				total += mConfusionMatrix[i][j];
+			}
+		}
+	}
+	if (total == 0) {
+		return 0;
+	}
+	return incorrect / total;
+}
+double Evaluation::precision(int classIndex)
+{
+	double correct = 0, total = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		if (i == classIndex) {
+			correct += mConfusionMatrix[i][classIndex];
+		}
+		total += mConfusionMatrix[i][classIndex];
+	}
+	if (total == 0) {
+		return 0;
+	}
+	return correct / total;
+}
+
+double Evaluation::recall(int classIndex)
+{
+	return truePositiveRate(classIndex);
+}
+
+double Evaluation::fMeasure(int classIndex)
+{
+	double precisionValue = precision(classIndex);
+	double recallValue = recall(classIndex);
+	if ((precisionValue + recallValue) == 0) {
+		return 0;
+	}
+	return 2 * precisionValue * recallValue / (precisionValue + recallValue);
+}
+
+double Evaluation::areaUnderROC(int classIndex)
+{
+	// Check if any predictions have been collected
+	if (mPredictions.empty()) {
+		return Utils::missingValue();
+	}
+	else {
+		ThresholdCurve tc;
+		Instances *result = tc.getCurve(mPredictions, classIndex);
+		return ThresholdCurve::getROCArea(result);
+	}
+}
+double Evaluation::weightedTruePositiveRate()
+{
+	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double classCountSum = 0;
+
+	for (int i = 0; i < mNumClasses; i++) {
+		for (int j = 0; j < mNumClasses; j++) {
+			classCounts[i] += mConfusionMatrix[i][j];
+		}
+		classCountSum += classCounts[i];
+	}
+
+	double truePosTotal = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		double temp = truePositiveRate(i);
+		truePosTotal += (temp * classCounts[i]);
+	}
+
+	return truePosTotal / classCountSum;
+}
+double Evaluation::weightedFalsePositiveRate()
+{
+	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double classCountSum = 0;
+
+	for (int i = 0; i < mNumClasses; i++) {
+		for (int j = 0; j < mNumClasses; j++) {
+			classCounts[i] += mConfusionMatrix[i][j];
+		}
+		classCountSum += classCounts[i];
+	}
+
+	double falsePosTotal = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		double temp = falsePositiveRate(i);
+		falsePosTotal += (temp * classCounts[i]);
+	}
+
+	return falsePosTotal / classCountSum;
+}
+double Evaluation::weightedPrecision()
+{
+	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double classCountSum = 0;
+
+	for (int i = 0; i < mNumClasses; i++) {
+		for (int j = 0; j < mNumClasses; j++) {
+			classCounts[i] += mConfusionMatrix[i][j];
+		}
+		classCountSum += classCounts[i];
+	}
+
+	double precisionTotal = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		double temp = precision(i);
+		precisionTotal += (temp * classCounts[i]);
+	}
+
+	return precisionTotal / classCountSum;
+}
+double Evaluation::weightedRecall()
+{
+	return weightedTruePositiveRate();
+}
+
+double Evaluation::weightedFMeasure()
+{
+	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double classCountSum = 0;
+
+	for (int i = 0; i < mNumClasses; i++) {
+		for (int j = 0; j < mNumClasses; j++) {
+			classCounts[i] += mConfusionMatrix[i][j];
+		}
+		classCountSum += classCounts[i];
+	}
+
+	double fMeasureTotal = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		double temp = fMeasure(i);
+		fMeasureTotal += (temp * classCounts[i]);
+	}
+
+	return fMeasureTotal / classCountSum;
+}
+double Evaluation::weightedAreaUnderROC()
+{
+	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double classCountSum = 0;
+
+	for (int i = 0; i < mNumClasses; i++) {
+		for (int j = 0; j < mNumClasses; j++) {
+			classCounts[i] += mConfusionMatrix[i][j];
+		}
+		classCountSum += classCounts[i];
+	}
+
+	double aucTotal = 0;
+	for (int i = 0; i < mNumClasses; i++) {
+		double temp = areaUnderROC(i);
+		if (!Utils::isMissingValue(temp)) {
+			aucTotal += (temp * classCounts[i]);
+		}
+	}
+
+	return aucTotal / classCountSum;
+}
+std::string Evaluation::num2ShortID(int num, std::vector<char> &IDChars, int IDWidth) {
+
+	std::vector<char> ID(IDWidth);
+	int i;
+
+	for (i = IDWidth - 1; i >= 0; i--) {
+		ID[i] = IDChars[num % IDChars.size()];
+		num = num / (int)IDChars.size() - 1;
+		if (num < 0) {
+			break;
+		}
+	}
+	for (i--; i >= 0; i--) {
+		ID[i] = ' ';
+	}
+
+	return std::string(ID.begin(), ID.end());
 }
