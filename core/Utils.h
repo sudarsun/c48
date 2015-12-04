@@ -318,7 +318,7 @@ public:
 	/// <param name="string"> the string to be quoted </param>
 	/// <returns> the string (possibly quoted) </returns>
 	/// <seealso cref= #unquote(String) </seealso>
-	static std::string quote(const std::string &string);
+	static std::string quote(const std::string &instring);
 
 	/// <summary>
 	/// unquotes are previously quoted string (but only if necessary), i.e., it
@@ -327,7 +327,7 @@ public:
 	/// <param name="string"> the string to process </param>
 	/// <returns> the unquoted string </returns>
 	/// <seealso cref= #quote(String) </seealso>
-	static std::string unquote(const std::string &string);
+	static std::string unquote(const std::string &inString);
 
 	/// <summary>
 	/// Converts carriage returns and new lines in a string into \r and \n.
@@ -336,7 +336,7 @@ public:
 	/// <param name="string"> the string </param>
 	/// <returns> the converted string </returns>
 	/// <seealso cref= #unbackQuoteChars(String) </seealso>
-	static std::string backQuoteChars(std::string &string);
+	static std::string backQuoteChars(std::string inString);
 
 	/// <summary>
 	/// Converts carriage returns and new lines in a string into \r and \n.

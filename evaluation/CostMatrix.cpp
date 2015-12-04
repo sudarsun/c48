@@ -171,7 +171,7 @@ Instances *CostMatrix::applyCostMatrix( Instances *data, Random *random ) {
 std::vector<double> CostMatrix::expectedCosts( std::vector<double> &classProbs ) {
 
   if( classProbs.size() != m_size ) {
-    throw std::exception( "Length of probability estimates don't match cost matrix" );
+    throw "Length of probability estimates don't match cost matrix";
   }
 
   std::vector<double> costs( m_size );
@@ -180,7 +180,7 @@ std::vector<double> CostMatrix::expectedCosts( std::vector<double> &classProbs )
     for( int y = 0; y < m_size; y++ ) {
       auto element = static_cast<double*>(getCell( y, x ));
       if( !( element  != nullptr ) ) {
-        throw std::exception( "Can't use non-fixed costs in computing expected costs." );
+        throw "Can't use non-fixed costs in computing expected costs.";
       }
       costs[x] += classProbs[y] * (*element) ;
     }
@@ -224,7 +224,7 @@ double CostMatrix::getMaxCost( int classVal ) {
   for( int i = 0; i < m_size; i++ ) {
     auto element = static_cast<double*>(getCell( classVal, i ));
     if( !(  element != nullptr ) ) {
-      throw std::exception( "Can't use non-fixed costs when getting max cost." );
+      throw "Can't use non-fixed costs when getting max cost.";
     }
     double cost = *element;
     if( cost > maxCost ) {
@@ -281,7 +281,7 @@ void *CostMatrix::getCell( int rowIndex, int columnIndex ) {
 double CostMatrix::getElement( int rowIndex, int columnIndex ) {
 	auto cell = m_matrix[rowIndex][columnIndex];
   if( !(static_cast<double*>(cell) != nullptr ) ) {
-    throw std::exception( "Cost matrix contains non-fixed costs!" );
+    throw "Cost matrix contains non-fixed costs!";
   }
   return *( static_cast<double*>(cell ) );
 }

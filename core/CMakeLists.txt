@@ -9,6 +9,8 @@ AttributeMetaInfo.h
 AttributeStats.cpp
 AttributeStats.h
 Consts.h
+ContingencyTables.cpp
+ContingencyTables.h
 DataSource.cpp
 DataSource.h
 DenseInstance.cpp
@@ -16,14 +18,15 @@ DenseInstance.h
 Instance.h
 Instances.cpp
 Instances.h
+Matrix.cpp
+Matrix.h
 NominalAttributeInfo.cpp
 NominalAttributeInfo.h
 statistics.cpp
 statistics.h
 Utils.cpp
 Utils.h
-ContingencyTables.cpp
-ContingencyTables.h
+
 )
 
 add_library(core STATIC ${core_SRCS})

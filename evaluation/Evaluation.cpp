@@ -36,10 +36,10 @@ Evaluation::Evaluation(Instances data, CostMatrix costMatrix)
 	mCostMatrix = &costMatrix;
 	if (mCostMatrix != nullptr) {
 		if (!mClassIsNominal) {
-			throw new std::exception("Class has to be nominal if cost matrix given!");
+			throw "Class has to be nominal if cost matrix given!";
 		}
 		if (mCostMatrix->size() != mNumClasses) {
-			throw new std::exception("Cost matrix not compatible with data!");
+			throw "Cost matrix not compatible with data!";
 		}
 	}
 	mClassPriors = std::vector<double>(mNumClasses);
@@ -502,7 +502,7 @@ const double Evaluation::pctIncorrect()
 const double Evaluation::KBRelativeInformation()
 {
 	if (!mClassIsNominal) {
-		throw new std::exception("Can't compute K&B Info score: class numeric!");
+		throw "Can't compute K&B Info score: class numeric!";
 	}
 
 	if (mNoPriors) {
@@ -515,7 +515,7 @@ const double Evaluation::KBRelativeInformation()
 const double Evaluation::KBInformation()
 {
 	if (!mClassIsNominal) {
-		throw new std::exception("Can't compute K&B Info score: class numeric!");
+		throw "Can't compute K&B Info score: class numeric!";
 	}
 
 	if (mNoPriors) {
@@ -527,7 +527,7 @@ const double Evaluation::KBInformation()
 const double Evaluation::KBMeanInformation()
 {
 	if (!mClassIsNominal) {
-		throw new std::exception("Can't compute K&B Info score: class numeric!");
+		throw "Can't compute K&B Info score: class numeric!";
 	}
 
 	if (mNoPriors) {
@@ -540,7 +540,7 @@ const double Evaluation::KBMeanInformation()
 const double Evaluation::correlationCoefficient()
 {
 	if (mClassIsNominal) {
-		throw new std::exception("Can't compute correlation coefficient: class is nominal!");
+		throw "Can't compute correlation coefficient: class is nominal!";
 	}
 
 	double correlation = 0;
@@ -659,7 +659,7 @@ const double Evaluation::meanPriorAbsoluteError()
 const double Evaluation::priorEntropy()
 {
 	if (!mClassIsNominal) {
-		throw new std::exception("Can't compute entropy of class prior: class numeric!");
+		throw "Can't compute entropy of class prior: class numeric!";
 	}
 
 	if (mNoPriors) {
@@ -686,7 +686,7 @@ const double Evaluation::rootMeanPriorSquaredError()
 std::string Evaluation::toClassDetailsString(std::string title)
 {
 	if (!mClassIsNominal) {
-		throw new std::exception("Evaluation: No confusion matrix possible!");
+		throw "Evaluation: No confusion matrix possible!";
 	}
 
 	std::string text = title + "\n               TP Rate   FP Rate"
@@ -743,7 +743,7 @@ std::string Evaluation::toMatrixString(std::string title)
 	bool fractional = false;
 
 	if (!mClassIsNominal) {
-		throw new std::exception("Evaluation: No confusion matrix possible!");
+		throw "Evaluation: No confusion matrix possible!";
 	}
 
 	// Find the maximum value in the matrix

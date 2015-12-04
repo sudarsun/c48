@@ -41,7 +41,7 @@ int EstimatorUtils::getMinMax( Instances *inst, int attrIndex, std::vector<doubl
   Instance *instance = nullptr;
   int numNotMissing = 0;
   if( ( minMax.empty() ) || (minMax.size() < 2) ) {
-    throw std::exception( "Error in Program, privat method getMinMax" );
+    throw "Error in Program, privat method getMinMax";
   }
 
   int i = 0, totInst = inst->numInstances();

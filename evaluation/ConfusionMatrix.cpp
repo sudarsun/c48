@@ -12,7 +12,7 @@ ConfusionMatrix::ConfusionMatrix(std::vector<std::string> classNames) :Matrix((i
 ConfusionMatrix *ConfusionMatrix::makeWeighted(CostMatrix *costs) {
 
 	if (costs->size() != size()) {
-		throw std::exception("Cost and confusion matrices must be the same size");
+		throw "Cost and confusion matrices must be the same size";
 	}
 	ConfusionMatrix *weighted = new ConfusionMatrix(mClassNames);
 	for (int row = 0; row < size(); row++) {
@@ -36,10 +36,10 @@ std::string ConfusionMatrix::className(int index) {
 void ConfusionMatrix::addPrediction(NominalPrediction *pred) {
 
 	if (pred->predicted() == NominalPrediction::MISSING_VALUE) {
-		throw std::exception("No predicted value given.");
+		throw "No predicted value given.";
 	}
 	if (pred->actual() == NominalPrediction::MISSING_VALUE) {
-		throw std::exception("No actual value given.");
+		throw "No actual value given.";
 	}
 	set(static_cast<int>(pred->actual()), static_cast<int>(pred->predicted()), get(static_cast<int>(pred->actual()), static_cast<int>(pred->predicted())) + pred->weight());
 
@@ -189,3 +189,22 @@ std::string ConfusionMatrix::num2ShortID(int num, std::vector<char> &IDChars, in
 }
 
 
+void ConfusionMatrix::set(int i, int j, double s)
+{
+  Matrix::set(i,j,s);
+}
+int ConfusionMatrix::getRowDimension() {
+	return Matrix::getRowDimension();
+}
+
+int ConfusionMatrix::getColumnDimension() {
+	return Matrix::getColumnDimension();
+}
+std::vector<std::vector<double>> ConfusionMatrix::getArray() {
+  return Matrix::getArray();
+}
+
+
+double ConfusionMatrix::get( int i, int j ) {
+  return Matrix::get( i, j );
+}

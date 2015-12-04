@@ -125,6 +125,32 @@ public:
 	/// </summary>
 	/// <param name="num"> integer to format </param>
 	/// <returns> the formatted integer as a string </returns>
+
+	    /// <summary>
+  /// Get a single element. </summary>
+  /// <param name="i">    Row index. </param>
+  /// <param name="j">    Column index. </param>
+  /// <returns>     A(i,j) </returns>
+  /// <exception cref="ArrayIndexOutOfBoundsException"> </exception>
+  virtual double get( int i, int j );
+
+  /**
+  * Set a single element.
+  * @param i    Row index.
+  * @param j    Column index.
+  * @param s    A(i,j).
+  * @throws  ArrayIndexOutOfBoundsException
+  */
+  virtual void set(int i, int j, double s);
+
+  /// <summary>
+  /// Access the internal two-dimensional array. </summary>
+  /// <returns>     Pointer to the two-dimensional array of matrix elements. </returns>
+  virtual std::vector<std::vector<double>> getArray();
+
+  virtual int getRowDimension();
+
+  virtual int getColumnDimension();
 private:
 	static std::string num2ShortID(int num, std::vector<char> &IDChars, int IDWidth);
 

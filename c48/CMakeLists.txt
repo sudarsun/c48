@@ -16,6 +16,22 @@ ClassifierSplitModel.cpp
 ClassifierSplitModel.h
 ClassifierTree.cpp
 ClassifierTree.h
+Distribution.cpp
+Distribution.h
+EntropyBasedSplitCrit.cpp
+EntropyBasedSplitCrit.h
+GainRatioSplitCrit.cpp
+GainRatioSplitCrit.h
+InfoGainSplitCrit.cpp
+InfoGainSplitCrit.h
+ModelSelection.cpp
+ModelSelection.h
+NoSplit.cpp
+NoSplit.h
+SplitCriterion.cpp
+SplitCriterion.h
+Stats.cpp
+Stats.h
 )
 
 add_library(c48 STATIC ${c48_SRCS})

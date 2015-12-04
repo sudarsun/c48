@@ -748,7 +748,7 @@ int Utils::select(std::vector<int> &array_Renamed, std::vector<int> &index, int 
 	}
 }
 
-std::string Utils::backQuoteChars(std::string &inString)
+std::string Utils::backQuoteChars(std::string inString)
 { // @pure@
 
 	int index;

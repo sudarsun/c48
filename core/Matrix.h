@@ -71,7 +71,7 @@ class Matrix {
   * @param s    A(i,j).
   * @throws  ArrayIndexOutOfBoundsException
   */
-  void set(int i, int j, double s);
+  virtual void set(int i, int j, double s);
 
   /// <summary>
   /// Access the internal two-dimensional array. </summary>

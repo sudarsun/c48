@@ -5,7 +5,7 @@
 
 void Estimator::addValue( double data, double weight ) {
   try {
-    throw std::exception( "Method to add single value is not implemented!\n Estimator should implement IncrementalEstimator." );
+    throw "Method to add single value is not implemented!\n Estimator should implement IncrementalEstimator.";
   } catch( std::exception &ex ) {
 		std::cout << ex.what() << std::endl;
   }

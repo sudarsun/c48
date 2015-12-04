@@ -1,6 +1,7 @@
 #include "EntropyBasedSplitCrit.h"
 #include "Distribution.h"
 //#include "core/ContingencyTables.h"
+#include <cmath>
 
 double EntropyBasedSplitCrit::lnFunc(double num) {
 
