@@ -29,6 +29,7 @@ public:
 	virtual void setDataset(Instances *data) = 0;
 	virtual  Instances* getDataset() = 0;
 	virtual bool classIsMissing()=0;
+	virtual void setClassMissing() = 0;
 	
 
 };

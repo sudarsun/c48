@@ -111,7 +111,51 @@ std::string Utils::padRight(const std::string &inString, int length) {
 
 std::string Utils::doubleToString(double value, int afterDecimalPoint)
 { // @pure@
-	return std::to_string(value);
+	std::string stringBuffer = "";
+	double temp;
+	int dotPosition;
+	long precisionValue;
+	temp = value * pow(10.0, afterDecimalPoint);
+	if (abs(temp) < std::numeric_limits<long long>::max()) {
+		precisionValue = (temp > 0) ? static_cast<long long>(temp + 0.5) : -static_cast<long long>(abs(temp) + 0.5);
+		if (precisionValue == 0) {
+			stringBuffer = std::to_string(0);
+		}
+		else {
+			stringBuffer = std::to_string(precisionValue);
+		}
+		if (afterDecimalPoint == 0) {
+			return stringBuffer;
+		}
+		dotPosition = stringBuffer.length() - afterDecimalPoint;
+		while (((precisionValue < 0) && (dotPosition < 1)) || (dotPosition < 0)) {
+			if (precisionValue < 0) {
+				stringBuffer.insert(1, "0");
+			}
+			else {
+				stringBuffer.insert(0, "0");
+			}
+			dotPosition++;
+		}
+		stringBuffer.insert(dotPosition, ".");
+		if ((precisionValue < 0) && (stringBuffer.at(1) == '.')) {
+			stringBuffer.insert(1, "0");
+		}
+		else if (stringBuffer.at(0) == '.') {
+			stringBuffer.insert(0, "0");
+		}
+		int currentPos = stringBuffer.length() - 1;
+		while ((currentPos > dotPosition) && (stringBuffer.at(currentPos) == '0')) {
+			stringBuffer[currentPos--] = ' ';
+		}
+		if (stringBuffer.at(currentPos) == '.') {
+			stringBuffer[currentPos] = ' ';
+		}
+		Utils::trim(stringBuffer);
+		return stringBuffer;
+	}
+	return std::string(std::string("") + std::to_string(value));
+
 }
 
 std::string Utils::doubleToString(double value, int width, int afterDecimalPoint)
@@ -165,8 +209,7 @@ std::string Utils::doubleToString(double value, int width, int afterDecimalPoint
 		result[offset + i] = tempString[i];
 	}
 
-	//return std::string( result );
-	return std::string("");
+	return std::string( result.begin(), result.end() );
 }
 
 bool Utils::eq(double a, double b)
@@ -777,4 +820,10 @@ std::string Utils::backQuoteChars(std::string inString)
 	}
 
 	return stringbuf;
+}
+
+void Utils::trim(std::string &outString)
+{
+	outString.erase(outString.find_last_not_of(' ') + 1);
+	outString.erase(0, outString.find_first_not_of(' '));
 }

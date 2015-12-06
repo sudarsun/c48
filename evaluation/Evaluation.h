@@ -24,12 +24,9 @@ public:
 	Evaluation(Instances data, CostMatrix costMatrix);
 	~Evaluation();
 
-	std::vector<double> evaluateModel(Classifier *classifier, Instances *data);
 	void setPriors(Instances train);
-	double evaluateModelOnceAndRecordPrediction(Classifier * classifier, Instances * data);
 	double evaluateModelOnceAndRecordPrediction(Classifier * classifier, Instance * instance);
 	double evaluateModelOnceAndRecordPrediction(std::vector<double> dist, Instance *instance);
-	double evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions);
 	std::string toSummaryString(bool printComplexityStatistics);
 	std::string toSummaryString(std::string title,  bool printComplexityStatistics);
 	std::string toClassDetailsString(std::string title);

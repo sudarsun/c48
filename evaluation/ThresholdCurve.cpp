@@ -232,7 +232,7 @@ Instances *ThresholdCurve::makeHeader() {
   fv.push_back( new Attribute( SAMPLE_SIZE_NAME ) );
   fv.push_back( new Attribute( LIFT_NAME ) );
   fv.push_back( new Attribute( THRESHOLD_NAME ) );
-  return new Instances( RELATION_NAME, fv, 100 );
+  return new Instances( RELATION_NAME, fv, 0 );
 }
 
 Instance *ThresholdCurve::makeInstance( TwoClassStats *tc, double prob ) {

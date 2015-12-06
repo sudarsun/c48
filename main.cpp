@@ -10,6 +10,8 @@
 
 using namespace std;
 void classify();
+void processClassifierPrediction(Instance *toPredict,
+	Classifier *classifier, Evaluation &eval, Instances *plotInstances);
 int main()
 {
 	classify();	
@@ -55,45 +57,27 @@ void classify()
 	cout << "\nTime taken to build model : "
 		 << difftime(TimeElapsed, startTime)
 		 << " seconds\n\n";
-	cout << "=== Evaluation on training set ===" << endl;
-
 	Evaluation *eval = nullptr;
 	CostMatrix *costMatrix = nullptr;
-	eval = new Evaluation(inst, costMatrix);
+	eval = new Evaluation(*inst, costMatrix);
 	for (int i = 0; i < totalInst; i++)
 	{
-
+		Instance *instance = inst->instance(i);
+		processClassifierPrediction(instance, classifier, *eval, inst);
 	}
+	cout << " === Evaluation on training set ===" << endl;
+	cout << eval->toSummaryString(true);
+	cout << eval->toClassDetailsString() << endl;
+	cout << eval->toMatrixString() << endl;
+	cin >> num;
+
 }
 void processClassifierPrediction(Instance *toPredict,
-	Classifier *classifier, Evaluation eval, Instances *plotInstances)
+	Classifier *classifier, Evaluation &eval, Instances *plotInstances)
 {
 	try
 	{
 		double pred = eval.evaluateModelOnceAndRecordPrediction(classifier,	toPredict);
-		if (plotInstances != nullptr) {
-			std::vector<double> values = std::vector<double>(plotInstances->numAttributes());
-			for (int i = 0; i < plotInstances->numAttributes(); i++) {
-				if (i < toPredict->classIndex()) {
-					values[i] = toPredict->value(i);
-				}
-				else if (i == toPredict->classIndex()) {
-					values[i] = pred;
-					values[i + 1] = toPredict->value(i);
-					/*
-					* // if the class value of the instances to predict is missing then
-					* // set it to the predicted value if (toPredict.isMissing(i)) {
-					* values[i+1] = pred; }
-					*/
-					i++;
-				}
-				else {
-					values[i] = toPredict->value(i - 1);
-				}
-			}
-			plotInstances->add(new DenseInstance(1.0, values));
-		}
-
 	}
 	catch (std::exception ex)
 	{

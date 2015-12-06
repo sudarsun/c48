@@ -4,6 +4,7 @@
 #include "Prediction.h"
 #include "core/Instances.h"
 #include "core/Instance.h"
+#include "core/DenseInstance.h"
 #include "c48/Classifier.h"
 #include "core/Utils.h"
 #include "NominalPrediction.h"
@@ -15,9 +16,9 @@
 const double Evaluation::MIN_SF_PROB = std::numeric_limits<double>::min();
 int Evaluation::kMarginResolution = 500;
 
-Evaluation::Evaluation(Instances data):Evaluation(data, nullptr)
+Evaluation::Evaluation(Instances data) :Evaluation(data, nullptr)
 {
-	
+
 }
 
 Evaluation::Evaluation(Instances data, CostMatrix costMatrix)
@@ -27,14 +28,14 @@ Evaluation::Evaluation(Instances data, CostMatrix costMatrix)
 	mClassIsNominal = data.classAttribute()->isNominal();
 
 	if (mClassIsNominal) {
-		mConfusionMatrix.resize(mNumClasses, std::vector<double>(mNumClasses,0) );
+		mConfusionMatrix.resize(mNumClasses, std::vector<double>(mNumClasses, 0));
 		mClassNames = std::vector<std::string>(mNumClasses);
 		for (int i = 0; i < mNumClasses; i++) {
 			mClassNames[i] = data.classAttribute()->value(i);
 		}
 	}
 	mCostMatrix = &costMatrix;
-	if (mCostMatrix != nullptr) {
+	if (mCostMatrix->size() != 0) {
 		if (!mClassIsNominal) {
 			throw "Class has to be nominal if cost matrix given!";
 		}
@@ -51,16 +52,6 @@ Evaluation::Evaluation(Instances data, CostMatrix costMatrix)
 Evaluation::~Evaluation()
 {
 	//dtor
-}
-
-double Evaluation::evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions)
-{
-	return 0.0;
-}
-
-std::vector<double> Evaluation::evaluateModel(Classifier *classifier, Instances *data)
-{
-	return { 0.0 };
 }
 
 void Evaluation::setPriors(Instances train)
@@ -98,21 +89,29 @@ void Evaluation::setPriors(Instances train)
 	}
 }
 
-double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, Instances *data)
-{
-	return 0.0;
-}
-
 double Evaluation::evaluateModelOnceAndRecordPrediction(std::vector<double> dist, Instance *instance)
 {
-	return 0.0;
+	double pred = 0;
+	if (mClassIsNominal) {
+		pred = Utils::maxIndex(dist);
+		if (dist[(int)pred] <= 0) {
+			pred = instance->missingValue();
+		}
+		updateStatsForClassifier(dist, instance);
+		mPredictions.push_back(new NominalPrediction(instance->classValue(), dist, instance->weight()));
+	}
+	else {
+		pred = dist[0];
+		updateStatsForPredictor(pred, instance);
+	}
+	return pred;
 }
 double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, Instance *instance)
 {
-	Instance *classMissing = instance;
+	Instance *classMissing = (static_cast<DenseInstance*>(instance))->copy();
 	double pred = 0;
 	classMissing->setDataset(instance->getDataset());
-	//classMissing->setClassMissing();
+	classMissing->setClassMissing();
 	if (mClassIsNominal) {
 		std::vector<double> dist = classifier->distributionForInstance(classMissing);
 		pred = Utils::maxIndex(dist);
@@ -126,7 +125,7 @@ double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, 
 		pred = classifier->classifyInstance(classMissing);
 		updateStatsForPredictor(pred, instance);
 	}
-	return 0.0;
+	return pred;
 }
 
 void Evaluation::updateStatsForClassifier(std::vector<double> predictedDistribution, Instance *instance)
@@ -150,7 +149,7 @@ void Evaluation::updateStatsForClassifier(std::vector<double> predictedDistribut
 		mWithClass += instance->weight();
 
 		// Determine misclassification cost
-		if (mCostMatrix != nullptr) {
+		if (mCostMatrix->size() != 0) {
 			if (predictedClass < 0) {
 				// For missing predictions, we assume the worst possible cost.
 				// This is pretty harsh.
@@ -302,7 +301,7 @@ void Evaluation::setNumericPriorsFromBuffer() {
 	double numPrecision = 0.01; // Default value
 	if (mNumTrainClassVals > 1) {
 		std::vector<double> temp(mNumTrainClassVals);
-		std::copy(mTrainClassVals.begin(), mTrainClassVals.begin()+mNumTrainClassVals, temp.begin());
+		std::copy(mTrainClassVals.begin(), mTrainClassVals.begin() + mNumTrainClassVals, temp.begin());
 		std::vector<int> index = Utils::sort(temp);
 		double lastVal = temp[index[0]];
 		double deltaSum = 0;
@@ -454,7 +453,7 @@ const double Evaluation::totalCost()
 
 const double Evaluation::avgCost()
 {
-	return mTotalCost/mWithClass;
+	return mTotalCost / mWithClass;
 }
 
 const double Evaluation::kappa()
@@ -492,11 +491,11 @@ const double Evaluation::inCorrect()
 
 const double Evaluation::pctCorrect()
 {
-	return 100 * mCorrect / mWithClass;;
+	return 100 * mCorrect / mWithClass;
 }
 const double Evaluation::pctIncorrect()
 {
-	return 100 * mIncorrect / mWithClass;;
+	return 100 * mIncorrect / mWithClass;
 }
 
 const double Evaluation::KBRelativeInformation()
@@ -690,7 +689,7 @@ std::string Evaluation::toClassDetailsString(std::string title)
 	}
 
 	std::string text = title + "\n               TP Rate   FP Rate"
-			+ "   Precision   Recall" + "  F-Measure   ROC Area  Class\n";
+		+ "   Precision   Recall" + "  F-Measure   ROC Area  Class\n";
 	for (int i = 0; i < mNumClasses; i++) {
 		text.append(
 			"               " + Utils::doubleToString(truePositiveRate(i), 7, 3))

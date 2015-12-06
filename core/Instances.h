@@ -81,6 +81,7 @@ public:
 	virtual double missingValue();
 	virtual bool classIsMissing();
 	std::vector<double> attributeToDoubleArray(int index);
+	virtual void setClassMissing();
 };
 
 

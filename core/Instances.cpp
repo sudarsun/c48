@@ -1,4 +1,5 @@
 #include "Instances.h"
+#include "DenseInstance.h"
 #include "Consts.h"
 #include "Utils.h"
 
@@ -41,7 +42,7 @@ Instances::Instances(const std::string &name, std::vector<Attribute*> &attInfo, 
 
 Instances::Instances(Instances *dataset) :Instances(dataset, 0)
 {
-	dataset->copyInstances(0, this, dataset->numInstances());
+	this->copyInstances(0, dataset, dataset->numInstances());
 }
 
 Instances::Instances(Instances *dataset, int capacity)
@@ -118,7 +119,9 @@ void Instances::copyInstances(int from, Instances *dest, int num)
 
 	for (int i = 0; i < num; i++)
 	{
-		dest->add(instance(from + i));
+		Instance *newInstance = static_cast<Instance*>(new DenseInstance(static_cast<DenseInstance*>(dest->instance(i))->weight(), static_cast<DenseInstance*>(dest->instance(i))->toDoubleArray()));
+		newInstance->setDataset(const_cast<Instances*>(this));
+		mInstances.push_back(newInstance);
 	}
 }
 
@@ -402,7 +405,6 @@ std::string Instances::getRelationName()
 void Instances::setRelationName(const std::string name)
 {
 	mRelationName = name;
-	//mRelationName = "sleep";
 }
 
 void Instances::setDataset(Instances *instances) {
@@ -426,4 +428,9 @@ std::vector<double> Instances::attributeToDoubleArray(int index)
 		result.push_back(instance(i)->value(index));
 	}
 	return result;
+}
+
+void Instances::setClassMissing()
+{
+	throw "Error!..Class is not set!";
 }

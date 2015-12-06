@@ -20,10 +20,10 @@ void C45PruneableClassifierTree::buildClassifier(Instances *data)
 {
 
 	// remove instances with missing class
-	Instances *dataMissed = data;
-	dataMissed->deleteWithMissingClass();
+	Instances dataMissed(data);
+	dataMissed.deleteWithMissingClass();
 
-	buildTree(dataMissed, mSubtreeRaising || !mCleanup);
+	buildTree(&dataMissed, mSubtreeRaising || !mCleanup);
 	if (mCollapseTheTree)
 	{
 		collapse();

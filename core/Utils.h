@@ -232,104 +232,6 @@ public:
 	static bool eq(double a, double b);
 
 	/// <summary>
-	/// Checks if the given array contains any non-empty options.
-	/// </summary>
-	/// <param name="options"> an array of strings </param>
-	/// <exception cref="Exception"> if there are any non-empty options </exception>
-	static void checkForRemainingOptions(std::vector<std::string> &options);
-
-	/// <summary>
-	/// Checks if the given array contains the flag "-Char". Stops searching at the
-	/// first marker "--". If the flag is found, it is replaced with the empty
-	/// string.
-	/// </summary>
-	/// <param name="flag"> the character indicating the flag. </param>
-	/// <param name="options"> the array of strings containing all the options. </param>
-	/// <returns> true if the flag was found </returns>
-	/// <exception cref="Exception"> if an illegal option was found </exception>
-	static bool getFlag(wchar_t flag, std::vector<std::string> &options);
-
-	/// <summary>
-	/// Checks if the given array contains the flag "-String". Stops searching at
-	/// the first marker "--". If the flag is found, it is replaced with the empty
-	/// string.
-	/// </summary>
-	/// <param name="flag"> the String indicating the flag. </param>
-	/// <param name="options"> the array of strings containing all the options. </param>
-	/// <returns> true if the flag was found </returns>
-	/// <exception cref="Exception"> if an illegal option was found </exception>
-	static bool getFlag(const std::string &flag, std::vector<std::string> &options);
-
-	/// <summary>
-	/// Gets an option indicated by a flag "-Char" from the given array of strings.
-	/// Stops searching at the first marker "--". Replaces flag and option with
-	/// empty strings.
-	/// </summary>
-	/// <param name="flag"> the character indicating the option. </param>
-	/// <param name="options"> the array of strings containing all the options. </param>
-	/// <returns> the indicated option or an empty string </returns>
-	/// <exception cref="Exception"> if the option indicated by the flag can't be found </exception>
-	static std::string getOption(wchar_t flag, std::vector<std::string> &options);
-
-	/// <summary>
-	/// Gets an option indicated by a flag "-String" from the given array of
-	/// strings. Stops searching at the first marker "--". Replaces flag and option
-	/// with empty strings.
-	/// </summary>
-	/// <param name="flag"> the String indicating the option. </param>
-	/// <param name="options"> the array of strings containing all the options. </param>
-	/// <returns> the indicated option or an empty string </returns>
-	/// <exception cref="Exception"> if the option indicated by the flag can't be found </exception>
-	static std::string getOption(const std::string &flag, std::vector<std::string> &options);
-
-	/// <summary>
-	/// Gets the index of an option or flag indicated by a flag "-Char" from the
-	/// given array of strings. Stops searching at the first marker "--".
-	/// </summary>
-	/// <param name="flag"> the character indicating the option. </param>
-	/// <param name="options"> the array of strings containing all the options. </param>
-	/// <returns> the position if found, or -1 otherwise </returns>
-	static int getOptionPos(wchar_t flag, std::vector<std::string> &options);
-
-	/// <summary>
-	/// Gets the index of an option or flag indicated by a flag "-String" from the
-	/// given array of strings. Stops searching at the first marker "--".
-	/// </summary>
-	/// <param name="flag"> the String indicating the option. </param>
-	/// <param name="options"> the array of strings containing all the options. </param>
-	/// <returns> the position if found, or -1 otherwise </returns>
-	static int getOptionPos(const std::string &flag, std::vector<std::string> &options);
-
-	/// <summary>
-	/// Quotes a string if it contains special characters.
-	///
-	/// The following rules are applied:
-	///
-	/// A character is backquoted version of it is one of <tt>" ' % \ \n \r \t</tt>
-	/// .
-	///
-	/// A string is enclosed within single quotes if a character has been
-	/// backquoted using the previous rule above or contains <tt>{ }</tt> or is
-	/// exactly equal to the strings <tt>, ? space or ""</tt> (empty string).
-	///
-	/// A quoted question mark distinguishes it from the missing value which is
-	/// represented as an unquoted question mark in arff files.
-	/// </summary>
-	/// <param name="string"> the string to be quoted </param>
-	/// <returns> the string (possibly quoted) </returns>
-	/// <seealso cref= #unquote(String) </seealso>
-	static std::string quote(const std::string &instring);
-
-	/// <summary>
-	/// unquotes are previously quoted string (but only if necessary), i.e., it
-	/// removes the single quotes around it. Inverse to quote(String).
-	/// </summary>
-	/// <param name="string"> the string to process </param>
-	/// <returns> the unquoted string </returns>
-	/// <seealso cref= #quote(String) </seealso>
-	static std::string unquote(const std::string &inString);
-
-	/// <summary>
 	/// Converts carriage returns and new lines in a string into \r and \n.
 	/// Backquotes the following characters: ` " \ \t and %
 	/// </summary>
@@ -338,38 +240,6 @@ public:
 	/// <seealso cref= #unbackQuoteChars(String) </seealso>
 	static std::string backQuoteChars(std::string inString);
 
-	/// <summary>
-	/// Converts carriage returns and new lines in a string into \r and \n.
-	/// </summary>
-	/// <param name="string"> the string </param>
-	/// <returns> the converted string </returns>
-	static std::string convertNewLines(const std::string &string);
-
-	/// <summary>
-	/// Reverts \r and \n in a string into carriage returns and new lines.
-	/// </summary>
-	/// <param name="string"> the string </param>
-	/// <returns> the converted string </returns>
-	static std::string revertNewLines(const std::string &string);
-
-	/// <summary>
-	/// Returns the secondary set of options (if any) contained in the supplied
-	/// options array. The secondary set is defined to be any options after the
-	/// first "--". These options are removed from the original options array.
-	/// </summary>
-	/// <param name="options"> the input array of options </param>
-	/// <returns> the array of secondary options </returns>
-	static std::vector<std::string> partitionOptions(std::vector<std::string> &options);
-
-	/// <summary>
-	/// The inverse operation of backQuoteChars(). Converts back-quoted carriage
-	/// returns and new lines in a string to the corresponding character ('\r' and
-	/// '\n'). Also "un"-back-quotes the following characters: ` " \ \t and %
-	/// </summary>
-	/// <param name="string"> the string </param>
-	/// <returns> the converted string </returns>
-	/// <seealso cref= #backQuoteChars(String) </seealso>
-	static std::string unbackQuoteChars(const std::string &string);
 	/// <summary>
 	/// Normalizes the doubles in the array by their sum.
 	/// </summary>
@@ -512,40 +382,7 @@ public:
 	/// <param name="s"> the string to process </param>
 	/// <param name="columns"> the width in columns </param>
 	/// <returns> the processed string </returns>
-
-	static std::vector<std::string> breakUp(const std::string &s, int columns);
-	/// <summary>
-	/// Converts a File's absolute path to a path relative to the user (ie start)
-	/// directory. Includes an additional workaround for Cygwin, which doesn't like
-	/// upper case drive letters.
-	/// </summary>
-	/// <param name="absolute"> the File to convert to relative path </param>
-	/// <returns> a File with a path that is relative to the user's directory </returns>
-	/// <exception cref="Exception"> if the path cannot be constructed </exception>
-
-	static FILE *convertToRelativePath(FILE *absolute);
-	/// <summary>
-	/// Utility method for grabbing the global info help (if it exists) from an
-	/// arbitrary object. Can also append capabilities information if the object is
-	/// a CapabilitiesHandler.
-	/// </summary>
-	/// <param name="object"> the object to grab global info from </param>
-	/// <param name="addCapabilities"> true if capabilities information is to be added to
-	///          the result </param>
-	/// <returns> the global help info or null if global info does not exist </returns>
-	static std::string getGlobalInfo(void *object, bool addCapabilities);
-
-	/// <summary>
-	/// Implements simple line breaking. Reformats the given string by introducing
-	/// line breaks so that, ideally, no line exceeds the given number of
-	/// characters. Line breaks are assumed to be indicated by newline characters.
-	/// Existing line breaks are left in the input text.
-	/// </summary>
-	/// <param name="input"> the string to line wrap </param>
-	/// <param name="maxLineWidth"> the maximum permitted number of characters in a line </param>
-	/// <returns> the processed string </returns>
-	static std::string lineWrap(const std::string &input, int maxLineWidth);
-
+	static void trim(std::string &outString);
 
 	/// <summary>
 	/// Initial index, filled with values from 0 to size - 1.

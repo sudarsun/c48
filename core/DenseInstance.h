@@ -14,7 +14,7 @@ class DenseInstance : public Instance
 
 public:
 	//int s_numericAfterDecimalPoint;
-	//DenseInstance( Instance *instance );
+	DenseInstance( Instance *instance );
 	DenseInstance(double weight, std::vector<double> &attValues);
 	//DenseInstance( int numAttributes );
 	virtual Attribute *attribute(int index);
@@ -49,6 +49,7 @@ public:
 	virtual void setWeight(double weight);
 	virtual double missingValue();
 	virtual bool classIsMissing();
+	DenseInstance* copy();
 	
 protected:
 	std::vector<double> mAttValues;

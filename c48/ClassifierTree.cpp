@@ -37,7 +37,7 @@ void ClassifierTree::buildTree(Instances *data, bool keepData) {
 	std::vector<Instances*> localInstances;
 
 	if (keepData) {
-		mTrain = data;
+		mTrain = new Instances(data);
 	}
 	mTest = nullptr;;
 	mIsLeaf = false;

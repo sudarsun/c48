@@ -1,6 +1,12 @@
 #include "DenseInstance.h"
 #include "Utils.h"
 
+DenseInstance::DenseInstance(Instance *instance)
+{
+	mAttValues = static_cast<DenseInstance*>(instance)->mAttValues;
+	mWeight = static_cast<DenseInstance*>(instance)->mWeight;
+	mDataset = static_cast<DenseInstance*>(instance)->mDataset;
+}
 DenseInstance::DenseInstance(double weight, std::vector<double> &attValues)
 {
 	mAttValues = attValues;
@@ -8,6 +14,12 @@ DenseInstance::DenseInstance(double weight, std::vector<double> &attValues)
 	mDataset = nullptr;
 }
 
+DenseInstance* DenseInstance::copy()
+{
+	DenseInstance *result = new DenseInstance(this);
+	result->mDataset = mDataset;
+	return result;
+}
 Attribute *DenseInstance::attribute(int index)
 {
 	return mDataset->attribute( index );
