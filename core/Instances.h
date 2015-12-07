@@ -13,9 +13,8 @@
 #include "Attribute.h"
 #include "AttributeStats.h"
 #include "Instance.h"
-//#include "Random.h"
 
-class Instances : Instance
+class Instances
 {
 
 protected:
@@ -38,51 +37,40 @@ protected:
 	/// The class attribute's index </summary>
 	int mClassIndex;
 	double mWeight;
-	virtual void initialize(Instances *dataset, int capacity);
+	void initialize(Instances *dataset, int capacity);
 
 public:
 	Instances(const std::string &name, std::vector<Attribute*> &attInfo, int capacity);
 	Instances(Instances *dataset);
 	Instances(Instances *dataset, int capacity);
-	virtual Attribute *attribute(int index);
-	virtual Attribute *attribute(const std::string &name);
-	virtual int numAttributes();
-	virtual int classIndex();
-	virtual bool add(Instance *instance);
-	virtual void add(int index, Instance *instance);
+	Attribute *attribute(int index);
+	Attribute *attribute(const std::string &name);
+	int numAttributes();
+	int classIndex();
+	bool add(Instance *instance);
+	void add(int index, Instance *instance);
 
-	virtual void setClassIndex(int classIndex);
-	virtual int numInstances();
-	virtual void copyInstances(int from, Instances *dest, int num);
-	virtual Instance *instance(int index);
-	virtual Attribute *classAttribute();
-	virtual int numClasses();
-	virtual double classValue();
-	virtual double weight();
-	virtual void setWeight(double weight);
-	virtual bool isMissing(int attIndex);
-	virtual Instance *lastInstance();
-	virtual double value(int attIndex);
-
-	virtual void Sort(int attIndex);
-	virtual void Sort(Attribute *att);
-	virtual void sortBasedOnNominalAttribute(int attIndex);
+	void setClassIndex(int classIndex);
+	int numInstances();
+	void copyInstances(int from, Instances *dest, int num);
+	Instance *instance(int index);
+	Attribute *classAttribute();
+	int numClasses();
+	Instance *lastInstance();
+	void setWeight(double weight);
+	void Sort(int attIndex);
+	void Sort(Attribute *att);
+	void sortBasedOnNominalAttribute(int attIndex);
 	void deleteWithMissingClass();
 	void deleteWithMissing(Attribute *att);
 	void deleteWithMissing(int attIndex);
 	double sumOfWeights();
-	std::string toString();
-	virtual Instances *trainCV(int numFolds, int numFold);
-	virtual Instances *testCV(int numFolds, int numFold);
-	virtual void setDataset(Instances *data);
-	virtual  Instances* getDataset();
+	Instances *trainCV(int numFolds, int numFold);
+	Instances *testCV(int numFolds, int numFold);
 	std::string getRelationName();
 	void setRelationName(const std::string name);
-	virtual double missingValue();
-	virtual bool classIsMissing();
 	std::vector<double> attributeToDoubleArray(int index);
-	virtual void setClassMissing();
-};
 
+};
 
 #endif // _INSTANCES_HPP

@@ -194,12 +194,6 @@ public:
 	/// </summary>
 	virtual void calculateDerived();
 
-	/// <summary>
-	/// Returns a string summarising the stats so far.
-	/// </summary>
-	/// <returns> the summary string </returns>
-	virtual std::string toString();
-
 }; // Stats
 
 

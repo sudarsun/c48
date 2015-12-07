@@ -4,7 +4,6 @@
 #include "Prediction.h"
 #include "core/Instances.h"
 #include "core/Instance.h"
-#include "core/DenseInstance.h"
 #include "c48/Classifier.h"
 #include "core/Utils.h"
 #include "NominalPrediction.h"
@@ -108,7 +107,7 @@ double Evaluation::evaluateModelOnceAndRecordPrediction(std::vector<double> dist
 }
 double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, Instance *instance)
 {
-	Instance *classMissing = (static_cast<DenseInstance*>(instance))->copy();
+	Instance *classMissing = instance->copy();
 	double pred = 0;
 	classMissing->setDataset(instance->getDataset());
 	classMissing->setClassMissing();
@@ -302,7 +301,7 @@ void Evaluation::setNumericPriorsFromBuffer() {
 	if (mNumTrainClassVals > 1) {
 		std::vector<double> temp(mNumTrainClassVals);
 		std::copy(mTrainClassVals.begin(), mTrainClassVals.begin() + mNumTrainClassVals, temp.begin());
-		std::vector<int> index = Utils::sort(temp);
+		std::vector<int> index = Utils::Sort(temp);
 		double lastVal = temp[index[0]];
 		double deltaSum = 0;
 		int distinct = 0;
@@ -764,8 +763,8 @@ std::string Evaluation::toMatrixString(std::string title)
 		}
 	}
 
-	int val1 = std::log(maxval) / std::log(10) + (fractional ? 3 : 0);
-	int val2 = std::log(mNumClasses) / std::log(IDChars.size());
+	int val1 = (int)std::log(maxval) / (int)std::log(10) + (fractional ? 3 : 0);
+	int val2 = (int)std::log(mNumClasses) / (int)std::log(IDChars.size());
 	IDWidth = 1 + val1 > val2 ? val1 : val2;
 	text.append(title).append("\n");
 	for (int i = 0; i < mNumClasses; i++) {

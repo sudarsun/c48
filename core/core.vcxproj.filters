@@ -22,9 +22,6 @@
     <ClCompile Include="DataSource.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="DenseInstance.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="Instances.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -38,6 +35,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="Matrix.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,12 +63,6 @@
     <ClInclude Include="DataSource.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="DenseInstance.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="Instance.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="Instances.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -88,6 +82,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

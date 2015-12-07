@@ -1,5 +1,5 @@
 #include "Instances.h"
-#include "DenseInstance.h"
+#include "Instance.h"
 #include "Consts.h"
 #include "Utils.h"
 
@@ -7,7 +7,6 @@
 #include <unordered_set>
 #include <exception>
 #include <stdexcept>
-
 
 Instances::Instances(const std::string &name, std::vector<Attribute*> &attInfo, int capacity)
 {
@@ -52,14 +51,11 @@ Instances::Instances(Instances *dataset, int capacity)
 
 Attribute *Instances::attribute(int index)
 {
-	// @pure@
-
 	return mAttributes[index];
 }
 
 Attribute *Instances::attribute(const std::string &name)
 {
-	// @pure@
 
 	int index = mNamesToAttributeIndices[name];
 	if (index != -1)
@@ -94,16 +90,12 @@ bool Instances::add(Instance *instance)
 	Instance *newInstance = static_cast<Instance*>( instance );
 	newInstance->setDataset(const_cast<Instances*>(this));
 	mInstances.push_back(instance);
-
 	return true;
 }
 
 void Instances::add(int index, Instance *instance)
 {
-	// @non_null@
-
 	Instance *newInstance = static_cast<Instance*>( instance );
-
 	newInstance->setDataset( this );
 	mInstances[index] = instance ;
 }
@@ -115,11 +107,9 @@ int Instances::numInstances()
 
 void Instances::copyInstances(int from, Instances *dest, int num)
 {
-	// @non_null@
-
 	for (int i = 0; i < num; i++)
 	{
-		Instance *newInstance = static_cast<Instance*>(new DenseInstance(static_cast<DenseInstance*>(dest->instance(i))->weight(), static_cast<DenseInstance*>(dest->instance(i))->toDoubleArray()));
+		Instance *newInstance = new Instance(dest->instance(i)->weight(), dest->instance(i)->toDoubleArray());
 		newInstance->setDataset(const_cast<Instances*>(this));
 		mInstances.push_back(newInstance);
 	}
@@ -169,20 +159,6 @@ int Instances::numClasses()
 		return classAttribute()->numValues();
 	}
 }
-double Instances::classValue()
-{
-
-	return 0.0;
-}
-
-double Instances::weight()
-{
-	return 0.0;
-}
-bool Instances::isMissing(int attIndex)
-{
-	return false;
-}
 
 Instance *Instances::lastInstance()
 {
@@ -191,13 +167,11 @@ Instance *Instances::lastInstance()
 
 void Instances::setWeight(double weight)
 {
-
 	mWeight = weight;
 }
 
 void Instances::deleteWithMissing(int attIndex)
 {
-
 	std::vector<Instance*> newInstances;
 	int totalInst = numInstances();
 	for (int i = 0; i < totalInst; i++)
@@ -227,8 +201,6 @@ void Instances::deleteWithMissingClass()
 
 double Instances::sumOfWeights()
 {
-	// @pure@
-
 	double sum = 0;
 
 	for (int i = 0; i < numInstances(); i++)
@@ -238,19 +210,8 @@ double Instances::sumOfWeights()
 	return sum;
 }
 
-double Instances::value(int attIndex)
-{
-	std::cout << "should call DenseInstance value()";
-	return 0;
-}
-std::string Instances::toString()
-{
-	return "";
-}
-
 Instances *Instances::trainCV(int numFolds, int numFold)
 {
-
 	int numInstForFold, first, offset;
 	Instances *train;
 
@@ -282,7 +243,6 @@ Instances *Instances::trainCV(int numFolds, int numFold)
 
 Instances *Instances::testCV(int numFolds, int numFold)
 {
-
 	int numInstForFold, first, offset;
 	Instances *test;
 
@@ -312,10 +272,8 @@ Instances *Instances::testCV(int numFolds, int numFold)
 
 void Instances::Sort(int attIndex)
 {
-
 	if (!attribute(attIndex)->isNominal())
 	{
-
 		// Use quicksort from Utils class for sorting
 		std::vector<double> vals(numInstances());
 		std::vector<Instance*> backup(vals.size());
@@ -348,14 +306,11 @@ void Instances::Sort(int attIndex)
 
 void Instances::Sort(Attribute *att)
 {
-
 	Sort(att->index());
 }
 
-
 void Instances::sortBasedOnNominalAttribute(int attIndex)
 {
-
 	// Figure out number of instances for each attribute value
 	// and store original list of instances away
 	std::vector<int> counts((attribute(attIndex))->numValues());
@@ -392,11 +347,6 @@ void Instances::sortBasedOnNominalAttribute(int attIndex)
 	}
 }
 
-Instances* Instances::getDataset()
-{
-	return this;
-}
-
 std::string Instances::getRelationName()
 {
 	return mRelationName;
@@ -407,19 +357,6 @@ void Instances::setRelationName(const std::string name)
 	mRelationName = name;
 }
 
-void Instances::setDataset(Instances *instances) {
-
-}
-bool Instances::classIsMissing()
-{
-	return false;
-}
-
-double Instances:: missingValue()
-{
-	return 0.0;
-}
-
 std::vector<double> Instances::attributeToDoubleArray(int index)
 {
 	int totalInst = numInstances();
@@ -428,9 +365,4 @@ std::vector<double> Instances::attributeToDoubleArray(int index)
 		result.push_back(instance(i)->value(index));
 	}
 	return result;
-}
-
-void Instances::setClassMissing()
-{
-	throw "Error!..Class is not set!";
 }

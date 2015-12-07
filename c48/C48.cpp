@@ -1,151 +1,111 @@
 #include "C48.h"
 #include "ModelSelection.h"
-//#include "BinC45ModelSelection.h"
 #include "C45PruneableClassifierTree.h"
-#include "PruneableClassifierTree.h"
 #include "C45ModelSelection.h"
 
 void C48::buildClassifier(Instances *instances)
 {
 
 	ModelSelection *modSelection = nullptr;
+	
+	modSelection = new C45ModelSelection(mMinNumObj, instances, mUseMDLcorrection, mDoNotMakeSplitPointActualValue);
 
-	if (mbinarySplits)
+	if (!mReducedErrorPruning)
 	{
-		;//modSelection = new BinC45ModelSelection( mminNumObj, instances, museMDLcorrection, mdoNotMakeSplitPointActualValue );
-	}
-	else
-	{
-		modSelection = new C45ModelSelection(mminNumObj, instances, museMDLcorrection, mdoNotMakeSplitPointActualValue);
+		mRoot = new C45PruneableClassifierTree(modSelection, !mUnpruned, mCF, mSubtreeRaising, !mNoCleanup, mCollapseTree);
 	}
 
-	if (!mreducedErrorPruning)
-	{
-		mroot = new C45PruneableClassifierTree(modSelection, !munpruned, mCF, msubtreeRaising, !mnoCleanup, mcollapseTree);
-	}
-	else
-	{
-		;//mroot = new PruneableClassifierTree( modSelection, !munpruned, mnumFolds, !mnoCleanup, mSeed );
-	}
-	mroot->buildClassifier(instances);
-	if (mbinarySplits)
-	{
-		;//( static_cast<BinC45ModelSelection*>( modSelection ) )->cleanup();
-	}
-	else
-	{
-		;// (static_cast<C45ModelSelection*>(modSelection))->cleanup();
-	}
+	mRoot->buildClassifier(instances);
 }
 
 double C48::classifyInstance(Instance *instance)
 {
-	return mroot->classifyInstance(instance);
+	return mRoot->classifyInstance(instance);
 }
 
 std::vector<double> C48::distributionForInstance(Instance *instance)
 {
-	return mroot->distributionForInstance(instance, museLaplace);
-}
-
-std::string C48::graph()
-{
-	return mroot->graph();
-}
-
-std::string C48::prefix()
-{
-	return mroot->prefix();
-}
-
-int C48::getSeed()
-{
-	return mSeed;
-}
-
-void C48::setSeed(int newSeed)
-{
-	mSeed = newSeed;
+	return mRoot->distributionForInstance(instance, mUseLaplace);
 }
 
 bool C48::getUseLaplace()
 {
-	return museLaplace;
+	return mUseLaplace;
 }
 
 void C48::setUseLaplace(bool newuseLaplace)
 {
-	museLaplace = newuseLaplace;
+	mUseLaplace = newuseLaplace;
 }
 
 bool C48::getUseMDLcorrection()
 {
-	return museMDLcorrection;
+	return mUseMDLcorrection;
 }
 
 void C48::setUseMDLcorrection(bool newuseMDLcorrection)
 {
-	museMDLcorrection = newuseMDLcorrection;
+	mUseMDLcorrection = newuseMDLcorrection;
 }
 
-std::string C48::toString()
+std::string C48::toString(bool isDumpTree)
 {
-	if (mroot == nullptr)
+	if (mRoot == nullptr)
 	{
 		return "No classifier built";
 	}
-	if (munpruned)
+	if (mUnpruned)
 	{
-		return std::string("C48 unpruned tree\n------------------\n") + mroot->toString();
+		return std::string("C48 unpruned tree\n------------------\n") + mRoot->toString(isDumpTree);
 	}
 	else
 	{
-		return std::string("C48 pruned tree\n------------------\n") + mroot->toString();
+		return std::string("C48 pruned tree\n------------------\n") + mRoot->toString(isDumpTree);
 	}
 }
 
 std::string C48::toSummaryString()
 {
-	return std::string("Number of leaves: ") + std::to_string(mroot->numLeaves()) + std::string("\n") + std::string("Size of the tree: ") + std::to_string(mroot->numNodes()) + std::string("\n");
+	return std::string("Number of leaves: ") + std::to_string(mRoot->numLeaves()) + std::string("\n") + std::string("Size of the tree: ") + std::to_string(mRoot->numNodes()) + std::string("\n");
 }
 
 double C48::measureTreeSize()
 {
-	return mroot->numNodes();
+	return mRoot->numNodes();
 }
 
 double C48::measureNumLeaves()
 {
-	return mroot->numLeaves();
+	return mRoot->numLeaves();
 }
 
 double C48::measureNumRules()
 {
-	return mroot->numLeaves();
+	return mRoot->numLeaves();
 }
 
 bool C48::getUnpruned()
 {
-	return munpruned;
+	return mUnpruned;
 }
 
 void C48::setUnpruned(bool v)
 {
 	if (v)
 	{
-		mreducedErrorPruning = false;
+		mReducedErrorPruning = false;
 	}
-	munpruned = v;
+	mUnpruned = v;
 }
 
 bool C48::getCollapseTree()
 {
-	return mcollapseTree;
+	return mCollapseTree;
 }
 
 void C48::setCollapseTree(bool v)
 {
-	mcollapseTree = v;
+	mCollapseTree = v;
 }
 
 float C48::getConfidenceFactor()
@@ -160,76 +120,66 @@ void C48::setConfidenceFactor(float v)
 
 int C48::getMinNumObj()
 {
-	return mminNumObj;
+	return mMinNumObj;
 }
 
 void C48::setMinNumObj(int v)
 {
-	mminNumObj = v;
+	mMinNumObj = v;
 }
 
 bool C48::getReducedErrorPruning()
 {
-	return mreducedErrorPruning;
+	return mReducedErrorPruning;
 }
 
 void C48::setReducedErrorPruning(bool v)
 {
 	if (v)
 	{
-		munpruned = false;
+		mUnpruned = false;
 	}
-	mreducedErrorPruning = v;
+	mReducedErrorPruning = v;
 }
 
 int C48::getNumFolds()
 {
-	return mnumFolds;
+	return mNumFolds;
 }
 
 void C48::setNumFolds(int v)
 {
-	mnumFolds = v;
-}
-
-bool C48::getBinarySplits()
-{
-	return mbinarySplits;
-}
-
-void C48::setBinarySplits(bool v)
-{
-	mbinarySplits = v;
+	mNumFolds = v;
 }
 
 bool C48::getSubtreeRaising()
 {
-	return msubtreeRaising;
+	return mSubtreeRaising;
 }
 
 void C48::setSubtreeRaising(bool v)
 {
-	msubtreeRaising = v;
+	mSubtreeRaising = v;
 }
 
 bool C48::getSaveInstanceData()
 {
-	return mnoCleanup;
+	return mNoCleanup;
 }
 
 void C48::setSaveInstanceData(bool v)
 {
-	mnoCleanup = v;
+	mNoCleanup = v;
 }
 
 bool C48::getDoNotMakeSplitPointActualValue()
 {
-	return mdoNotMakeSplitPointActualValue;
+	return mDoNotMakeSplitPointActualValue;
 }
 
-void C48::setDoNotMakeSplitPointActualValue(bool mdoNotMakeSplitPointActualValue)
+void C48::setDoNotMakeSplitPointActualValue(bool mDoNotMakeSplitPointActualValue)
 {
-	this->mdoNotMakeSplitPointActualValue = mdoNotMakeSplitPointActualValue;
+	this->mDoNotMakeSplitPointActualValue = mDoNotMakeSplitPointActualValue;
 }
 
 void C48::generatePartition(Instances *data)
@@ -239,10 +189,10 @@ void C48::generatePartition(Instances *data)
 
 std::vector<double> C48::getMembershipValues(Instance *inst)
 {
-	return mroot->getMembershipValues(inst);
+	return mRoot->getMembershipValues(inst);
 }
 
 int C48::numElements()
 {
-	return mroot->numNodes();
+	return mRoot->numNodes();
 }

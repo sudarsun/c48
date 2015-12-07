@@ -1,6 +1,5 @@
 #include "DataSource.h"
 #include "Instance.h"
-#include "DenseInstance.h"
 #include "Instances.h"
 #include "Attribute.h"
 #include "Utils.h"
@@ -275,7 +274,7 @@ Instance *DataSource::getInstance(std::string inData)
 		}
 		i++;
 	}
-	return new DenseInstance(1.0, instance);
+	return new Instance(1.0, instance);
 }
 
 Instances *DataSource::getDataSet()

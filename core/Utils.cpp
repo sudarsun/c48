@@ -12,14 +12,6 @@ double Utils::missingValue() {
 	return std::numeric_limits<double>::quiet_NaN();
 }
 
-template<typename T>
-//JAVA TO C++ CONVERTER TODO TASK: Most Java annotations will not have direct C++ equivalents:
-//ORIGINAL LINE: @SuppressWarnings("unchecked") public static <T> T cast(Object x)
-T Utils::cast(void *x) {
-	return static_cast<T>(x);
-}
-
-
 double Utils::correlation(std::vector<double> &y1, std::vector<double> &y2, int n) {
 
 	int i;
@@ -53,9 +45,9 @@ std::string Utils::removeSubstring(const std::string &inString, const std::strin
 
 	std::string result = "";
 	int oldLoc = 0, loc = 0;
-	while ((loc = inString.find(substring, oldLoc)) != -1) {
+	while ((loc = (int)inString.find(substring, oldLoc)) != -1) {
 		result.append(inString.substr(oldLoc, loc - oldLoc));
-		oldLoc = loc + substring.length();
+		oldLoc = loc + (int)substring.length();
 	}
 	result.append(inString.substr(oldLoc));
 
@@ -66,51 +58,17 @@ std::string Utils::replaceSubstring(const std::string &inString, const std::stri
 
 	std::string result = "";
 	int oldLoc = 0, loc = 0;
-	while ((loc = inString.find(subString, oldLoc)) != -1) {
+	while ((loc = (int)inString.find(subString, oldLoc)) != -1) {
 		result.append(inString.substr(oldLoc, loc - oldLoc));
 		result.append(replaceString);
-		oldLoc = loc + subString.length();
+		oldLoc = loc + (int)subString.length();
 	}
 	result.append(inString.substr(oldLoc));
 	return result;
 }
 
-std::string Utils::padLeftAndAllowOverflow(const std::string &inString, int length) {
-	char* format = new char[inString.length() + sizeof(length)];
-	sprintf(format, "%1$s", length, inString.c_str());
-	std::string str = format;
-	delete[] format;
-	return str;
-}
-
-std::string Utils::padRightAndAllowOverflow(const std::string &inString, int length) {
-
-	char* format = new char[inString.length() + sizeof(length)];
-	sprintf(format, "%1$-s", length, inString.c_str());
-	std::string str = format;
-	delete[] format;
-	return str;
-}
-
-std::string Utils::padLeft(const std::string &inString, int length) {
-
-	char* format = new char[inString.length() + sizeof(length)];
-	sprintf(format, "%1s", length, inString.c_str());
-	std::string str = format;
-	delete[] format;
-	return str;
-}
-
-std::string Utils::padRight(const std::string &inString, int length) {
-	char* format = new char[inString.length() + sizeof(length)];
-	sprintf(format, "%1-.s", length, inString.c_str());
-	std::string str = format;
-	delete[] format;
-	return str;
-}
-
 std::string Utils::doubleToString(double value, int afterDecimalPoint)
-{ // @pure@
+{
 	std::string stringBuffer = "";
 	double temp;
 	int dotPosition;
@@ -127,7 +85,7 @@ std::string Utils::doubleToString(double value, int afterDecimalPoint)
 		if (afterDecimalPoint == 0) {
 			return stringBuffer;
 		}
-		dotPosition = stringBuffer.length() - afterDecimalPoint;
+		dotPosition = (int)stringBuffer.length() - afterDecimalPoint;
 		while (((precisionValue < 0) && (dotPosition < 1)) || (dotPosition < 0)) {
 			if (precisionValue < 0) {
 				stringBuffer.insert(1, "0");
@@ -144,7 +102,7 @@ std::string Utils::doubleToString(double value, int afterDecimalPoint)
 		else if (stringBuffer.at(0) == '.') {
 			stringBuffer.insert(0, "0");
 		}
-		int currentPos = stringBuffer.length() - 1;
+		int currentPos = (int)stringBuffer.length() - 1;
 		while ((currentPos > dotPosition) && (stringBuffer.at(currentPos) == '0')) {
 			stringBuffer[currentPos--] = ' ';
 		}
@@ -159,7 +117,7 @@ std::string Utils::doubleToString(double value, int afterDecimalPoint)
 }
 
 std::string Utils::doubleToString(double value, int width, int afterDecimalPoint)
-{ // @pure@
+{
 
 	std::string tempString = doubleToString(value, afterDecimalPoint);
 	std::vector<char> result;
@@ -177,16 +135,16 @@ std::string Utils::doubleToString(double value, int width, int afterDecimalPoint
 
 	if (afterDecimalPoint > 0) {
 		// Get position of decimal point and insert decimal point
-		dotPosition = tempString.find(".");
+		dotPosition = (int)tempString.find(".");
 		if (dotPosition == -1) {
-			dotPosition = tempString.length();
+			dotPosition = (int)tempString.length();
 		}
 		else {
 			result[width - afterDecimalPoint - 1] = '.';
 		}
 	}
 	else {
-		dotPosition = tempString.length();
+		dotPosition = (int)tempString.length();
 	}
 
 	int offset = width - afterDecimalPoint - dotPosition;
@@ -213,13 +171,13 @@ std::string Utils::doubleToString(double value, int width, int afterDecimalPoint
 }
 
 bool Utils::eq(double a, double b)
-{ // @pure@
+{
 
 	return (a == b) || ((a - b < SMALL) && (b - a < SMALL));
 }
 
 double Utils::info(std::vector<int> &counts)
-{ // @pure@
+{
 
 	int total = 0;
 	double x = 0;
@@ -231,49 +189,49 @@ double Utils::info(std::vector<int> &counts)
 }
 
 bool Utils::smOrEq(double a, double b)
-{ // @pure@
+{
 
 	return (a - b < SMALL) || (a <= b);
 }
 
 bool Utils::grOrEq(double a, double b)
-{ // @pure@
+{
 
 	return (b - a < SMALL) || (a >= b);
 }
 
 bool Utils::sm(double a, double b)
-{ // @pure@
+{
 
 	return (b - a > SMALL);
 }
 
 bool Utils::gr(double a, double b)
-{ // @pure@
+{
 
 	return (a - b > SMALL);
 }
 
 int Utils::kthSmallestValue(std::vector<int> &array_Renamed, int k) {
 
-	std::vector<int> index = initialIndex(array_Renamed.size());
-	return array_Renamed[index[select(array_Renamed, index, 0, array_Renamed.size() - 1, k)]];
+	std::vector<int> index = initialIndex((int)array_Renamed.size());
+	return array_Renamed[index[select(array_Renamed, index, 0, (int)array_Renamed.size() - 1, k)]];
 }
 
 double Utils::kthSmallestValue(std::vector<double> &array_Renamed, int k) {
 
-	std::vector<int> index = initialIndex(array_Renamed.size());
-	return array_Renamed[index[select(array_Renamed, index, 0, array_Renamed.size() - 1, k)]];
+	std::vector<int> index = initialIndex((int)array_Renamed.size());
+	return array_Renamed[index[select(array_Renamed, index, 0, (int)array_Renamed.size() - 1, k)]];
 }
 
 double Utils::getLog2(double a)
-{ // @pure@
+{
 
 	return log(a) / log(2);
 }
 
 int Utils::maxIndex(std::vector<double> &doubles)
-{ // @pure@
+{
 
 	double maximum = 0;
 	int maxIndex = 0;
@@ -289,7 +247,7 @@ int Utils::maxIndex(std::vector<double> &doubles)
 }
 
 int Utils::maxIndex(std::vector<int> &ints)
-{ // @pure@
+{
 
 	int maximum = 0;
 	int maxIndex = 0;
@@ -305,7 +263,7 @@ int Utils::maxIndex(std::vector<int> &ints)
 }
 
 double Utils::mean(std::vector<double> &vector)
-{ // @pure@
+{
 
 	double sum = 0;
 
@@ -319,7 +277,7 @@ double Utils::mean(std::vector<double> &vector)
 }
 
 int Utils::minIndex(std::vector<int> &ints)
-{ // @pure@
+{
 
 	int minimum = 0;
 	int minIndex = 0;
@@ -335,7 +293,7 @@ int Utils::minIndex(std::vector<int> &ints)
 }
 
 int Utils::minIndex(std::vector<double> &doubles)
-{ // @pure@
+{
 
 	double minimum = 0;
 	int minIndex = 0;
@@ -389,7 +347,7 @@ std::vector<double> Utils::logs2probs(std::vector<double> &a) {
 }
 
 double Utils::probToLogOdds(double prob)
-{ // @pure@
+{
 
 	if (gr(prob, 1) || (sm(prob, 0))) {
 		throw std::invalid_argument(std::string("probToLogOdds: probability must ") + std::string("be in [0,1] ") + std::to_string(prob));
@@ -399,7 +357,7 @@ double Utils::probToLogOdds(double prob)
 }
 
 int Utils::round(double value)
-{ // @pure@
+{
 
 	int roundedValue = value > 0 ? static_cast<int>(value + 0.5) : -static_cast<int>(abs(value) + 0.5);
 
@@ -437,22 +395,22 @@ void Utils::replaceMissingWithMAX_VALUE(std::vector<double> &array_Renamed) {
 }
 
 double Utils::roundDouble(double value, int afterDecimalPoint)
-{ // @pure@
+{
 
 	double mask = pow(10.0, afterDecimalPoint);
 
 	return (round(value * mask)) / mask;
 }
 
-std::vector<int> Utils::sort(std::vector<int> &array_Renamed)
-{ // @pure@
+std::vector<int> Utils::Sort(std::vector<int> &array_Renamed)
+{
 
-	std::vector<int> index = initialIndex(array_Renamed.size());
+	std::vector<int> index = initialIndex((int)array_Renamed.size());
 	std::vector<int> newIndex(array_Renamed.size());
 	std::vector<int> helpIndex;
 	int numEqual;
 
-	quickSort(array_Renamed, index, 0, array_Renamed.size() - 1);
+	quickSort(array_Renamed, index, 0, (int)array_Renamed.size() - 1);
 
 	// Make sort stable
 	int i = 0;
@@ -480,33 +438,33 @@ std::vector<int> Utils::sort(std::vector<int> &array_Renamed)
 	return newIndex;
 }
 
-std::vector<int> Utils::sort(std::vector<double> &array_Renamed)
+std::vector<int> Utils::Sort(std::vector<double> &array_Renamed)
 { // @non_null@ -  @pure@
 
-	std::vector<int> index = initialIndex(array_Renamed.size());
+	std::vector<int> index = initialIndex((int)array_Renamed.size());
 	if (array_Renamed.size() > 1) {
 		//array_Renamed = array_Renamed;
 		replaceMissingWithMAX_VALUE(array_Renamed);
-		quickSort(array_Renamed, index, 0, array_Renamed.size() - 1);
+		quickSort(array_Renamed, index, 0, (int)array_Renamed.size() - 1);
 	}
 	return index;
 }
 
 std::vector<int> Utils::sortWithNoMissingValues(std::vector<double> &array_Renamed)
 /* @non_null@ */
-{ // @pure@
+{
 
-	std::vector<int> index = initialIndex(array_Renamed.size());
+	std::vector<int> index = initialIndex((int)array_Renamed.size());
 	if (array_Renamed.size() > 1) {
-		quickSort(array_Renamed, index, 0, array_Renamed.size() - 1);
+		quickSort(array_Renamed, index, 0, (int)array_Renamed.size() - 1);
 	}
 	return index;
 }
 
 std::vector<int> Utils::stableSort(std::vector<double> &array_Renamed)
-{ // @pure@
+{
 
-	std::vector<int> index = initialIndex(array_Renamed.size());
+	std::vector<int> index = initialIndex((int)array_Renamed.size());
 
 	if (array_Renamed.size() > 1) {
 
@@ -516,7 +474,7 @@ std::vector<int> Utils::stableSort(std::vector<double> &array_Renamed)
 
 		//array_Renamed = array_Renamed.clone();
 		replaceMissingWithMAX_VALUE(array_Renamed);
-		quickSort(array_Renamed, index, 0, array_Renamed.size() - 1);
+		quickSort(array_Renamed, index, 0, (int)array_Renamed.size() - 1);
 
 		// Make sort stable
 
@@ -550,7 +508,7 @@ std::vector<int> Utils::stableSort(std::vector<double> &array_Renamed)
 }
 
 double Utils::variance(std::vector<double> &vector)
-{ // @pure@
+{
 
 	if (vector.size() <= 1) {
 		return std::numeric_limits<double>::quiet_NaN();
@@ -577,7 +535,7 @@ double Utils::variance(std::vector<double> &vector)
 }
 
 double Utils::sum(std::vector<double> &doubles)
-{ // @pure@
+{
 
 	double sum = 0;
 
@@ -588,7 +546,7 @@ double Utils::sum(std::vector<double> &doubles)
 }
 
 int Utils::sum(std::vector<int> &ints)
-{ // @pure@
+{
 
 	int sum = 0;
 
@@ -599,7 +557,7 @@ int Utils::sum(std::vector<int> &ints)
 }
 
 double Utils::xlogx(int c)
-{ // @pure@
+{
 
 	if (c == 0) {
 		return 0.0;
@@ -792,7 +750,7 @@ int Utils::select(std::vector<int> &array_Renamed, std::vector<int> &index, int 
 }
 
 std::string Utils::backQuoteChars(std::string inString)
-{ // @pure@
+{
 
 	int index;
 	std::string stringbuf;
@@ -803,7 +761,7 @@ std::string Utils::backQuoteChars(std::string inString)
 	for (int i = 0; i < charsFind.size(); i++) {
 		if (inString.find(charsFind[i]) != -1) {
 			stringbuf = "";
-			while ((index = inString.find(charsFind[i])) != -1) {
+			while ((index = (int)inString.find(charsFind[i])) != -1) {
 				if (index > 0) {
 					stringbuf.append(inString.substr(0, index));
 				}

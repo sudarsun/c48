@@ -1,6 +1,6 @@
 #include "core/DataSource.h"
 #include "core/Instances.h"
-#include "core/DenseInstance.h"
+#include "core/Instance.h"
 #include "core/Utils.h"
 #include "c48/C48.h"
 #include "evaluation/Evaluation.h"
@@ -9,24 +9,32 @@
 #include <ctime>
 
 using namespace std;
-void classify();
+void classify(char *fileName, bool isDumpTree = false);
 void processClassifierPrediction(Instance *toPredict,
-	Classifier *classifier, Evaluation &eval, Instances *plotInstances);
-int main()
+	Classifier *classifier, Evaluation &eval);
+
+int main( int argc, char *argv[]  )
 {
-	classify();	
+	if (argc != 3)
+	{
+		std::cout << endl;
+		std::cout << "please check the argument(s). the tool expects min. 2 arguments " << endl;
+		std::cout << "1.\tfileStem.names|fileStem.data\n2.\t<dump tree structure for classification> => enable->1, disable->0" << std::endl;
+		std::cout << "\nExample: " << argv[0] << " sample.names|sample.data <0|1>" << std::endl;
+		std::cout << endl;
+		exit(0);
+	}
+	bool isDumpTree = atoi(argv[1]) == 0 ? false : true;
+	classify(argv[1], isDumpTree);
     return 0;
 }
 
-void classify()
+void classify(char *fileName, bool isDumpTree)
 {
-	
 	time_t startTime, TimeElapsed;
-#ifdef _WIN64
-	std::string path = "E:\\C4.5\\sleep.names";
-#else
-	std::string path = "/opt/c48/sleep.names";
-#endif
+	
+	std::string path(fileName);
+
 	// Set data source
 	DataSource data(path);
 	Instances *inst = nullptr;
@@ -53,7 +61,7 @@ void classify()
 	classifier->buildClassifier(inst);
 	time(&TimeElapsed);
 	cout << "=== Classifier model (full training set) ===" << endl << endl;
-	cout << classifier->toString() << endl;
+	cout << classifier->toString(isDumpTree) << endl;
 	cout << "\nTime taken to build model : "
 		 << difftime(TimeElapsed, startTime)
 		 << " seconds\n\n";
@@ -63,7 +71,7 @@ void classify()
 	for (int i = 0; i < totalInst; i++)
 	{
 		Instance *instance = inst->instance(i);
-		processClassifierPrediction(instance, classifier, *eval, inst);
+		processClassifierPrediction(instance, classifier, *eval);
 	}
 	cout << " === Evaluation on training set ===" << endl;
 	cout << eval->toSummaryString(true);
@@ -73,7 +81,7 @@ void classify()
 
 }
 void processClassifierPrediction(Instance *toPredict,
-	Classifier *classifier, Evaluation &eval, Instances *plotInstances)
+	Classifier *classifier, Evaluation &eval)
 {
 	try
 	{
@@ -81,6 +89,6 @@ void processClassifierPrediction(Instance *toPredict,
 	}
 	catch (std::exception ex)
 	{
-
+		std::cout << ex.what();
 	}
 }

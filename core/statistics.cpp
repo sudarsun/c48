@@ -159,30 +159,3 @@ void Statistics::calculateDerived() {
 	stdDev = sqrt(stdDev);
 
 }
-
-std::string Statistics::toString() {
-	std::string tostring = "";
-
-	tostring.append("Count   ");
-	tostring.append(count, 8);
-	tostring.append("\n");
-	tostring.append("Min     ");
-	tostring.append(min, 8);
-	tostring.append("\n");
-	tostring.append("Max     ");
-	tostring.append(max, 8);
-	tostring.append("\n");
-	tostring.append("Sum     ");
-	tostring.append(sum, 8);
-	tostring.append("\n");
-	tostring.append("SumSq   ");
-	tostring.append(sumSq, 8);
-	tostring.append("\n");
-	tostring.append("Mean    ");
-	tostring.append(mean, 8);
-	tostring.append("\n");
-	tostring.append("StdDev  ");
-	tostring.append(stdDev, 8);
-	tostring.append("\n");
-	return tostring;
-}

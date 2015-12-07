@@ -123,7 +123,7 @@
     <ClCompile Include="AttributeStats.cpp" />
     <ClCompile Include="ContingencyTables.cpp" />
     <ClCompile Include="DataSource.cpp" />
-    <ClCompile Include="DenseInstance.cpp" />
+    <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Instances.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="NominalAttributeInfo.cpp" />
@@ -139,7 +139,6 @@
     <ClInclude Include="Consts.h" />
     <ClInclude Include="ContingencyTables.h" />
     <ClInclude Include="DataSource.h" />
-    <ClInclude Include="DenseInstance.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="Instances.h" />
     <ClInclude Include="Matrix.h" />

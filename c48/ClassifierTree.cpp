@@ -152,54 +152,6 @@ int ClassifierTree::assignIDs(int lastID) {
 	return currLastID;
 }
 
-int ClassifierTree::graphType() {
-	return 0;
-}
-
-std::string ClassifierTree::graph() {
-
-	std::string text = "";
-
-	assignIDs(-1);
-	text.append("digraph J48Tree {\n");
-	if (mIsLeaf) {
-		text.append(std::string("N") + std::to_string(mID) + std::string(" [label=\"") + Utils::backQuoteChars(mLocalModel->dumpLabel(0, mTrain)) + std::string("\" ") + std::string("shape=box style=filled "));
-		if (mTrain != nullptr && mTrain->numInstances() > 0) {
-			text.append(std::string("data =\n") + mTrain->toString()+ std::string("\n"));
-			text.append(",\n");
-
-		}
-		text.append("]\n");
-	}
-	else {
-		text.append(std::string("N") + std::to_string(mID) + std::string(" [label=\"") + Utils::backQuoteChars(mLocalModel->leftSide(mTrain)) + std::string("\" "));
-		if (mTrain != nullptr && mTrain->numInstances() > 0) {
-			text.append(std::string("data =\n") + mTrain->toString() + std::string("\n"));
-			text.append(",\n");
-		}
-		text.append("]\n");
-		graphTree(text);
-	}
-
-	return text.append("}\n");
-}
-
-std::string ClassifierTree::prefix() {
-
-	std::string text;
-
-	text = "";
-	if (mIsLeaf) {
-		text.append(std::string("[") + mLocalModel->dumpLabel(0, mTrain) + std::string("]"));
-	}
-	else {
-		prefixTree(text);
-	}
-
-	return text;
-}
-
-
 int ClassifierTree::numLeaves() {
 
 	int num = 0;
@@ -231,17 +183,19 @@ int ClassifierTree::numNodes() {
 	return no;
 }
 
-std::string ClassifierTree::toString() {
+std::string ClassifierTree::toString(bool isDumpTree) {
 
 	try {
 		std::string text = "";
-
-		if (mIsLeaf) {
-			text.append(": ");
-			text.append(mLocalModel->dumpLabel(0, mTrain));
-		}
-		else {
-			dumpTree(0, text);
+		if (isDumpTree)
+		{
+			if (mIsLeaf) {
+				text.append(": ");
+				text.append(mLocalModel->dumpLabel(0, mTrain));
+			}
+			else {
+				dumpTree(0, text);
+			}
 		}
 		text.append(std::string("\n\nNumber of Leaves  : \t") + std::to_string(numLeaves()) + std::string("\n"));
 		text.append(std::string("\nSize of the tree : \t") + std::to_string(numNodes()) + std::string("\n"));
@@ -289,53 +243,6 @@ void ClassifierTree::dumpTree(int depth, std::string &text) {
 			mSons[i]->dumpTree(depth + 1, text);
 		}
 	}
-}
-
-void ClassifierTree::graphTree(std::string &text) {
-
-	for (int i = 0; i < mSons.size(); i++) {
-		text.append(std::string("N") + std::to_string(mID) + std::string("->") + std::string("N") + std::to_string(mSons[i]->mID) + std::string(" [label=\"") + Utils::backQuoteChars(mLocalModel->rightSide(i, mTrain)) + std::string("\"]\n"));
-		if (mSons[i]->mIsLeaf) {
-			text.append(std::string("N") + std::to_string(mSons[i]->mID) + std::string(" [label=\"") + Utils::backQuoteChars(mLocalModel->dumpLabel(i, mTrain)) + std::string("\" ") + std::string("shape=box style=filled "));
-			if (mTrain != nullptr && mTrain->numInstances() > 0) {
-				text.append(std::string("data =\n") + mSons[i]->mTrain->toString() + std::string("\n"));
-				text.append(",\n");
-			}
-			text.append("]\n");
-		}
-		else {
-			text.append(std::string("N") + std::to_string(mSons[i]->mID) + std::string(" [label=\"") + Utils::backQuoteChars(mSons[i]->mLocalModel->leftSide(mTrain)) + std::string("\" "));
-			if (mTrain != nullptr && mTrain->numInstances() > 0) {
-				text.append(std::string("data =\n") + mSons[i]->mTrain->toString() + std::string("\n"));
-				text.append(",\n");
-			}
-			text.append("]\n");
-			mSons[i]->graphTree(text);
-		}
-	}
-}
-
-void ClassifierTree::prefixTree(std::string &text) {
-
-	text.append("[");
-	text.append(mLocalModel->leftSide(mTrain) + std::string(":"));
-	for (int i = 0; i < mSons.size(); i++) {
-		if (i > 0) {
-			text.append(",\n");
-		}
-		text.append(mLocalModel->rightSide(i, mTrain));
-	}
-	for (int i = 0; i < mSons.size(); i++) {
-		if (mSons[i]->mIsLeaf) {
-			text.append("[");
-			text.append(mLocalModel->dumpLabel(i, mTrain));
-			text.append("]");
-		}
-		else {
-			mSons[i]->prefixTree(text);
-		}
-	}
-	text.append("]");
 }
 
 double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, double weight) {

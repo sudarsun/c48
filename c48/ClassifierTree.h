@@ -134,26 +134,6 @@ public:
 	virtual int assignIDs(int lastID);
 
 	/// <summary>
-	/// Returns the type of graph this classifier represents.
-	/// </summary>
-	/// <returns> Drawable.TREE </returns>
-	virtual int graphType();
-
-	/// <summary>
-	/// Returns graph describing the tree.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
-	/// <returns> the tree as graph </returns>
-	virtual std::string graph();
-
-	/// <summary>
-	/// Returns tree in prefix order.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
-	/// <returns> the prefix order </returns>
-	virtual std::string prefix();
-
-	/// <summary>
 	/// Returns number of leaves in tree structure.
 	/// </summary>
 	/// <returns> the number of leaves </returns>
@@ -169,7 +149,7 @@ public:
 	/// Prints tree structure.
 	/// </summary>
 	/// <returns> the tree structure </returns>
-	virtual std::string toString();
+	virtual std::string toString(bool isDumpTree = false);
 
 	/// <summary>
 	/// Returns a newly created tree.
@@ -197,20 +177,6 @@ protected:
 	/// <exception cref="Exception"> if something goes wrong </exception>
 private:
 	void dumpTree(int depth, std::string &text);
-
-	/// <summary>
-	/// Help method for printing tree structure as a graph.
-	/// </summary>
-	/// <param name="text"> for outputting the tree </param>
-	/// <exception cref="Exception"> if something goes wrong </exception>
-	void graphTree(std::string &text);
-
-	/// <summary>
-	/// Prints the tree in prefix form
-	/// </summary>
-	/// <param name="text"> the buffer to output the prefix form to </param>
-	/// <exception cref="Exception"> if something goes wrong </exception>
-	void prefixTree(std::string &text);
 
 	/// <summary>
 	/// Help method for computing class probabilities of a given instance.

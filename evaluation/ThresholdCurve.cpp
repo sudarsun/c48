@@ -1,7 +1,7 @@
 #include "ThresholdCurve.h"
 #include "TwoClassStats.h"
 #include "core/Instances.h"
-#include "core/DenseInstance.h"
+#include "core/Instance.h"
 #include <vector>
 #include "NominalPrediction.h"
 
@@ -59,7 +59,7 @@ Instances *ThresholdCurve::getCurve( std::vector<Prediction*> predictions, int c
   }
 
   Instances *insts = makeHeader();
-  std::vector<int> sorted = Utils::sort( probs );
+  std::vector<int> sorted = Utils::Sort( probs );
   TwoClassStats *tc = new TwoClassStats( totPos, totNeg, 0, 0 );
   double threshold = 0;
   double cumulativePos = 0;
@@ -115,7 +115,7 @@ double ThresholdCurve::getNPointPrecision( Instances *tcurve, int n ) {
   int recallInd = tcurve->attribute( RECALL_NAME )->index();
   int precisInd = tcurve->attribute( PRECISION_NAME )->index();
   std::vector<double> recallVals = tcurve->attributeToDoubleArray( recallInd );
-  std::vector<int> sorted = Utils::sort( recallVals );
+  std::vector<int> sorted = Utils::Sort( recallVals );
   double isize = 1.0 / ( n - 1 );
   double psum = 0;
   for( int i = 0; i < n; i++ ) {
@@ -181,7 +181,7 @@ int ThresholdCurve::getThresholdInstance( Instances *tcurve, double threshold ) 
     return 0;
   }
   std::vector<double> tvals = tcurve->attributeToDoubleArray( tcurve->numAttributes() - 1 );
-  std::vector<int> sorted = Utils::sort( tvals );
+  std::vector<int> sorted = Utils::Sort( tvals );
   return binarySearch( sorted, tvals, threshold );
 }
 
@@ -259,5 +259,5 @@ Instance *ThresholdCurve::makeInstance( TwoClassStats *tc, double prob ) {
 
   }
   vals[count++] = prob;
-  return new DenseInstance( 1.0, vals );
+  return new Instance( 1.0, vals );
 }

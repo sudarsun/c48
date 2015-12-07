@@ -61,12 +61,6 @@
 
       virtual void addDistinct( double value, int count, double weight );
 
-      /// <summary>
-      /// Returns a human readable representation of this AttributeStats instance.
-      /// </summary>
-      /// <returns> a String represtinging these AttributeStats. </returns>
-  public:
-      virtual std::string toString();
     };
 
 #endif	//#ifndef _ATTRIBUTESTATS_
