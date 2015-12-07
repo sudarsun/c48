@@ -13,6 +13,8 @@ EstimatorUtils.h
 Evaluation.cpp
 Evaluation.h
 IncrementalEstimator.h
+KernelEstimator.cpp
+KernelEstimator.h
 NominalPrediction.cpp
 NominalPrediction.h
 NumericPrediction.cpp

@@ -13,8 +13,7 @@ ContingencyTables.cpp
 ContingencyTables.h
 DataSource.cpp
 DataSource.h
-DenseInstance.cpp
-DenseInstance.h
+Instance.cpp
 Instance.h
 Instances.cpp
 Instances.h

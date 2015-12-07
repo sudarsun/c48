@@ -20,6 +20,8 @@ Distribution.cpp
 Distribution.h
 EntropyBasedSplitCrit.cpp
 EntropyBasedSplitCrit.h
+EntropySplitCrit.cpp
+EntropySplitCrit.h
 GainRatioSplitCrit.cpp
 GainRatioSplitCrit.h
 InfoGainSplitCrit.cpp
