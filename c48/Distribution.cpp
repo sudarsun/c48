@@ -10,10 +10,7 @@ Distribution::Distribution(int numBags, int numClasses) :
 	mperBag(std::vector<double>(numBags)),
 	mperClass(std::vector<double>(numClasses))
 {
-
-	int i;
-
-	for (i = 0; i < numBags; i++)
+	for (int i = 0; i < numBags; i++)
 	{
 		this->mperClassPerBag.push_back( std::vector<double>(numClasses));
 	}

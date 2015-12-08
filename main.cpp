@@ -24,7 +24,7 @@ int main( int argc, char *argv[]  )
 		std::cout << endl;
 		exit(0);
 	}
-	bool isDumpTree = atoi(argv[1]) == 0 ? false : true;
+	bool isDumpTree = atoi(argv[2]) == 0 ? false : true;
 	classify(argv[1], isDumpTree);
     return 0;
 }
@@ -77,9 +77,8 @@ void classify(char *fileName, bool isDumpTree)
 	cout << eval->toSummaryString(true);
 	cout << eval->toClassDetailsString() << endl;
 	cout << eval->toMatrixString() << endl;
-	cin >> num;
-
 }
+
 void processClassifierPrediction(Instance *toPredict,
 	Classifier *classifier, Evaluation &eval)
 {

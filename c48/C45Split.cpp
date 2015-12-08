@@ -170,9 +170,10 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
 	{
 		minSplit = mMinNoObj;
 	}
-	else if (Utils::gr(minSplit, 25))
+	else
 	{
-		minSplit = 25;
+		if (Utils::gr(minSplit, 25))	
+			minSplit = 25;
 	}
 
 	// Enough Instances with known values?

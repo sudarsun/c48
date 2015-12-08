@@ -10,7 +10,6 @@
 
 class ClassifierTree;
 class ModelSelection;
-class BinC45ModelSelection;
 class C45ModelSelection;
 
 class C48 : public AbstractClassifier
@@ -21,15 +20,15 @@ protected:
 	/// <summary>
 	/// The decision tree 
 	/// </summary>
-	ClassifierTree *mroot;
+	ClassifierTree *mRoot;
 
 	/// <summary>
 	/// Unpruned tree? </summary>
-	bool munpruned = false;
+	bool mUnpruned = false;
 
 	/// <summary>
 	/// Collapse tree? </summary>
-	bool mcollapseTree = true;
+	bool mCollapseTree = true;
 
 	/// <summary>
 	/// Confidence level </summary>
@@ -37,45 +36,37 @@ protected:
 
 	/// <summary>
 	/// Minimum number of instances </summary>
-	int mminNumObj = 2;
+	int mMinNumObj = 2;
 
 	/// <summary>
 	/// Use MDL correction? </summary>
-	bool museMDLcorrection = true;
+	bool mUseMDLcorrection = true;
 
 	/// <summary>
 	/// Determines whether probabilities are smoothed using Laplace correction when
 	/// predictions are generated
 	/// </summary>
-	bool museLaplace = false;
+	bool mUseLaplace = false;
 
 	/// <summary>
 	/// Use reduced error pruning? </summary>
-	bool mreducedErrorPruning = false;
+	bool mReducedErrorPruning = false;
 
 	/// <summary>
 	/// Number of folds for reduced error pruning. </summary>
-	int mnumFolds = 3;
-
-	/// <summary>
-	/// Binary splits on nominal attributes? </summary>
-	bool mbinarySplits = false;
+	int mNumFolds = 3;
 
 	/// <summary>
 	/// Subtree raising to be performed? </summary>
-	bool msubtreeRaising = true;
+	bool mSubtreeRaising = true;
 
 	/// <summary>
 	/// Cleanup after the tree has been built. </summary>
-	bool mnoCleanup = false;
-
-	/// <summary>
-	/// Random number seed for reduced-error pruning. </summary>
-	int mSeed = 1;
+	bool mNoCleanup = false;
 
 	/// <summary>
 	/// Do not relocate split point to actual data value </summary>
-	bool mdoNotMakeSplitPointActualValue = false;
+	bool mDoNotMakeSplitPointActualValue = false;
 
 public:
 
@@ -101,32 +92,6 @@ public:
 	/// <returns> the class probabilities </returns>
 	/// <exception cref="Exception"> if distribution can't be computed successfully </exception>
 	std::vector<double> distributionForInstance(Instance *instance);
-
-	/// <summary>
-	/// Returns graph describing the tree.
-	/// </summary>
-	/// <returns> the graph describing the tree </returns>
-	/// <exception cref="Exception"> if graph can't be computed </exception>
-	virtual std::string graph();
-
-	/// <summary>
-	/// Returns tree in prefix order.
-	/// </summary>
-	/// <returns> the tree in prefix order </returns>
-	/// <exception cref="Exception"> if something goes wrong </exception>
-	virtual std::string prefix();
-
-	/// <summary>
-	/// Get the value of Seed.
-	/// </summary>
-	/// <returns> Value of Seed. </returns>
-	virtual int getSeed();
-
-	/// <summary>
-	/// Set the value of Seed.
-	/// </summary>
-	/// <param name="newSeed"> Value to assign to Seed. </param>
-	virtual void setSeed(int newSeed);
 
 	/// <summary>
 	/// Get the value of useLaplace.
@@ -156,7 +121,7 @@ public:
 	/// Returns a description of the classifier.
 	/// </summary>
 	/// <returns> a description of the classifier </returns>
-	virtual std::string toString();
+	virtual std::string toString(bool isDumpTree = false);
 
 	/// <summary>
 	/// Returns a superconcise version of the model
@@ -253,18 +218,6 @@ public:
 	/// </summary>
 	/// <param name="v"> Value to assign to numFolds. </param>
 	virtual void setNumFolds(int v);
-
-	/// <summary>
-	/// Get the value of binarySplits.
-	/// </summary>
-	/// <returns> Value of binarySplits. </returns>
-	virtual bool getBinarySplits();
-
-	/// <summary>
-	/// Set the value of binarySplits.
-	/// </summary>
-	/// <param name="v"> Value to assign to binarySplits. </param>
-	virtual void setBinarySplits(bool v);
 
 	/// <summary>
 	/// Get the value of subtreeRaising.
