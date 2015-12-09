@@ -3,10 +3,9 @@
 #include "TwoClassStats.h"
 #include "core/Utils.h"
 
-ConfusionMatrix::ConfusionMatrix(std::vector<std::string> classNames) :Matrix((int)classNames.size(), (int)classNames.size()) {
-
+ConfusionMatrix::ConfusionMatrix(std::vector<std::string> classNames) :
+    Matrix::Matrix((int)classNames.size(), (int)classNames.size()) {
 	mClassNames = classNames;
-
 }
 
 ConfusionMatrix *ConfusionMatrix::makeWeighted(CostMatrix *costs) {
@@ -191,20 +190,20 @@ std::string ConfusionMatrix::num2ShortID(int num, std::vector<char> &IDChars, in
 
 void ConfusionMatrix::set(int i, int j, double s)
 {
-  Matrix::set(i,j,s);
+  set(i,j,s);
 }
 int ConfusionMatrix::getRowDimension() {
-	return Matrix::getRowDimension();
+	return getRowDimension();
 }
 
 int ConfusionMatrix::getColumnDimension() {
-	return Matrix::getColumnDimension();
+	return getColumnDimension();
 }
 std::vector<std::vector<double>> ConfusionMatrix::getArray() {
-  return Matrix::getArray();
+  return getArray();
 }
 
 
 double ConfusionMatrix::get( int i, int j ) {
-  return Matrix::get( i, j );
+  return get( i, j );
 }

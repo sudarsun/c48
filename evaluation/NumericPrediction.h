@@ -5,15 +5,10 @@
 #include <string>
 #include <vector>
 
-//JAVA TO C++ CONVERTER NOTE: Forward class declarations:
-class StringBuffer;
-
 /// <summary>
 /// Encapsulates an evaluatable numeric prediction: the predicted class value
 /// plus the actual class value.
 ///
-/// @author Len Trigg (len@reeltwo.com)
-/// @version $Revision: 8034 $
 /// </summary>
 class NumericPrediction : public Prediction {
 

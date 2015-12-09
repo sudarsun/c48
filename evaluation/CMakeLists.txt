@@ -15,6 +15,8 @@ Evaluation.h
 IncrementalEstimator.h
 KernelEstimator.cpp
 KernelEstimator.h
+Matrix.cpp
+Matrix.h
 NominalPrediction.cpp
 NominalPrediction.h
 NumericPrediction.cpp

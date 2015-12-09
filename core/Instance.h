@@ -15,7 +15,7 @@ class Instance
 public:
 	//int s_numericAfterDecimalPoint;
 	Instance( Instance *instance );
-	Instance(double weight, std::vector<double> &attValues);
+	Instance(double weight, std::vector<double> attValues);
 	//DenseInstance( int numAttributes );
 	Attribute *attribute(int index);
 	int classIndex();

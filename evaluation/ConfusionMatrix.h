@@ -1,7 +1,7 @@
 #ifndef _CONFUSIONMATRIX_
 #define _CONFUSIONMATRIX_
 
-#include "core/Matrix.h"
+#include "Matrix.h"
 #include "Prediction.h"
 #include "NominalPrediction.h"
 #include <string>
@@ -132,7 +132,7 @@ public:
   /// <param name="j">    Column index. </param>
   /// <returns>     A(i,j) </returns>
   /// <exception cref="ArrayIndexOutOfBoundsException"> </exception>
-  virtual double get( int i, int j );
+    virtual double get( int i, int j );
 
   /**
   * Set a single element.
@@ -151,6 +151,7 @@ public:
   virtual int getRowDimension();
 
   virtual int getColumnDimension();
+  
 private:
 	static std::string num2ShortID(int num, std::vector<char> &IDChars, int IDWidth);
 

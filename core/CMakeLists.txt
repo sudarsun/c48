@@ -17,8 +17,6 @@ Instance.cpp
 Instance.h
 Instances.cpp
 Instances.h
-Matrix.cpp
-Matrix.h
 NominalAttributeInfo.cpp
 NominalAttributeInfo.h
 statistics.cpp

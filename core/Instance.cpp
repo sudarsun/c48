@@ -8,7 +8,7 @@ Instance::Instance(Instance *instance)
 	mWeight = instance->mWeight;
 	mDataset = instance->mDataset;
 }
-Instance::Instance(double weight, std::vector<double> &attValues)
+Instance::Instance(double weight, std::vector<double> attValues)
 {
 	mAttValues = attValues;
 	mWeight = weight;
