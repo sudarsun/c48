@@ -46,6 +46,9 @@
     <ClInclude Include="ConfusionMatrix.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Evaluation.cpp">
@@ -79,6 +82,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="ConfusionMatrix.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

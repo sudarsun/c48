@@ -125,7 +125,6 @@
     <ClCompile Include="DataSource.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Instances.cpp" />
-    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="NominalAttributeInfo.cpp" />
     <ClCompile Include="statistics.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -141,7 +140,6 @@
     <ClInclude Include="DataSource.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="Instances.h" />
-    <ClInclude Include="Matrix.h" />
     <ClInclude Include="NominalAttributeInfo.h" />
     <ClInclude Include="statistics.h" />
     <ClInclude Include="Typedefs.h" />

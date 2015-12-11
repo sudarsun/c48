@@ -125,6 +125,7 @@
     <ClInclude Include="Evaluation.h" />
     <ClInclude Include="IncrementalEstimator.h" />
     <ClInclude Include="KernelEstimator.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="NominalPrediction.h" />
     <ClInclude Include="NumericPrediction.h" />
     <ClInclude Include="Prediction.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Prediction.cpp" />
     <ClCompile Include="ThresholdCurve.cpp" />
     <ClCompile Include="TwoClassStats.cpp" />
+    <ClCompile Include="Matrix.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
