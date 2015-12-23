@@ -1,10 +1,10 @@
 #include "NominalPrediction.h"
 
-NominalPrediction::NominalPrediction(double actual, std::vector<double> &distribution) : NominalPrediction(actual, distribution, 1) {
+NominalPrediction::NominalPrediction(double actual, double_array &distribution) : NominalPrediction(actual, distribution, 1) {
 
 }
 
-NominalPrediction::NominalPrediction(double actual, std::vector<double> &distribution, double weight) {
+NominalPrediction::NominalPrediction(double actual, double_array &distribution, double weight) {
 
 	if (distribution.empty()) {
 		throw "Null distribution in NominalPrediction.";
@@ -15,7 +15,7 @@ NominalPrediction::NominalPrediction(double actual, std::vector<double> &distrib
 	updatePredicted();
 }
 
-std::vector<double> NominalPrediction::distribution() {
+double_array NominalPrediction::distribution() {
 
 	return mDistribution;
 }
@@ -51,9 +51,9 @@ double NominalPrediction::margin() {
 	return probActual - probNext;
 }
 
-std::vector<double> NominalPrediction::makeDistribution(double predictedClass, int numClasses) {
+double_array NominalPrediction::makeDistribution(double predictedClass, int numClasses) {
 
-	std::vector<double> dist(numClasses);
+	double_array dist(numClasses);
 	if (predictedClass == MISSING_VALUE) {
 		return dist;
 	}
@@ -61,9 +61,9 @@ std::vector<double> NominalPrediction::makeDistribution(double predictedClass, i
 	return dist;
 }
 
-std::vector<double> NominalPrediction::makeUniformDistribution(int numClasses) {
+double_array NominalPrediction::makeUniformDistribution(int numClasses) {
 
-	std::vector<double> dist(numClasses);
+	double_array dist(numClasses);
 	for (int i = 0; i < numClasses; i++) {
 		dist[i] = 1.0 / numClasses;
 	}
@@ -89,12 +89,12 @@ void NominalPrediction::updatePredicted() {
 	}
 }
 
-std::string NominalPrediction::toString() {
+string NominalPrediction::toString() {
 
-	std::string desc = "";
+	string desc = "";
 	desc.append("NOM: ").append(std::to_string(actual())).append(" ").append(std::to_string(predicted()));
 	desc.append(" ").append(std::to_string(weight()));
-	std::vector<double> dist = distribution();
+	double_array dist = distribution();
 	for (int i = 0; i < (int)dist.size(); i++) {
 		desc.append(" ").append(std::to_string(dist[i]));
 	}

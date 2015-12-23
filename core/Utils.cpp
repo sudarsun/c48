@@ -12,7 +12,7 @@ double Utils::missingValue() {
 	return std::numeric_limits<double>::quiet_NaN();
 }
 
-double Utils::correlation(std::vector<double> &y1, std::vector<double> &y2, int n) {
+double Utils::correlation(double_array &y1, double_array &y2, int n) {
 
 	int i;
 	double av1 = 0.0, av2 = 0.0, y11 = 0.0, y22 = 0.0, y12 = 0.0, c;
@@ -41,9 +41,9 @@ double Utils::correlation(std::vector<double> &y1, std::vector<double> &y2, int 
 	return c;
 }
 
-std::string Utils::removeSubstring(const std::string &inString, const std::string &substring) {
+string Utils::removeSubstring(const string &inString, const string &substring) {
 
-	std::string result = "";
+	string result = "";
 	int oldLoc = 0, loc = 0;
 	while ((loc = (int)inString.find(substring, oldLoc)) != -1) {
 		result.append(inString.substr(oldLoc, loc - oldLoc));
@@ -54,9 +54,9 @@ std::string Utils::removeSubstring(const std::string &inString, const std::strin
 	return result;
 }
 
-std::string Utils::replaceSubstring(const std::string &inString, const std::string &subString, const std::string &replaceString) {
+string Utils::replaceSubstring(const string &inString, const string &subString, const string &replaceString) {
 
-	std::string result = "";
+	string result = "";
 	int oldLoc = 0, loc = 0;
 	while ((loc = (int)inString.find(subString, oldLoc)) != -1) {
 		result.append(inString.substr(oldLoc, loc - oldLoc));
@@ -67,9 +67,9 @@ std::string Utils::replaceSubstring(const std::string &inString, const std::stri
 	return result;
 }
 
-std::string Utils::doubleToString(double value, int afterDecimalPoint)
+string Utils::doubleToString(double value, int afterDecimalPoint)
 {
-	std::string stringBuffer = "";
+	string stringBuffer = "";
 	double temp;
 	int dotPosition;
 	long precisionValue;
@@ -112,14 +112,14 @@ std::string Utils::doubleToString(double value, int afterDecimalPoint)
 		Utils::trim(stringBuffer);
 		return stringBuffer;
 	}
-	return std::string(std::string("") + std::to_string(value));
+	return string(string("") + std::to_string(value));
 
 }
 
-std::string Utils::doubleToString(double value, int width, int afterDecimalPoint)
+string Utils::doubleToString(double value, int width, int afterDecimalPoint)
 {
 
-	std::string tempString = doubleToString(value, afterDecimalPoint);
+	string tempString = doubleToString(value, afterDecimalPoint);
 	std::vector<char> result;
 	int dotPosition;
 
@@ -167,7 +167,7 @@ std::string Utils::doubleToString(double value, int width, int afterDecimalPoint
 		result[offset + i] = tempString[i];
 	}
 
-	return std::string( result.begin(), result.end() );
+	return string( result.begin(), result.end() );
 }
 
 bool Utils::eq(double a, double b)
@@ -218,7 +218,7 @@ int Utils::kthSmallestValue(std::vector<int> &array_Renamed, int k) {
 	return array_Renamed[index[select(array_Renamed, index, 0, (int)array_Renamed.size() - 1, k)]];
 }
 
-double Utils::kthSmallestValue(std::vector<double> &array_Renamed, int k) {
+double Utils::kthSmallestValue(double_array &array_Renamed, int k) {
 
 	std::vector<int> index = initialIndex((int)array_Renamed.size());
 	return array_Renamed[index[select(array_Renamed, index, 0, (int)array_Renamed.size() - 1, k)]];
@@ -230,7 +230,7 @@ double Utils::getLog2(double a)
 	return log(a) / log(2);
 }
 
-int Utils::maxIndex(std::vector<double> &doubles)
+int Utils::maxIndex(double_array &doubles)
 {
 
 	double maximum = 0;
@@ -262,7 +262,7 @@ int Utils::maxIndex(std::vector<int> &ints)
 	return maxIndex;
 }
 
-double Utils::mean(std::vector<double> &vector)
+double Utils::mean(double_array &vector)
 {
 
 	double sum = 0;
@@ -292,7 +292,7 @@ int Utils::minIndex(std::vector<int> &ints)
 	return minIndex;
 }
 
-int Utils::minIndex(std::vector<double> &doubles)
+int Utils::minIndex(double_array &doubles)
 {
 
 	double minimum = 0;
@@ -307,7 +307,7 @@ int Utils::minIndex(std::vector<double> &doubles)
 
 	return minIndex;
 }
-void Utils::normalize(std::vector<double> &doubles) {
+void Utils::normalize(double_array &doubles) {
 
 	double sum = 0;
 	for (auto d : doubles) {
@@ -316,7 +316,7 @@ void Utils::normalize(std::vector<double> &doubles) {
 	normalize(doubles, sum);
 }
 
-void Utils::normalize(std::vector<double> &doubles, double sum) {
+void Utils::normalize(double_array &doubles, double sum) {
 
 	if (std::isnan(sum)) {
 		throw std::invalid_argument("Can't normalize array. Sum is NaN.");
@@ -330,12 +330,12 @@ void Utils::normalize(std::vector<double> &doubles, double sum) {
 	}
 }
 
-std::vector<double> Utils::logs2probs(std::vector<double> &a) {
+double_array Utils::logs2probs(double_array &a) {
 
 	double max = a[maxIndex(a)];
 	double sum = 0.0;
 
-	std::vector<double> result(a.size());
+	double_array result(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		result[i] = exp(a[i] - max);
 		sum += result[i];
@@ -350,7 +350,7 @@ double Utils::probToLogOdds(double prob)
 {
 
 	if (gr(prob, 1) || (sm(prob, 0))) {
-		throw std::invalid_argument(std::string("probToLogOdds: probability must ") + std::string("be in [0,1] ") + std::to_string(prob));
+		throw std::invalid_argument(string("probToLogOdds: probability must ") + string("be in [0,1] ") + std::to_string(prob));
 	}
 	double p = SMALL + (1.0 - 2 * SMALL) * prob;
 	return log(p / (1 - p));
@@ -385,7 +385,7 @@ int Utils::round(double value)
   }
   }*/
 
-void Utils::replaceMissingWithMAX_VALUE(std::vector<double> &array_Renamed) {
+void Utils::replaceMissingWithMAX_VALUE(double_array &array_Renamed) {
 
 	for (int i = 0; i < array_Renamed.size(); i++) {
 		if (isMissingValue(array_Renamed[i])) {
@@ -438,7 +438,7 @@ std::vector<int> Utils::Sort(std::vector<int> &array_Renamed)
 	return newIndex;
 }
 
-std::vector<int> Utils::Sort(std::vector<double> &array_Renamed)
+std::vector<int> Utils::Sort(double_array &array_Renamed)
 { // @non_null@ -  @pure@
 
 	std::vector<int> index = initialIndex((int)array_Renamed.size());
@@ -450,7 +450,7 @@ std::vector<int> Utils::Sort(std::vector<double> &array_Renamed)
 	return index;
 }
 
-std::vector<int> Utils::sortWithNoMissingValues(std::vector<double> &array_Renamed)
+std::vector<int> Utils::sortWithNoMissingValues(double_array &array_Renamed)
 /* @non_null@ */
 {
 
@@ -461,7 +461,7 @@ std::vector<int> Utils::sortWithNoMissingValues(std::vector<double> &array_Renam
 	return index;
 }
 
-std::vector<int> Utils::stableSort(std::vector<double> &array_Renamed)
+std::vector<int> Utils::stableSort(double_array &array_Renamed)
 {
 
 	std::vector<int> index = initialIndex((int)array_Renamed.size());
@@ -507,7 +507,7 @@ std::vector<int> Utils::stableSort(std::vector<double> &array_Renamed)
 	}
 }
 
-double Utils::variance(std::vector<double> &vector)
+double Utils::variance(double_array &vector)
 {
 
 	if (vector.size() <= 1) {
@@ -534,7 +534,7 @@ double Utils::variance(std::vector<double> &vector)
 	}
 }
 
-double Utils::sum(std::vector<double> &doubles)
+double Utils::sum(double_array &doubles)
 {
 
 	double sum = 0;
@@ -574,7 +574,7 @@ std::vector<int> Utils::initialIndex(int size) {
 	return index;
 }
 
-int Utils::sortLeftRightAndCenter(std::vector<double> &array_Renamed, std::vector<int> &index, int l, int r) {
+int Utils::sortLeftRightAndCenter(double_array &array_Renamed, std::vector<int> &index, int l, int r) {
 
 	int c = (l + r) / 2;
 	conditionalSwap(array_Renamed, index, l, c);
@@ -590,7 +590,7 @@ void Utils::swap(std::vector<int> &index, int l, int r) {
 	index[r] = help;
 }
 
-void Utils::conditionalSwap(std::vector<double> &array_Renamed, std::vector<int> &index, int left, int right) {
+void Utils::conditionalSwap(double_array &array_Renamed, std::vector<int> &index, int left, int right) {
 
 	if (array_Renamed[index[left]] > array_Renamed[index[right]]) {
 		int help = index[left];
@@ -599,7 +599,7 @@ void Utils::conditionalSwap(std::vector<double> &array_Renamed, std::vector<int>
 	}
 }
 
-int Utils::partition(std::vector<double> &array_Renamed, std::vector<int> &index, int l, int r, double pivot) {
+int Utils::partition(double_array &array_Renamed, std::vector<int> &index, int l, int r, double pivot) {
 
 	r--;
 	while (true) {
@@ -643,7 +643,7 @@ int Utils::partition(std::vector<int> &array_Renamed, std::vector<int> &index, i
 	return r;
 }
 
-void Utils::quickSort(std::vector<double> &array_Renamed, std::vector<int> &index, int left, int right)
+void Utils::quickSort(double_array &array_Renamed, std::vector<int> &index, int left, int right)
 { // @non_null@ -  @non_null@
 
 	int diff = right - left;
@@ -691,7 +691,7 @@ void Utils::quickSort(std::vector<int> &array_Renamed, std::vector<int> &index, 
 	}
 }
 
-int Utils::select(std::vector<double> &array_Renamed, std::vector<int> &index, int left, int right, int k)
+int Utils::select(double_array &array_Renamed, std::vector<int> &index, int left, int right, int k)
 { // @non_null@ -  @non_null@
 
 	int diff = right - left;
@@ -749,15 +749,15 @@ int Utils::select(std::vector<int> &array_Renamed, std::vector<int> &index, int 
 	}
 }
 
-std::string Utils::backQuoteChars(std::string inString)
+string Utils::backQuoteChars(string inString)
 {
 
 	int index;
-	std::string stringbuf;
+	string stringbuf;
 
 	// replace each of the following characters with the backquoted version
 	std::vector<char> charsFind = { '\\', '\'', '\t', '\n', '\r', '"', '%', '\u001E' };
-	std::vector<std::string> charsReplace = { "\\\\", "\\'", "\\t", "\\n", "\\r", "\\\"", "\\%", "\\u001E" };
+	string_array charsReplace = { "\\\\", "\\'", "\\t", "\\n", "\\r", "\\\"", "\\%", "\\u001E" };
 	for (int i = 0; i < charsFind.size(); i++) {
 		if (inString.find(charsFind[i]) != -1) {
 			stringbuf = "";
@@ -780,7 +780,7 @@ std::string Utils::backQuoteChars(std::string inString)
 	return stringbuf;
 }
 
-void Utils::trim(std::string &outString)
+void Utils::trim(string &outString)
 {
 	outString.erase(outString.find_last_not_of(' ') + 1);
 	outString.erase(0, outString.find_first_not_of(' '));

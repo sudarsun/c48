@@ -20,7 +20,7 @@ class BatchPredictor {
 	/// </summary>
 	/// <param name="size"> the batch size to use </param>
 public:
-	virtual void setBatchSize(const std::string &size) = 0;
+	virtual void setBatchSize(const string &size) = 0;
 
 	/// <summary>
 	/// Get the batch size to use. The implementer will prefer (but not  
@@ -29,7 +29,7 @@ public:
 	/// to be encapsulated with the client.
 	/// </summary>
 	/// <returns> the batch size to use </returns>
-	virtual std::string getBatchSize() = 0;
+	virtual string getBatchSize() = 0;
 
 	/// <summary>
 	/// Batch scoring method
@@ -37,7 +37,7 @@ public:
 	/// <param name="insts"> the instances to get predictions for </param>
 	/// <returns> an array of probability distributions, one for each instance </returns>
 	/// <exception cref="Exception"> if a problem occurs </exception>
-	virtual std::vector<std::vector<double>> distributionsForInstances(Instances *insts) = 0;
+	virtual double_2D_array distributionsForInstances(Instances *insts) = 0;
 
 	/// <summary>
 	/// Returns true if this BatchPredictor can generate batch predictions

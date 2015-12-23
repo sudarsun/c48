@@ -3,6 +3,22 @@
 #include "C45PruneableClassifierTree.h"
 #include "C45ModelSelection.h"
 
+C48::C48()
+{
+	mRoot = nullptr;
+	mUnpruned = false;
+	mCollapseTree = true;
+	mCF = 0.25f;
+	mMinNumObj = 2;
+	mUseMDLcorrection = true;
+	mUseLaplace = false;
+	mReducedErrorPruning = false;
+	mNumFolds = 3;
+	mSubtreeRaising = true;
+	mNoCleanup= false;
+	mDoNotMakeSplitPointActualValue= false;
+}
+
 void C48::buildClassifier(Instances *instances)
 {
 
@@ -23,7 +39,7 @@ double C48::classifyInstance(Instance *instance)
 	return mRoot->classifyInstance(instance);
 }
 
-std::vector<double> C48::distributionForInstance(Instance *instance)
+double_array C48::distributionForInstance(Instance *instance)
 {
 	return mRoot->distributionForInstance(instance, mUseLaplace);
 }
@@ -48,7 +64,7 @@ void C48::setUseMDLcorrection(bool newuseMDLcorrection)
 	mUseMDLcorrection = newuseMDLcorrection;
 }
 
-std::string C48::toString(bool isDumpTree)
+string C48::toString(bool isDumpTree)
 {
 	if (mRoot == nullptr)
 	{
@@ -56,17 +72,17 @@ std::string C48::toString(bool isDumpTree)
 	}
 	if (mUnpruned)
 	{
-		return std::string("C48 unpruned tree\n------------------\n") + mRoot->toString(isDumpTree);
+		return string("C48 unpruned tree\n------------------\n") + mRoot->toString(isDumpTree);
 	}
 	else
 	{
-		return std::string("C48 pruned tree\n------------------\n") + mRoot->toString(isDumpTree);
+		return string("C48 pruned tree\n------------------\n") + mRoot->toString(isDumpTree);
 	}
 }
 
-std::string C48::toSummaryString()
+string C48::toSummaryString()
 {
-	return std::string("Number of leaves: ") + std::to_string(mRoot->numLeaves()) + std::string("\n") + std::string("Size of the tree: ") + std::to_string(mRoot->numNodes()) + std::string("\n");
+	return string("Number of leaves: ") + std::to_string(mRoot->numLeaves()) + string("\n") + string("Size of the tree: ") + std::to_string(mRoot->numNodes()) + string("\n");
 }
 
 double C48::measureTreeSize()
@@ -187,7 +203,7 @@ void C48::generatePartition(Instances *data)
 	buildClassifier(data);
 }
 
-std::vector<double> C48::getMembershipValues(Instance *inst)
+double_array C48::getMembershipValues(Instance *inst)
 {
 	return mRoot->getMembershipValues(inst);
 }

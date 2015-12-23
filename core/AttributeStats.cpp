@@ -19,7 +19,6 @@ void AttributeStats::addDistinct(double value, int count, double weight) {
 			nominalWeights[static_cast<int>(value)] = weight;
 		}
 		if (numericStats != nullptr) {
-			//numericStats.add(value, count);
 			numericStats->add(value, weight);
 			numericStats->calculateDerived();
 		}

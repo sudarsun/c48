@@ -4,263 +4,270 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include "core/Typedefs.h"
 
 class Instances;
 class ClassifierSplitModel;
 class Instance;
 
 
-/// <summary>
-/// Class for handling a distribution of class values.
-/// </summary>
+/**
+ * Class for handling a distribution of class values.
+ *
+ */
 class Distribution
 {
 
-	/// <summary>
-	/// Weight of instances per class per bag. </summary>
 protected:
-	std::vector<std::vector<double>> mperClassPerBag;
 
-	/// <summary>
-	/// Weight of instances per bag. </summary>
-	std::vector<double> mperBag;
+	/** Weight of instances per class per bag. */
+	double_2D_array mperClassPerBag;
 
-	/// <summary>
-	/// Weight of instances per class. </summary>
-	std::vector<double> mperClass;
+	/** Weight of instances per bag. */
+	double_array mperBag;
 
-	/// <summary>
-	/// Total weight of instances. </summary>
+	/** Weight of instances per class. */
+	double_array mperClass;
+
+	/** Total weight of instances. */
 	double totaL = 0;
 
-	/// <summary>
-	/// Creates and initializes a new distribution.
-	/// </summary>
 public:
+
+	/**
+	 * Creates and initializes a new distribution.
+	 */
 	Distribution(int numBags, int numClasses);
 
-	/// <summary>
-	/// Creates and initializes a new distribution using the given array. WARNING:
-	/// it just copies a reference to this array.
-	/// </summary>
-	Distribution(std::vector<std::vector<double>> &table);
+  /**
+   * Creates and initializes a new distribution using the given
+   * array. WARNING: it just copies a reference to this array.
+   */
+	Distribution(double_2D_array &table);
 
-	/// <summary>
-	/// Creates a distribution with only one bag according to instances in source.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+	  /**
+   * Creates a distribution with only one bag according
+   * to instances in source.
+   *
+   * @exception Exception if something goes wrong
+   */
 	Distribution(Instances *source);
 
-	/// <summary>
-	/// Creates a distribution according to given instances and split model.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
-
+  /**
+   * Creates a distribution according to given instances and
+   * split model.
+   *
+   * @exception Exception if something goes wrong
+   */
 	Distribution(Instances *source, ClassifierSplitModel *modelToUse);
 
-	/// <summary>
-	/// Creates distribution with only one bag by merging all bags of given
-	/// distribution.
-	/// </summary>
+  /**
+   * Creates distribution with only one bag by merging all
+   * bags of given distribution.
+   */
 	Distribution(Distribution *toMerge);
 
-	/// <summary>
-	/// Creates distribution with two bags by merging all bags apart of the
-	/// indicated one.
-	/// </summary>
+  /**
+   * Creates distribution with two bags by merging all bags apart of
+   * the indicated one.
+   */
 	Distribution(Distribution *toMerge, int index);
 
-	/// <summary>
-	/// Returns number of non-empty bags of distribution.
-	/// </summary>
+  /**
+   * Returns number of non-empty bags of distribution.
+   */
 	int actualNumBags();
 
-	/// <summary>
-	/// Returns number of classes actually occuring in distribution.
-	/// </summary>
+  /**
+   * Returns number of classes actually occuring in distribution.
+   */
 	int actualNumClasses();
 
-	/// <summary>
-	/// Returns number of classes actually occuring in given bag.
-	/// </summary>
+  /**
+   * Returns number of classes actually occuring in given bag.
+   */
 	int actualNumClasses(int bagIndex);
 
-	/// <summary>
-	/// Adds given instance to given bag.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+  /**
+   * Adds given instance to given bag.
+   *
+   * @exception Exception if something goes wrong
+   */
 	void add(int bagIndex, Instance *instance);
 
-	/// <summary>
-	/// Subtracts given instance from given bag.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+  /**
+   * Subtracts given instance from given bag.
+   *
+   * @exception Exception if something goes wrong
+   */
 	void sub(int bagIndex, Instance *instance);
 
-	/// <summary>
-	/// Adds counts to given bag.
-	/// </summary>
-	void add(int bagIndex, std::vector<double> &counts);
+  /**
+   * Adds counts to given bag.
+   */
+	void add(int bagIndex, double_array &counts);
 
-	/// <summary>
-	/// Adds all instances with unknown values for given attribute, weighted
-	/// according to frequency of instances in each bag.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+  /**
+   * Adds all instances with unknown values for given attribute, weighted
+   * according to frequency of instances in each bag.
+   *
+   * @exception Exception if something goes wrong
+   */
 	void addInstWithUnknown(Instances *source, int attIndex);
 
-	/// <summary>
-	/// Adds all instances in given range to given bag.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+  /**
+   * Adds all instances in given range to given bag.
+   *
+   * @exception Exception if something goes wrong
+   */
 	void addRange(int bagIndex, Instances *source, int startIndex, int lastPlusOne);
 
-	/// <summary>
-	/// Adds given instance to all bags weighting it according to given weights.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
-	void addWeights(Instance *instance, std::vector<double> &weights);
+  /**
+   * Adds given instance to all bags weighting it according to given weights.
+   *
+   * @exception Exception if something goes wrong
+   */
+	void addWeights(Instance *instance, double_array &weights);
 
-	/// <summary>
-	/// Checks if at least two bags contain a minimum number of instances.
-	/// </summary>
+  /**
+   * Checks if at least two bags contain a minimum number of instances.
+   */
 	bool check(double minNoObj);
 
-	/// <summary>
-	/// Clones distribution (Deep copy of distribution).
-	/// </summary>
-	void *clone();
-
-	/// <summary>
-	/// Deletes given instance from given bag.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+  /**
+   * Deletes given instance from given bag.
+   *
+   * @exception Exception if something goes wrong
+   */
 	void del(int bagIndex, Instance *instance);
 
-	/// <summary>
-	/// Deletes all instances in given range from given bag.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+  /**
+   * Deletes all instances in given range from given bag.
+   *
+   * @exception Exception if something goes wrong
+   */
 	void delRange(int bagIndex, Instances *source, int startIndex, int lastPlusOne);
 
-	/// <summary>
-	/// Prints distribution.
-	/// </summary>
+  /**
+   * Prints distribution.
+   */
+	string dumpDistribution();
 
-	std::string dumpDistribution();
-
-	/// <summary>
-	/// Sets all counts to zero.
-	/// </summary>
+  /**
+   * Sets all counts to zero.
+   */
 	void initialize();
 
-	/// <summary>
-	/// Returns matrix with distribution of class values.
-	/// </summary>
-	std::vector<std::vector<double>> matrix();
+  /**
+   * Returns matrix with distribution of class values.
+   */
+	double_2D_array matrix();
 
-	/// <summary>
-	/// Returns index of bag containing maximum number of instances.
-	/// </summary>
+  /**
+   * Returns index of bag containing maximum number of instances.
+   */
 	int maxBag();
 
-	/// <summary>
-	/// Returns class with highest frequency over all bags.
-	/// </summary>
+  /**
+   * Returns class with highest frequency over all bags.
+   */
 	int maxClass();
 
-	/// <summary>
-	/// Returns class with highest frequency for given bag.
-	/// </summary>
+  /**
+   * Returns class with highest frequency for given bag.
+   */
 	int maxClass(int index);
 
-	/// <summary>
-	/// Returns number of bags.
-	/// </summary>
+  /**
+   * Returns number of bags.
+   */
 	int numBags();
 
-	/// <summary>
-	/// Returns number of classes.
-	/// </summary>
+  /**
+   * Returns number of classes.
+   */
 	int numClasses();
 
-	/// <summary>
-	/// Returns perClass(maxClass()).
-	/// </summary>
+  /**
+   * Returns perClass(maxClass()).
+   */
 	double numCorrect();
 
-	/// <summary>
-	/// Returns perClassPerBag(index,maxClass(index)).
-	/// </summary>
+  /**
+   * Returns perClassPerBag(index,maxClass(index)).
+   */
 	double numCorrect(int index);
 
-	/// <summary>
-	/// Returns total-numCorrect().
-	/// </summary>
+  /**
+   * Returns total-numCorrect().
+   */
 	double numIncorrect();
 
-	/// <summary>
-	/// Returns perBag(index)-numCorrect(index).
-	/// </summary>
+  /**
+   * Returns perBag(index)-numCorrect(index).
+   */
 	double numIncorrect(int index);
 
-	/// <summary>
-	/// Returns number of (possibly fractional) instances of given class in given
-	/// bag.
-	/// </summary>
+  /**
+   * Returns number of (possibly fractional) instances of given class in 
+   * given bag.
+   */
 	double perClassPerBag(int bagIndex, int classIndex);
 
-	/// <summary>
-	/// Returns number of (possibly fractional) instances in given bag.
-	/// </summary>
+  /**
+   * Returns number of (possibly fractional) instances in given bag.
+   */
 	double perBag(int bagIndex);
 
-	/// <summary>
-	/// Returns number of (possibly fractional) instances of given class.
-	/// </summary>
+  /**
+   * Returns number of (possibly fractional) instances of given class.
+   */
 	double perClass(int classIndex);
 
-	/// <summary>
-	/// Returns relative frequency of class over all bags with Laplace correction.
-	/// </summary>
+  /**
+   * Returns relative frequency of class over all bags with
+   * Laplace correction.
+   */
 	double laplaceProb(int classIndex);
 
-	/// <summary>
-	/// Returns relative frequency of class for given bag.
-	/// </summary>
+  /**
+   * Returns relative frequency of class for given bag.
+   */
 	double laplaceProb(int classIndex, int intIndex);
 
-	/// <summary>
-	/// Returns relative frequency of class over all bags.
-	/// </summary>
+  /**
+   * Returns relative frequency of class over all bags.
+   */
 	double prob(int classIndex);
 
-	/// <summary>
-	/// Returns relative frequency of class for given bag.
-	/// </summary>
+  /**
+   * Returns relative frequency of class for given bag.
+   */
 	double prob(int classIndex, int intIndex);
 
-	/// <summary>
-	/// Subtracts the given distribution from this one. The results has only one
-	/// bag.
-	/// </summary>
+  /** 
+   * Subtracts the given distribution from this one. The results
+   * has only one bag.
+   */
 	Distribution *subtract(Distribution *toSubstract);
 
-	/// <summary>
-	/// Returns total number of (possibly fractional) instances.
-	/// </summary>
+  /**
+   * Returns total number of (possibly fractional) instances.
+   */
 	double total();
 
-	/// <summary>
-	/// Shifts given instance from one bag to another one.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+  /**
+   * Shifts given instance from one bag to another one.
+   *
+   * @exception Exception if something goes wrong
+   */
 	void shift(int from, int to, Instance *instance);
 
-	/// <summary>
-	/// Shifts all instances in given range from one bag to another one.
-	/// </summary>
-	/// <exception cref="Exception"> if something goes wrong </exception>
+  /**
+   * Shifts all instances in given range from one bag to another one.
+   *
+   * @exception Exception if something goes wrong
+   */
 	void shiftRange(int from, int to, Instances *source, int startIndex, int lastPlusOne);
 
 };

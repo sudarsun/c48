@@ -32,8 +32,8 @@ double KernelEstimator::round( double data ) {
 
 KernelEstimator::KernelEstimator( double precision ) {
 
-  m_Values = std::vector<double>( 50 );
-  m_Weights = std::vector<double>( 50 );
+  m_Values = double_array( 50 );
+  m_Weights = double_array( 50 );
   m_NumValues = 0;
   m_SumOfWeights = 0;
   m_AllWeightsOne = true;
@@ -67,8 +67,8 @@ void KernelEstimator::addValue( double data, double weight ) {
       m_Weights[insertIndex] = weight;
       m_NumValues++;
     } else {
-      std::vector<double> newValues( m_Values.size() * 2 );
-      std::vector<double> newWeights( m_Values.size() * 2 );
+      double_array newValues( m_Values.size() * 2 );
+      double_array newWeights( m_Values.size() * 2 );
       int left = m_NumValues - insertIndex;
 	  std::copy(m_Values.begin(), m_Values.begin() + insertIndex, newValues.begin());
 	  std::copy(m_Weights.begin(), m_Weights.begin() + insertIndex, newWeights.begin());
@@ -141,35 +141,35 @@ double KernelEstimator::getProbability( double data ) {
   return sum / m_SumOfWeights;
 }
 
-std::string KernelEstimator::toString() {
+string KernelEstimator::toString() {
 
-  std::string result = std::to_string( m_NumValues ) + std::string(" Normal Kernels. \nStandardDev = " ) + Utils::doubleToString( m_StandardDev,6,4 ) + std::string( " Precision = " ) + std::to_string( m_Precision );
+  string result = std::to_string( m_NumValues ) + string(" Normal Kernels. \nStandardDev = " ) + Utils::doubleToString( m_StandardDev,6,4 ) + string( " Precision = " ) + std::to_string( m_Precision );
   if( m_NumValues == 0 ) {
-    result += std::string( "  \nMean = 0" );
+    result += string( "  \nMean = 0" );
   } else {
-    result += std::string( "  \nMeans =" );
+    result += string( "  \nMeans =" );
     for( int i = 0; i < m_NumValues; i++ ) {
-  result += std::string( " " ) + std::to_string( m_Values[i] );
+  result += string( " " ) + std::to_string( m_Values[i] );
     }
     if( !m_AllWeightsOne ) {
-  result += std::string( "\nWeights = " );
+  result += string( "\nWeights = " );
   for( int i = 0; i < m_NumValues; i++ ) {
-    result += std::string( " " ) + std::to_string( m_Weights[i] );
+    result += string( " " ) + std::to_string( m_Weights[i] );
   }
     }
   }
-  return result + std::string( "\n" );
+  return result + string( "\n" );
 }
 
 int KernelEstimator::getNumKernels() {
   return m_NumValues;
 }
 
-std::vector<double> KernelEstimator::getMeans() {
+double_array KernelEstimator::getMeans() {
   return m_Values;
 }
 
-std::vector<double> KernelEstimator::getWeights() {
+double_array KernelEstimator::getWeights() {
   return m_Weights;
 }
 

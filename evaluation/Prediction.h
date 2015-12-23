@@ -2,6 +2,8 @@
 #define _PREDICTION_
 
 #include <limits>
+#include "core/Typedefs.h"
+
 /// <summary>
 /// Encapsulates a single evaluatable prediction: the predicted value plus the
 /// actual class value.

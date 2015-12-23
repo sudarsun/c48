@@ -8,29 +8,29 @@
 #include <exception>
 #include <stdexcept>
 
-Instances::Instances(const std::string &name, std::vector<Attribute*> &attInfo, int capacity)
+Instances::Instances(const string &name, std::vector<Attribute*> &attInfo, int capacity)
 {
 	// check whether the attribute names are unique
-	std::unordered_set<std::string> attr_names;
-	std::string nonUniqueNames = "";
+	std::unordered_set<string> attr_names;
+	string nonUniqueNames = "";
 	for (auto att : attInfo)
 	{
 		if (std::find(attr_names.begin(), attr_names.end(), att->name()) != attr_names.end())
 		{
-			nonUniqueNames.append(std::string("'") + att->name() + std::string("' "));
+			nonUniqueNames.append(string("'") + att->name() + string("' "));
 		}
 		attr_names.insert(att->name());
 	}
 	if (attr_names.size() != attInfo.size())
 	{
-		throw std::invalid_argument(std::string("Attribute names are not unique!") + std::string(" Causes: ") + nonUniqueNames);
+		throw std::invalid_argument(string("Attribute names are not unique!") + string(" Causes: ") + nonUniqueNames);
 	}
 	attr_names.clear();
 
 	mRelationName = name;
 	mClassIndex = -1;
 	mAttributes = attInfo;
-	mNamesToAttributeIndices = std::unordered_map<std::string, int>(static_cast<int>(numAttributes() / 0.75));
+	mNamesToAttributeIndices = std::unordered_map<string, int>(static_cast<int>(numAttributes() / 0.75));
 	for (int i = 0; i < numAttributes(); i++)
 	{
 		(attribute(i))->setIndex(i);
@@ -54,7 +54,7 @@ Attribute *Instances::attribute(int index)
 	return mAttributes[index];
 }
 
-Attribute *Instances::attribute(const std::string &name)
+Attribute *Instances::attribute(const string &name)
 {
 
 	int index = mNamesToAttributeIndices[name];
@@ -80,7 +80,7 @@ void Instances::setClassIndex(int classIndex)
 {
 	if (classIndex >= numAttributes())
 	{
-		throw  std::string("Invalid class index: ") + std::to_string(classIndex);
+		throw  string("Invalid class index: ") + std::to_string(classIndex);
 	}
 	mClassIndex = classIndex;
 }
@@ -275,7 +275,7 @@ void Instances::Sort(int attIndex)
 	if (!attribute(attIndex)->isNominal())
 	{
 		// Use quicksort from Utils class for sorting
-		std::vector<double> vals(numInstances());
+		double_array vals(numInstances());
 		std::vector<Instance*> backup(vals.size());
 		for (int i = 0; i < vals.size(); i++)
 		{
@@ -347,20 +347,20 @@ void Instances::sortBasedOnNominalAttribute(int attIndex)
 	}
 }
 
-std::string Instances::getRelationName()
+string Instances::getRelationName()
 {
 	return mRelationName;
 }
 
-void Instances::setRelationName(const std::string name)
+void Instances::setRelationName(const string name)
 {
 	mRelationName = name;
 }
 
-std::vector<double> Instances::attributeToDoubleArray(int index)
+double_array Instances::attributeToDoubleArray(int index)
 {
 	int totalInst = numInstances();
-	std::vector<double> result;
+	double_array result;
 	for (int i = 0; i < totalInst; i++) {
 		result.push_back(instance(i)->value(index));
 	}

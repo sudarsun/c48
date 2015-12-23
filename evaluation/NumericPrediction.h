@@ -28,7 +28,7 @@ private:
 
 	/// <summary>
 	/// the prediction intervals. </summary>
-	std::vector<std::vector<double>> mPredictionIntervals;
+	double_2D_array mPredictionIntervals;
 
 	/// <summary>
 	/// Creates the NumericPrediction object with a default weight of 1.0.
@@ -55,7 +55,7 @@ public:
 	/// <param name="predInt"> the prediction intervals from classifiers implementing
 	/// the <code>IntervalEstimator</code> interface. </param>
 	/// <seealso cref= IntervalEstimator </seealso>
-	NumericPrediction(double actual, double predicted, double weight, std::vector<std::vector<double>> &predInt);
+	NumericPrediction(double actual, double predicted, double weight, double_2D_array &predInt);
 
 	/// <summary>
 	/// Gets the actual class value.
@@ -91,7 +91,7 @@ public:
 	/// Sets the prediction intervals for this prediction.
 	/// </summary>
 	/// <param name="predInt"> the prediction intervals </param>
-	virtual void setPredictionIntervals(std::vector<std::vector<double>> &predInt);
+	virtual void setPredictionIntervals(double_2D_array &predInt);
 
 	/// <summary>
 	/// Returns the predictions intervals. Only classifiers implementing the
@@ -99,13 +99,13 @@ public:
 	/// </summary>
 	/// <returns> the prediction intervals. </returns>
 	/// <seealso cref= IntervalEstimator </seealso>
-	virtual std::vector<std::vector<double>> predictionIntervals();
+	virtual double_2D_array predictionIntervals();
 
 	/// <summary>
 	/// Gets a human readable representation of this prediction.
 	/// </summary>
 	/// <returns> a human readable representation of this prediction. </returns>
-	virtual std::string toString();
+	virtual string toString();
 
 };
 

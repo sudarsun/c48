@@ -7,133 +7,128 @@
 #include <vector>
 #include <stdexcept>
 
-//JAVA TO C++ CONVERTER NOTE: Forward class declarations:
+// Forward class declarations:
 class Instance;
 class Instances;
 
-/// <summary>
-/// Abstract classifier. All schemes for numeric or nominal prediction in Weka
-/// extend this class. Note that a classifier MUST either implement
-/// distributionForInstance() or classifyInstance().
-///
-/// </summary>
+/**
+ * Abstract classifier Class. All schemes for numeric or nominal prediction in C48
+ * extend this class. Note that a classifier MUST either implement
+ * distributionForInstance() or classifyInstance().
+ */
 class AbstractClassifier : public Classifier, public BatchPredictor {
 
-
-	/// <summary>
-	/// Whether the classifier is run in debug mode. </summary>
 protected:
-	bool m_Debug = false;
 
-	/// <summary>
-	/// Whether capabilities should not be checked before classifier is built. </summary>
-	bool m_DoNotCheckCapabilities = false;
-	int m_numDecimalPlaces = 2;
-	/// <summary>
-	/// The number of decimal places used when printing numbers in the model.
-	/// </summary>
+	/* Whether the classifier is run in debug mode. */
+	bool mDebug;
+
+	int mNumDecimalPlaces = 2;
+	/* The number of decimal places used when printing numbers in the model.*/
+
 public:
 	static const int NUM_DECIMAL_PLACES_DEFAULT = 2;
 
+	/* Default preferred batch size for batch predictions */
+	string mBatchSize = "100";
 
-
-	/// <summary>
-	/// Default preferred batch size for batch predictions </summary>
-	std::string m_BatchSize = "100";
-
-
-	/// <summary>
-	/// Classifies the given test instance. The instance has to belong to a dataset
-	/// when it's being classified. Note that a classifier MUST implement either
-	/// this or distributionForInstance().
-	/// </summary>
-	/// <param name="instance"> the instance to be classified </param>
-	/// <returns> the predicted most likely class for the instance or
-	///         Utils.missingValue() if no prediction is made </returns>
-	/// <exception cref="Exception"> if an error occurred during the prediction </exception>
+	/**
+	 * Classifies the given test instance. The instance has to belong to a dataset
+	 * when it's being classified. Note that a classifier MUST implement either
+	 * this or distributionForInstance().
+	 *
+	 * @param instance the instance to be classified
+	 * @return the predicted most likely class for the instance or
+	 *         Utils::missingValue() if no prediction is made
+	 * @exception Exception if an error occurred during the prediction
+	 */
 public:
 	virtual double classifyInstance(Instance *instance);
 
-	/// <summary>
-	/// Predicts the class memberships for a given instance. If an instance is
-	/// unclassified, the returned array elements must be all zero. If the class is
-	/// numeric, the array must consist of only one element, which contains the
-	/// predicted value. Note that a classifier MUST implement either this or
-	/// classifyInstance().
-	/// </summary>
-	/// <param name="instance"> the instance to be classified </param>
-	/// <returns> an array containing the estimated membership probabilities of the
-	///         test instance in each class or the numeric prediction </returns>
-	/// <exception cref="Exception"> if distribution could not be computed successfully </exception>
-	virtual std::vector<double> distributionForInstance(Instance *instance);
 
-	/// <summary>
-	/// Get whether debugging is turned on.
-	/// </summary>
-	/// <returns> true if debugging output is on </returns>
+	/**
+	 * Predicts the class memberships for a given instance. If an instance is
+	 * unclassified, the returned array elements must be all zero. If the class is
+	 * numeric, the array must consist of only one element, which contains the
+	 * predicted value. Note that a classifier MUST implement either this or
+	 * classifyInstance().
+	 *
+	 * @param instance the instance to be classified
+	 * @return an array containing the estimated membership probabilities of the
+	 *         test instance in each class or the numeric prediction
+	 * @exception Exception if distribution could not be computed successfully
+	 */
+	virtual double_array distributionForInstance(Instance *instance);
+
+
+	/**
+	 * Get whether debugging is turned on.
+	 *
+	 * @return true if debugging output is on
+	 */
 	virtual bool getDebug();
 
-	/// <summary>
-	/// Set debugging mode.
-	/// </summary>
-	/// <param name="debug"> true if debug output should be printed </param>
+
+	/**
+	 * Set debugging mode.
+	 *
+	 * @param debug true if debug output should be printed
+	 */
 	virtual void setDebug(bool debug);
 
-	/// <summary>
-	/// Get whether capabilities checking is turned off.
-	/// </summary>
-	/// <returns> true if capabilities checking is turned off. </returns>
-	virtual bool getDoNotCheckCapabilities();
 
-	/// <summary>
-	/// Set whether not to check capabilities.
-	/// </summary>
-	/// <param name="doNotCheckCapabilities"> true if capabilities are not to be checked. </param>
-	virtual void setDoNotCheckCapabilities(bool doNotCheckCapabilities);
-
-	/// <summary>
-	/// Get the number of decimal places.
-	/// </summary>
+	/**
+	 * Get the number of decimal places.
+	 */
 	virtual int getNumDecimalPlaces();
 
-	/// <summary>
-	/// Set the number of decimal places.
-	/// </summary>
+
+	/**
+	 * Set the number of decimal places.
+	 */
 	virtual void setNumDecimalPlaces(int num);
 
-	/// <summary>
-	/// Set the preferred batch size for batch prediction.
-	/// </summary>
-	/// <param name="size"> the batch size to use </param>
-	virtual void setBatchSize(const std::string &size);
 
-	/// <summary>
-	/// Get the preferred batch size for batch prediction.
-	/// </summary>
-	/// <returns> the preferred batch size </returns>
-	virtual std::string getBatchSize();
+	/**
+	 * Set the preferred batch size for batch prediction.
+	 *
+	 * @param size the batch size to use
+	 */
+	virtual void setBatchSize(const string &size);
 
-	/// <summary>
-	/// Return true if this classifier can generate batch predictions in an
-	/// efficient manner. Default implementation here returns false. Subclasses to
-	/// override as appropriate.
-	/// </summary>
-	/// <returns> true if this classifier can generate batch predictions in an
-	///         efficient manner. </returns>
+
+	/**
+	 * Get the preferred batch size for batch prediction.
+	 *
+	 * @return the preferred batch size
+	 */
+	virtual string getBatchSize();
+
+
+	/**
+	 * Return true if this classifier can generate batch predictions in an
+	 * efficient manner. Default implementation here returns false. Subclasses to
+	 * override as appropriate.
+	 *
+	 * @return true if this classifier can generate batch predictions in an
+	 *         efficient manner.
+	 */
 	virtual bool implementsMoreEfficientBatchPrediction();
 
-	/// <summary>
-	/// Batch prediction method. This default implementation simply calls
-	/// distributionForInstance() for each instance in the batch. If subclasses can
-	/// produce batch predictions in a more efficient manner than this they should
-	/// override this method and also return true from
-	/// implementsMoreEfficientBatchPrediction()
-	/// </summary>
-	/// <param name="batch"> the instances to get predictions for </param>
-	/// <returns> an array of probability distributions, one for each instance in the
-	///         batch </returns>
-	/// <exception cref="Exception"> if a problem occurs. </exception>
-	virtual std::vector<std::vector<double>> distributionsForInstances(Instances *batch);
+
+	/**
+	 * Batch prediction method. This default implementation simply calls
+	 * distributionForInstance() for each instance in the batch. If subclasses can
+	 * produce batch predictions in a more efficient manner than this they should
+	 * override this method and also return true from
+	 * implementsMoreEfficientBatchPrediction()
+	 *
+	 * @param batch the instances to get predictions for
+	 * @return an array of probability distributions, one for each instance in the
+	 *         batch
+	 * @throws Exception if a problem occurs.
+	 */
+	virtual double_2D_array distributionsForInstances(Instances *batch);
 };
 
 

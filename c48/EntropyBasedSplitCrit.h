@@ -5,39 +5,33 @@
 
 class Distribution;
 
-
-
-
-/// <summary>
-/// "Abstract" class for computing splitting criteria
-/// based on the entropy of a class distribution.
-/// 
-/// @author Eibe Frank (eibe@cs.waikato.ac.nz)
-/// @version $Revision$
-/// </summary>
+/**
+ * "Abstract" class for computing splitting criteria
+ * based on the entropy of a class distribution.
+ */
 class EntropyBasedSplitCrit : public SplitCriterion {
 
-
-	/// <summary>
-	/// Help method for computing entropy.
-	/// </summary>
 public:
+
+	/**
+	 * Help method for computing entropy.
+	 */
 	double lnFunc(double num);
 
-	/// <summary>
-	/// Computes entropy of distribution before splitting.
-	/// </summary>
+	/**
+	 * Computes entropy of distribution before splitting.
+	 */
 	double oldEnt(Distribution *bags);
 
-	/// <summary>
-	/// Computes entropy of distribution after splitting.
-	/// </summary>
+	/**
+	 * Computes entropy of distribution after splitting.
+	 */
 	double newEnt(Distribution *bags);
 
-	/// <summary>
-	/// Computes entropy after splitting without considering the
-	/// class values.
-	/// </summary>
+	/**
+	 * Computes entropy after splitting without considering the
+	 * class values.
+	 */
 	double splitEnt(Distribution *bags);
 };
 

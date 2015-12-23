@@ -4,7 +4,7 @@
 #include "core/Instance.h"
 
 
-std::string CostMatrix::FILE_EXTENSION = ".cost";
+string CostMatrix::FILE_EXTENSION = ".cost";
 
 CostMatrix::CostMatrix( int numOfClasses = 0 ) {
   m_size = numOfClasses;
@@ -53,8 +53,8 @@ bool CostMatrix::replaceStrings( Instances *dataset ) {
 
   for( int i = 0; i < m_size; i++ ) {
     for( int j = 0; j < m_size; j++ ) {
-      //if( dynamic_cast<std::string>( getCell( i, j ) ) != nullptr ) {
-	 //	  setCell(i, j, new InstanceExpression(static_cast<std::string>(getCell(i, j)), dataset));
+      //if( dynamic_cast<string>( getCell( i, j ) ) != nullptr ) {
+	 //	  setCell(i, j, new InstanceExpression(static_cast<string>(getCell(i, j)), dataset));
       //  nonDouble = true;
       //} else
 		double *p = static_cast<double*>(getCell(i, j));
@@ -71,7 +71,7 @@ bool CostMatrix::replaceStrings( Instances *dataset ) {
 Instances *CostMatrix::applyCostMatrix( Instances *data, Random *random ) {
 
   double sumOfWeightFactors = 0, sumOfMissClassWeights, sumOfWeights;
-  std::vector<double> weightOfInstancesInClass, weightFactor, weightOfInstances;
+  double_array weightOfInstancesInClass, weightFactor, weightOfInstances;
 
   if( data->classIndex() < 0 ) {
     throw std::exception( "Class index is not set!" );
@@ -88,7 +88,7 @@ Instances *CostMatrix::applyCostMatrix( Instances *data, Random *random ) {
       throw std::exception("Can't resample/reweight instances using non-fixed cost values when there are more than two classes!");
     } else {
       // Store new weights
-      weightOfInstances = std::vector<double>( data->numInstances() );
+      weightOfInstances = double_array( data->numInstances() );
       for( int i = 0; i < data->numInstances(); i++ ) {
         Instance *inst = data->instance( i );
         int classValIndex = static_cast<int>( inst->classValue() );
@@ -115,8 +115,8 @@ Instances *CostMatrix::applyCostMatrix( Instances *data, Random *random ) {
     }
   }
 
-  weightFactor = std::vector<double>( data->numClasses() );
-  weightOfInstancesInClass = std::vector<double>( data->numClasses() );
+  weightFactor = double_array( data->numClasses() );
+  weightOfInstancesInClass = double_array( data->numClasses() );
   for( int j = 0; j < data->numInstances(); j++ ) {
     weightOfInstancesInClass[static_cast<int>( data->instance( j ).classValue() )] += data->instance(j).weight();
   }
@@ -151,7 +151,7 @@ Instances *CostMatrix::applyCostMatrix( Instances *data, Random *random ) {
   }
 
   // Store new weights
-  weightOfInstances = std::vector<double>( data->numInstances() );
+  weightOfInstances = double_array( data->numInstances() );
   for( int i = 0; i < data->numInstances(); i++ ) {
     weightOfInstances[i] = data->instance( i )->weight() * weightFactor[static_cast<int>(data->instance(i)->classValue())];
   }
@@ -168,13 +168,13 @@ Instances *CostMatrix::applyCostMatrix( Instances *data, Random *random ) {
   }
 }*/
 
-std::vector<double> CostMatrix::expectedCosts( std::vector<double> &classProbs ) {
+double_array CostMatrix::expectedCosts( double_array &classProbs ) {
 
   if( classProbs.size() != m_size ) {
     throw "Length of probability estimates don't match cost matrix";
   }
 
-  std::vector<double> costs( m_size );
+  double_array costs( m_size );
 
   for( int x = 0; x < m_size; x++ ) {
     for( int y = 0; y < m_size; y++ ) {
@@ -189,7 +189,7 @@ std::vector<double> CostMatrix::expectedCosts( std::vector<double> &classProbs )
   return costs;
 }
 
-/*std::vector<double> CostMatrix::expectedCosts( std::vector<double> &classProbs, Instance *inst ) {
+/*double_array CostMatrix::expectedCosts( double_array &classProbs, Instance *inst ) {
 
   if( classProbs.size() != m_size ) {
     throw std::exception( "Length of probability estimates don't match cost matrix");
@@ -199,7 +199,7 @@ std::vector<double> CostMatrix::expectedCosts( std::vector<double> &classProbs )
     return expectedCosts( classProbs );
   }
 
-  std::vector<double> costs( m_size );
+  double_array costs( m_size );
 
   for( int x = 0; x < m_size; x++ ) {
     for( int y = 0; y < m_size; y++ ) {

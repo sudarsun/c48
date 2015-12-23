@@ -27,8 +27,8 @@ Evaluation::Evaluation(Instances data, CostMatrix costMatrix)
 	mClassIsNominal = data.classAttribute()->isNominal();
 
 	if (mClassIsNominal) {
-		mConfusionMatrix.resize(mNumClasses, std::vector<double>(mNumClasses, 0));
-		mClassNames = std::vector<std::string>(mNumClasses);
+		mConfusionMatrix.resize(mNumClasses, double_array(mNumClasses, 0));
+		mClassNames = string_array(mNumClasses);
 		for (int i = 0; i < mNumClasses; i++) {
 			mClassNames[i] = data.classAttribute()->value(i);
 		}
@@ -42,9 +42,9 @@ Evaluation::Evaluation(Instances data, CostMatrix costMatrix)
 			throw "Cost matrix not compatible with data!";
 		}
 	}
-	mClassPriors = std::vector<double>(mNumClasses);
+	mClassPriors = double_array(mNumClasses);
 	setPriors(data);
-	mMarginCounts = std::vector<double>(kMarginResolution + 1);
+	mMarginCounts = double_array(kMarginResolution + 1);
 
 }
 
@@ -88,7 +88,7 @@ void Evaluation::setPriors(Instances train)
 	}
 }
 
-double Evaluation::evaluateModelOnceAndRecordPrediction(std::vector<double> dist, Instance *instance)
+double Evaluation::evaluateModelOnceAndRecordPrediction(double_array dist, Instance *instance)
 {
 	double pred = 0;
 	if (mClassIsNominal) {
@@ -112,7 +112,7 @@ double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, 
 	classMissing->setDataset(instance->getDataset());
 	classMissing->setClassMissing();
 	if (mClassIsNominal) {
-		std::vector<double> dist = classifier->distributionForInstance(classMissing);
+		double_array dist = classifier->distributionForInstance(classMissing);
 		pred = Utils::maxIndex(dist);
 		if (dist[(int)pred] <= 0) {
 			pred = instance->missingValue();
@@ -127,7 +127,7 @@ double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, 
 	return pred;
 }
 
-void Evaluation::updateStatsForClassifier(std::vector<double> predictedDistribution, Instance *instance)
+void Evaluation::updateStatsForClassifier(double_array predictedDistribution, Instance *instance)
 {
 	int actualClass = (int)instance->classValue();
 
@@ -242,7 +242,7 @@ void Evaluation::updateStatsForPredictor(double predictedValue, Instance *instan
 	}
 }
 
-void Evaluation::updateMargins(std::vector<double> predictedDistribution, int actualClass,
+void Evaluation::updateMargins(double_array predictedDistribution, int actualClass,
 	double weight) {
 
 	double probActual = predictedDistribution[actualClass];
@@ -259,7 +259,7 @@ void Evaluation::updateMargins(std::vector<double> predictedDistribution, int ac
 	mMarginCounts[bin] += weight;
 }
 
-void Evaluation::updateNumericScores(std::vector<double> predicted, std::vector<double> actual, double weight)
+void Evaluation::updateNumericScores(double_array predicted, double_array actual, double weight)
 {
 	double diff;
 	double sumErr = 0, sumAbsErr = 0, sumSqrErr = 0;
@@ -280,9 +280,9 @@ void Evaluation::updateNumericScores(std::vector<double> predicted, std::vector<
 	mSumPriorSqrErr += weight * sumPriorSqrErr / mNumClasses;
 }
 
-std::vector<double> Evaluation::makeDistribution(double predictedClass)
+double_array Evaluation::makeDistribution(double predictedClass)
 {
-	std::vector<double> result = std::vector<double>(mNumClasses);
+	double_array result = double_array(mNumClasses);
 	if (Utils::isMissingValue(predictedClass)) {
 		return result;
 	}
@@ -299,7 +299,7 @@ void Evaluation::setNumericPriorsFromBuffer() {
 
 	double numPrecision = 0.01; // Default value
 	if (mNumTrainClassVals > 1) {
-		std::vector<double> temp(mNumTrainClassVals);
+		double_array temp(mNumTrainClassVals);
 		std::copy(mTrainClassVals.begin(), mTrainClassVals.begin() + mNumTrainClassVals, temp.begin());
 		std::vector<int> index = Utils::Sort(temp);
 		double lastVal = temp[index[0]];
@@ -327,14 +327,14 @@ void Evaluation::setNumericPriorsFromBuffer() {
 	}
 }
 
-std::string Evaluation::toSummaryString(bool printComplexityStatistics)
+string Evaluation::toSummaryString(bool printComplexityStatistics)
 {
 	return toSummaryString("=== Summary ===\n", printComplexityStatistics);
 }
 
-std::string Evaluation::toSummaryString(std::string title, bool printComplexityStatistics)
+string Evaluation::toSummaryString(string title, bool printComplexityStatistics)
 {
-	std::string text = "";
+	string text = "";
 
 	if (printComplexityStatistics && mNoPriors) {
 		printComplexityStatistics = false;
@@ -424,15 +424,15 @@ std::string Evaluation::toSummaryString(std::string title, bool printComplexityS
 void Evaluation::addNumericTrainClass(double classValue, double weight)
 {
 	if (mTrainClassVals.empty()) {
-		mTrainClassVals = std::vector<double>(100);
-		mTrainClassWeights = std::vector<double>(100);
+		mTrainClassVals = double_array(100);
+		mTrainClassWeights = double_array(100);
 	}
 	if (mNumTrainClassVals == mTrainClassVals.size()) {
-		std::vector<double> temp = std::vector<double>(mTrainClassVals.size() * 2);
+		double_array temp = double_array(mTrainClassVals.size() * 2);
 		std::copy(mTrainClassVals.begin(), mTrainClassVals.end(), temp.begin());
 		mTrainClassVals = temp;
 
-		temp = std::vector<double>(mTrainClassWeights.size() * 2);
+		temp = double_array(mTrainClassWeights.size() * 2);
 		std::copy(mTrainClassWeights.begin(), mTrainClassWeights.end(), temp.begin());
 		mTrainClassWeights = temp;
 	}
@@ -457,8 +457,8 @@ const double Evaluation::avgCost()
 
 const double Evaluation::kappa()
 {
-	std::vector<double> sumRows = std::vector<double>(mConfusionMatrix.size());
-	std::vector<double> sumColumns = std::vector<double>(mConfusionMatrix.size());
+	double_array sumRows = double_array(mConfusionMatrix.size());
+	double_array sumColumns = double_array(mConfusionMatrix.size());
 	double sumOfWeights = 0;
 	for (int i = 0; i < mConfusionMatrix.size(); i++) {
 		for (int j = 0; j < mConfusionMatrix.size(); j++) {
@@ -681,13 +681,13 @@ const double Evaluation::rootMeanPriorSquaredError()
 	return std::sqrt(mSumPriorSqrErr / mWithClass);
 }
 
-std::string Evaluation::toClassDetailsString(std::string title)
+string Evaluation::toClassDetailsString(string title)
 {
 	if (!mClassIsNominal) {
 		throw "Evaluation: No confusion matrix possible!";
 	}
 
-	std::string text = title + "\n               TP Rate   FP Rate"
+	string text = title + "\n               TP Rate   FP Rate"
 		+ "   Precision   Recall" + "  F-Measure   ROC Area  Class\n";
 	for (int i = 0; i < mNumClasses; i++) {
 		text.append(
@@ -722,18 +722,18 @@ std::string Evaluation::toClassDetailsString(std::string title)
 	return text;
 }
 
-std::string Evaluation::toClassDetailsString()
+string Evaluation::toClassDetailsString()
 {
 	return toClassDetailsString("=== Detailed Accuracy By Class ===\n");
 }
 
-std::string Evaluation::toMatrixString()
+string Evaluation::toMatrixString()
 {
 	return toMatrixString("=== Confusion Matrix ===\n");
 }
-std::string Evaluation::toMatrixString(std::string title)
+string Evaluation::toMatrixString(string title)
 {
-	std::string text = "";
+	string text = "";
 	std::vector<char> IDChars =
 	{ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
 		'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
@@ -866,7 +866,7 @@ double Evaluation::areaUnderROC(int classIndex)
 }
 double Evaluation::weightedTruePositiveRate()
 {
-	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double_array classCounts = double_array(mNumClasses);
 	double classCountSum = 0;
 
 	for (int i = 0; i < mNumClasses; i++) {
@@ -886,7 +886,7 @@ double Evaluation::weightedTruePositiveRate()
 }
 double Evaluation::weightedFalsePositiveRate()
 {
-	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double_array classCounts = double_array(mNumClasses);
 	double classCountSum = 0;
 
 	for (int i = 0; i < mNumClasses; i++) {
@@ -906,7 +906,7 @@ double Evaluation::weightedFalsePositiveRate()
 }
 double Evaluation::weightedPrecision()
 {
-	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double_array classCounts = double_array(mNumClasses);
 	double classCountSum = 0;
 
 	for (int i = 0; i < mNumClasses; i++) {
@@ -931,7 +931,7 @@ double Evaluation::weightedRecall()
 
 double Evaluation::weightedFMeasure()
 {
-	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double_array classCounts = double_array(mNumClasses);
 	double classCountSum = 0;
 
 	for (int i = 0; i < mNumClasses; i++) {
@@ -951,7 +951,7 @@ double Evaluation::weightedFMeasure()
 }
 double Evaluation::weightedAreaUnderROC()
 {
-	std::vector<double> classCounts = std::vector<double>(mNumClasses);
+	double_array classCounts = double_array(mNumClasses);
 	double classCountSum = 0;
 
 	for (int i = 0; i < mNumClasses; i++) {
@@ -971,7 +971,7 @@ double Evaluation::weightedAreaUnderROC()
 
 	return aucTotal / classCountSum;
 }
-std::string Evaluation::num2ShortID(int num, std::vector<char> &IDChars, int IDWidth) {
+string Evaluation::num2ShortID(int num, std::vector<char> &IDChars, int IDWidth) {
 
 	std::vector<char> ID(IDWidth);
 	int i;
@@ -987,5 +987,5 @@ std::string Evaluation::num2ShortID(int num, std::vector<char> &IDChars, int IDW
 		ID[i] = ' ';
 	}
 
-	return std::string(ID.begin(), ID.end());
+	return string(ID.begin(), ID.end());
 }

@@ -10,9 +10,6 @@
     <ClCompile Include="Attribute.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="AttributeMetaInfo.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="AttributeStats.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -45,9 +42,6 @@
     <ClInclude Include="AttributeInfo.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="AttributeMetaInfo.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="AttributeStats.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -73,9 +67,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractInstance.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="Instance.h">

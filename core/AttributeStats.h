@@ -5,6 +5,7 @@
 #include <vector>
 #include <cmath>
 #include "statistics.h"
+#include "Typedefs.h"
 
 
     /// <summary>
@@ -50,7 +51,7 @@
 
       /// <summary>
       /// Weight mass for each nominal value </summary>
-      std::vector<double> nominalWeights;
+      double_array nominalWeights;
 
       /// <summary>
       /// Updates the counters for one more observed distinct value.

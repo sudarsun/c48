@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "core/Typedefs.h"
 
 // Forward class declarations:
 class TwoClassStats;
@@ -28,47 +29,47 @@ class ThresholdCurve {
   /// <summary>
   /// The name of the relation used in threshold curve datasets </summary>
   public:
-  static const std::string RELATION_NAME;
+  static const string RELATION_NAME;
 
   /// <summary>
   /// attribute name: True Positives </summary>
-  static const std::string TRUE_POS_NAME;
+  static const string TRUE_POS_NAME;
   /// <summary>
   /// attribute name: False Negatives </summary>
-  static const std::string FALSE_NEG_NAME;
+  static const string FALSE_NEG_NAME;
   /// <summary>
   /// attribute name: False Positives </summary>
-  static const std::string FALSE_POS_NAME;
+  static const string FALSE_POS_NAME;
   /// <summary>
   /// attribute name: True Negatives </summary>
-  static const std::string TRUE_NEG_NAME;
+  static const string TRUE_NEG_NAME;
   /// <summary>
   /// attribute name: False Positive Rate" </summary>
-  static const std::string FP_RATE_NAME;
+  static const string FP_RATE_NAME;
   /// <summary>
   /// attribute name: True Positive Rate </summary>
-  static const std::string TP_RATE_NAME;
+  static const string TP_RATE_NAME;
   /// <summary>
   /// attribute name: Precision </summary>
-  static const std::string PRECISION_NAME;
+  static const string PRECISION_NAME;
   /// <summary>
   /// attribute name: Recall </summary>
-  static const std::string RECALL_NAME;
+  static const string RECALL_NAME;
   /// <summary>
   /// attribute name: Fallout </summary>
-  static const std::string FALLOUT_NAME;
+  static const string FALLOUT_NAME;
   /// <summary>
   /// attribute name: FMeasure </summary>
-  static const std::string FMEASURE_NAME;
+  static const string FMEASURE_NAME;
   /// <summary>
   /// attribute name: Sample Size </summary>
-  static const std::string SAMPLE_SIZE_NAME;
+  static const string SAMPLE_SIZE_NAME;
   /// <summary>
   /// attribute name: Lift </summary>
-  static const std::string LIFT_NAME;
+  static const string LIFT_NAME;
   /// <summary>
   /// attribute name: Threshold </summary>
-  static const std::string THRESHOLD_NAME;
+  static const string THRESHOLD_NAME;
 
   /// <summary>
   /// Calculates the performance stats for the default class and return 
@@ -143,13 +144,13 @@ class ThresholdCurve {
   /// <param name="target"> the target to look for </param>
   /// <returns> the index of the target </returns>
   private:
-  static int binarySearch( std::vector<int> &index, std::vector<double> &vals, double target );
+  static int binarySearch( std::vector<int> &index, double_array &vals, double target );
 
   /// 
   /// <param name="predictions"> the predictions to use </param>
   /// <param name="classIndex"> the class index </param>
   /// <returns> the probabilities </returns>
-  std::vector<double> getProbabilities( std::vector<Prediction*> predictions, int classIndex );
+  double_array getProbabilities( std::vector<Prediction*> predictions, int classIndex );
 
   /// <summary>
   /// generates the header

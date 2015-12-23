@@ -8,7 +8,6 @@
 #include <iostream>
 #include <ctime>
 
-using namespace std;
 void classify(char *fileName, bool isDumpTree = false);
 void processClassifierPrediction(Instance *toPredict,
 	Classifier *classifier, Evaluation &eval);
@@ -17,11 +16,11 @@ int main( int argc, char *argv[]  )
 {
 	if (argc != 3)
 	{
-		std::cout << endl;
-		std::cout << "please check the argument(s). the tool expects min. 2 arguments " << endl;
+		std::cout << std::endl;
+		std::cout << "please check the argument(s). the tool expects min. 2 arguments " << std::endl;
 		std::cout << "1.\tfileStem.names|fileStem.data\n2.\t<dump tree structure for classification> => enable->1, disable->0" << std::endl;
 		std::cout << "\nExample: " << argv[0] << " sample.names|sample.data <0|1>" << std::endl;
-		std::cout << endl;
+		std::cout << std::endl;
 		exit(0);
 	}
 	bool isDumpTree = atoi(argv[2]) == 0 ? false : true;
@@ -33,7 +32,7 @@ void classify(char *fileName, bool isDumpTree)
 {
 	time_t startTime, TimeElapsed;
 	
-	std::string path(fileName);
+	string path(fileName);
 
 	// Set data source
 	DataSource data(path);
@@ -44,25 +43,25 @@ void classify(char *fileName, bool isDumpTree)
 
 	int num = inst->numAttributes(); // Get total number of attributes
 	int totalInst = inst->numInstances();
-	cout << "Schema:       " << "C++ 4.8 Decision Tree Implementation" << endl;
-	cout << "Relation:     " << inst->getRelationName() << endl;
-	cout << "Instances:    " << totalInst << endl;
-	cout << "Attributes:   " << endl;
+	std::cout << "Schema:       " << "C++ 4.8 Decision Tree Implementation" << std::endl;
+	std::cout << "Relation:     " << inst->getRelationName() << std::endl;
+	std::cout << "Instances:    " << totalInst << std::endl;
+	std::cout << "Attributes:   " << std::endl;
 	for (int i = 0; i<num; i++)
-		cout << "              " << inst->attribute(i)->name() << endl;
+		std::cout << "              " << inst->attribute(i)->name() << std::endl;
 
-	cout << "\nTime taken to read data : "
+	std::cout << "\nTime taken to read data : "
 		<< difftime(TimeElapsed, startTime)
 		<< " seconds"
-		<< endl << endl; 
-	cout << "Test mode : " << endl;
+		<< std::endl << std::endl;
+	std::cout << "Test mode : evaluate on training data" << std::endl;
 	C48 *classifier = new C48();
 	time(&startTime);
 	classifier->buildClassifier(inst);
 	time(&TimeElapsed);
-	cout << "=== Classifier model (full training set) ===" << endl << endl;
-	cout << classifier->toString(isDumpTree) << endl;
-	cout << "\nTime taken to build model : "
+	std::cout << "=== Classifier model (full training set) ===" << std::endl << std::endl;
+	std::cout << classifier->toString(isDumpTree) << std::endl;
+	std::cout << "\nTime taken to build model : "
 		 << difftime(TimeElapsed, startTime)
 		 << " seconds\n\n";
 	Evaluation *eval = nullptr;
@@ -73,10 +72,10 @@ void classify(char *fileName, bool isDumpTree)
 		Instance *instance = inst->instance(i);
 		processClassifierPrediction(instance, classifier, *eval);
 	}
-	cout << " === Evaluation on training set ===" << endl;
-	cout << eval->toSummaryString(true);
-	cout << eval->toClassDetailsString() << endl;
-	cout << eval->toMatrixString() << endl;
+	std::cout << " === Evaluation on training set ===" << std::endl;
+	std::cout << eval->toSummaryString(true);
+	std::cout << eval->toClassDetailsString() << std::endl;
+	std::cout << eval->toMatrixString() << std::endl;
 }
 
 void processClassifierPrediction(Instance *toPredict,

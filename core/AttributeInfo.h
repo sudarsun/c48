@@ -1,6 +1,7 @@
 #ifndef _ATTRIBUTEINFO_
 #define _ATTRIBUTEINFO_
 
+#include "Typedefs.h"
 /// <summary>
 /// Interface implemented by classes that store information for a particular attribute
 /// type.

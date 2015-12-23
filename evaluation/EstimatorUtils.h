@@ -6,6 +6,7 @@
 #include <iostream>
 #include <limits>
 #include <stdexcept>
+#include "core/Typedefs.h"
 
 // Forward class declarations:
 class Instances;
@@ -34,7 +35,7 @@ class EstimatorUtils {
   /// <param name="minMax"> the array to return minimum and maximum in </param>
   /// <returns> number of not missing values </returns>
   /// <exception cref="Exception"> if parameter minMax wasn't initialized properly </exception>
-  static int getMinMax( Instances *inst, int attrIndex, std::vector<double> &minMax ) ;
+  static int getMinMax( Instances *inst, int attrIndex, double_array &minMax ) ;
 
   /// <summary>
   /// Returns a dataset that contains all instances of a certain class value.
@@ -68,7 +69,7 @@ class EstimatorUtils {
   /// <summary>
   /// Returns a string representing the cutpoints
   /// </summary>
-  static std::string cutpointsToString( std::vector<double> &cutPoints, std::vector<bool> &cutAndLeft );
+  static string cutpointsToString( double_array &cutPoints, bool_array &cutAndLeft );
 };
 
 

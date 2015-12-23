@@ -5,6 +5,7 @@
 #include <vector>
 #include <limits>
 #include <stdexcept>
+#include "core/Typedefs.h"
 
 // Forward class declarations:
 class Instances;
@@ -43,7 +44,7 @@ class CostMatrix {
   /// <summary>
   /// The deafult file extension for cost matrix files </summary>
   public:
-  static std::string FILE_EXTENSION;
+  static string FILE_EXTENSION;
 
   /// <summary>
   /// Creates a default cost matrix of a particular size. All diagonal values
@@ -103,7 +104,7 @@ class CostMatrix {
   /// <returns> the expected costs. </returns>
   /// <exception cref="Exception"> if the wrong number of class probabilities is
   ///              supplied. </exception>
-  std::vector<double> expectedCosts( std::vector<double> &classProbs );
+  double_array expectedCosts( double_array &classProbs );
 
   /// <summary>
   /// Calculates the expected misclassification cost for each possible class
@@ -114,7 +115,7 @@ class CostMatrix {
   ///          used for computing any non-fixed cost values. </param>
   /// <returns> the expected costs. </returns>
   /// <exception cref="Exception"> if something goes wrong </exception>
-  //std::vector<double> expectedCosts( std::vector<double> &classProbs, Instance *inst );
+  //double_array expectedCosts( double_array &classProbs, Instance *inst );
 
   /// <summary>
   /// Gets the maximum cost for a particular class value.

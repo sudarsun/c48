@@ -17,7 +17,7 @@ class NominalPrediction : public Prediction {
 	/// <summary>
 	/// The predicted probabilities </summary>
 private:
-	std::vector<double> mDistribution;
+	double_array mDistribution;
 
 	/// <summary>
 	/// The actual class value </summary>
@@ -38,7 +38,7 @@ private:
 	/// <param name="distribution"> the predicted probability distribution. Use 
 	/// NominalPrediction.makeDistribution() if you only know the predicted value. </param>
 public:
-	NominalPrediction(double actual, std::vector<double> &distribution);
+	NominalPrediction(double actual, double_array &distribution);
 
 	/// <summary>
 	/// Creates the NominalPrediction object.
@@ -47,13 +47,13 @@ public:
 	/// <param name="distribution"> the predicted probability distribution. Use 
 	/// NominalPrediction.makeDistribution() if you only know the predicted value. </param>
 	/// <param name="weight"> the weight assigned to the prediction. </param>
-	NominalPrediction(double actual, std::vector<double> &distribution, double weight);
+	NominalPrediction(double actual, double_array &distribution, double weight);
 
 	/// <summary>
 	/// Gets the predicted probabilities
 	/// </summary>
 	/// <returns> the predicted probabilities </returns>
-	virtual std::vector<double> distribution();
+	virtual double_array distribution();
 
 	/// <summary>
 	/// Gets the actual class value.
@@ -97,7 +97,7 @@ public:
 	/// <param name="numClasses"> the number of possible classes for this nominal
 	/// prediction. </param>
 	/// <returns> the probability distribution.   </returns>
-	static std::vector<double> makeDistribution(double predictedClass, int numClasses);
+	static double_array makeDistribution(double predictedClass, int numClasses);
 
 	/// <summary>
 	/// Creates a uniform probability distribution -- where each of the
@@ -106,7 +106,7 @@ public:
 	/// <param name="numClasses"> the number of possible classes for this nominal
 	/// prediction. </param>
 	/// <returns> the probability distribution.   </returns>
-	static std::vector<double> makeUniformDistribution(int numClasses);
+	static double_array makeUniformDistribution(int numClasses);
 
 	/// <summary>
 	/// Determines the predicted class (doesn't detect multiple 
@@ -122,7 +122,7 @@ private:
 	/// </summary>
 	/// <returns> a human readable representation of this prediction. </returns>
 public:
-	virtual std::string toString();
+	virtual string toString();
 
 };
 

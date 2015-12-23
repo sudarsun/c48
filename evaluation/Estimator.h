@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include "core/Typedefs.h"
 
 //Forward class declarations:
 class Instances;

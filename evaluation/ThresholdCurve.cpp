@@ -8,27 +8,27 @@
 #include "core/Attribute.h"
 #include "core/Utils.h"
 
-const std::string ThresholdCurve::RELATION_NAME = "ThresholdCurve";
-const std::string ThresholdCurve::TRUE_POS_NAME = "True Positives";
-const std::string ThresholdCurve::FALSE_NEG_NAME = "False Negatives";
-const std::string ThresholdCurve::FALSE_POS_NAME = "False Positives";
-const std::string ThresholdCurve::TRUE_NEG_NAME = "True Negatives";
-const std::string ThresholdCurve::FP_RATE_NAME = "False Positive Rate";
-const std::string ThresholdCurve::TP_RATE_NAME = "True Positive Rate";
-const std::string ThresholdCurve::PRECISION_NAME = "Precision";
-const std::string ThresholdCurve::RECALL_NAME = "Recal";
-const std::string ThresholdCurve::FALLOUT_NAME = "Fallout";
-const std::string ThresholdCurve::FMEASURE_NAME = "FMeasure";
-const std::string ThresholdCurve::SAMPLE_SIZE_NAME = "Sample Size";
-const std::string ThresholdCurve::LIFT_NAME = "Lift";
-const std::string ThresholdCurve::THRESHOLD_NAME = "Threshold";
+const string ThresholdCurve::RELATION_NAME = "ThresholdCurve";
+const string ThresholdCurve::TRUE_POS_NAME = "True Positives";
+const string ThresholdCurve::FALSE_NEG_NAME = "False Negatives";
+const string ThresholdCurve::FALSE_POS_NAME = "False Positives";
+const string ThresholdCurve::TRUE_NEG_NAME = "True Negatives";
+const string ThresholdCurve::FP_RATE_NAME = "False Positive Rate";
+const string ThresholdCurve::TP_RATE_NAME = "True Positive Rate";
+const string ThresholdCurve::PRECISION_NAME = "Precision";
+const string ThresholdCurve::RECALL_NAME = "Recal";
+const string ThresholdCurve::FALLOUT_NAME = "Fallout";
+const string ThresholdCurve::FMEASURE_NAME = "FMeasure";
+const string ThresholdCurve::SAMPLE_SIZE_NAME = "Sample Size";
+const string ThresholdCurve::LIFT_NAME = "Lift";
+const string ThresholdCurve::THRESHOLD_NAME = "Threshold";
 
 Instances *ThresholdCurve::getCurve( std::vector<Prediction*> predictions ) {
 
   if( predictions.size() == 0 ) {
     return nullptr;
   }
-  return getCurve( predictions, (static_cast<NominalPrediction*>( predictions[ 0 ] ) )->distribution().size() - 1 );
+  return getCurve( predictions, (static_cast<NominalPrediction*>( predictions[0] ) )->distribution().size() - 1 );
 }
 
 Instances *ThresholdCurve::getCurve( std::vector<Prediction*> predictions, int classIndex ) {
@@ -38,7 +38,7 @@ Instances *ThresholdCurve::getCurve( std::vector<Prediction*> predictions, int c
   }
 
   double totPos = 0, totNeg = 0;
-  std::vector<double> probs = getProbabilities( predictions, classIndex );
+  double_array probs = getProbabilities( predictions, classIndex );
 
   // Get distribution of positive/negatives
   for( int i = 0; i < probs.size(); i++ ) {
@@ -114,7 +114,7 @@ double ThresholdCurve::getNPointPrecision( Instances *tcurve, int n ) {
   }
   int recallInd = tcurve->attribute( RECALL_NAME )->index();
   int precisInd = tcurve->attribute( PRECISION_NAME )->index();
-  std::vector<double> recallVals = tcurve->attributeToDoubleArray( recallInd );
+  double_array recallVals = tcurve->attributeToDoubleArray( recallInd );
   std::vector<int> sorted = Utils::Sort( recallVals );
   double isize = 1.0 / ( n - 1 );
   double psum = 0;
@@ -149,8 +149,8 @@ double ThresholdCurve::getROCArea( Instances *tcurve ) {
   }
   const int tpInd = tcurve->attribute( TRUE_POS_NAME )->index();
   const int fpInd = tcurve->attribute( FALSE_POS_NAME )->index();
-  const std::vector<double> tpVals = tcurve->attributeToDoubleArray( tpInd );
-  const std::vector<double> fpVals = tcurve->attributeToDoubleArray( fpInd );
+  const double_array tpVals = tcurve->attributeToDoubleArray( tpInd );
+  const double_array fpVals = tcurve->attributeToDoubleArray( fpInd );
 
   double area = 0.0, cumNeg = 0.0;
   const double totalPos = tpVals[0];
@@ -180,12 +180,12 @@ int ThresholdCurve::getThresholdInstance( Instances *tcurve, double threshold ) 
   if( tcurve->numInstances() == 1 ) {
     return 0;
   }
-  std::vector<double> tvals = tcurve->attributeToDoubleArray( tcurve->numAttributes() - 1 );
+  double_array tvals = tcurve->attributeToDoubleArray( tcurve->numAttributes() - 1 );
   std::vector<int> sorted = Utils::Sort( tvals );
   return binarySearch( sorted, tvals, threshold );
 }
 
-int ThresholdCurve::binarySearch( std::vector<int> &index, std::vector<double> &vals, double target ) {
+int ThresholdCurve::binarySearch( std::vector<int> &index, double_array &vals, double target ) {
 
   int lo = 0, hi = (int)index.size() - 1;
   while( hi - lo > 1 ) {
@@ -205,10 +205,10 @@ int ThresholdCurve::binarySearch( std::vector<int> &index, std::vector<double> &
   return lo;
 }
 
-std::vector<double> ThresholdCurve::getProbabilities( std::vector<Prediction*> predictions, int classIndex ) {
+double_array ThresholdCurve::getProbabilities( std::vector<Prediction*> predictions, int classIndex ) {
 
   // sort by predicted probability of the desired class.
-  std::vector<double> probs(predictions.size() );
+  double_array probs(predictions.size() );
   for( int i = 0; i < probs.size(); i++ ) {
     NominalPrediction *pred = static_cast<NominalPrediction*>( predictions[i] );
     probs[i] = pred->distribution()[classIndex];
@@ -238,7 +238,7 @@ Instances *ThresholdCurve::makeHeader() {
 Instance *ThresholdCurve::makeInstance( TwoClassStats *tc, double prob ) {
 
   int count = 0;
-  std::vector<double> vals( 13 );
+  double_array vals( 13 );
   vals[count++] = tc->getTruePositive();
   vals[count++] = tc->getFalseNegative();
   vals[count++] = tc->getFalsePositive();

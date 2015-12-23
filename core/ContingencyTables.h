@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cmath>
+#include "Typedefs.h"
 
 /// <summary>
 /// Class implementing some statistical routines for contingency tables.
@@ -17,7 +18,7 @@ class ContingencyTables {
   /// Cache of integer logs </summary>
   private:
   static const double MAX_INT_FOR_CACHE_PLUS_ONE;
-  static std::vector<double> INT_N_LOG_N_CACHE;
+  static double_array INT_N_LOG_N_CACHE;
 
   /// <summary>
   /// Initialize cache </summary>

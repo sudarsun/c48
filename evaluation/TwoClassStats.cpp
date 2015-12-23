@@ -1,7 +1,7 @@
 #include "TwoClassStats.h"
 #include "ConfusionMatrix.h"
 
-std::vector<std::string> TwoClassStats::CATEGORY_NAMES = { "negative", "positive" };
+string_array TwoClassStats::CATEGORY_NAMES = { "negative", "positive" };
 
 TwoClassStats::TwoClassStats( double tp, double fp, double tn, double fn ) {
 
@@ -99,9 +99,9 @@ ConfusionMatrix *TwoClassStats::getConfusionMatrix() {
   return cm;
 }
 
-std::string TwoClassStats::toString() {
+string TwoClassStats::toString() {
 
-  std::string res = "";
+  string res = "";
   res.append( std::to_string(getTruePositive())).append(" ");
   res.append( std::to_string(getFalseNegative())).append(" ");
   res.append( std::to_string(getTrueNegative())).append(" ");

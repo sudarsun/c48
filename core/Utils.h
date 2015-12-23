@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include "Typedefs.h"
 
 /// <summary>
 /// Class implementing some simple utility methods.
@@ -67,7 +68,7 @@ public:
 	/// <param name="array"> the array of double </param>
 	/// <param name="k"> the value of k </param>
 	/// <returns> the kth-smallest value </returns>
-	static double kthSmallestValue(std::vector<double> &array_Renamed, int k);
+	static double kthSmallestValue(double_array &array_Renamed, int k);
 	/// <summary>
 	/// Returns the logarithm of a for base 2.
 	/// </summary>
@@ -81,7 +82,7 @@ public:
 	/// </summary>
 	/// <param name="doubles"> the array of doubles </param>
 	/// <returns> the index of the maximum element </returns>
-	static int maxIndex(std::vector<double> &doubles);
+	static int maxIndex(double_array &doubles);
 	/// <summary>
 	/// Returns index of maximum element in a given array of integers. First
 	/// maximum is returned.
@@ -95,7 +96,7 @@ public:
 	/// </summary>
 	/// <param name="vector"> the array </param>
 	/// <returns> the mean </returns>
-	static double mean(std::vector<double> &vector);
+	static double mean(double_array &vector);
 
 	/// <summary>
 	/// Returns index of minimum element in a given array of integers. First
@@ -111,7 +112,7 @@ public:
 	/// </summary>
 	/// <param name="doubles"> the array of doubles </param>
 	/// <returns> the index of the minimum element </returns>
-	static int minIndex(std::vector<double> &doubles);
+	static int minIndex(double_array &doubles);
 
 	/// <summary>
 	/// Tests if the given value codes "missing".
@@ -136,7 +137,7 @@ public:
 	/// <param name="y2"> double vector 2 </param>
 	/// <param name="n"> the length of two double vectors </param>
 	/// <returns> the correlation coefficient </returns>
-	static double correlation(std::vector<double> &y1, std::vector<double> &y2, int n);
+	static double correlation(double_array &y1, double_array &y2, int n);
 
 	/// <summary>
 	/// Removes all occurrences of a string from another string.
@@ -144,7 +145,7 @@ public:
 	/// <param name="inString"> the string to remove substrings from. </param>
 	/// <param name="substring"> the substring to remove. </param>
 	/// <returns> the input string with occurrences of substring removed. </returns>
-	static std::string removeSubstring(const std::string &inString, const std::string &substring);
+	static string removeSubstring(const string &inString, const string &substring);
 
 	/// <summary>
 	/// Replaces with a new string, all occurrences of a string from another
@@ -154,7 +155,7 @@ public:
 	/// <param name="subString"> the substring to replace. </param>
 	/// <param name="replaceString"> the replacement substring </param>
 	/// <returns> the input string with occurrences of substring replaced. </returns>
-	static std::string replaceSubstring(const std::string &inString, const std::string &subString, const std::string &replaceString);
+	static string replaceSubstring(const string &inString, const string &subString, const string &replaceString);
 
 	/// <summary>
 	/// Rounds a double and converts it into String.
@@ -163,7 +164,7 @@ public:
 	/// <param name="afterDecimalPoint"> the (maximum) number of digits permitted after the
 	///          decimal point </param>
 	/// <returns> the double as a formatted string </returns>
-	static std::string doubleToString(double value, int afterDecimalPoint);
+	static string doubleToString(double value, int afterDecimalPoint);
 
 	/// <summary>
 	/// Rounds a double and converts it into a formatted decimal-justified String.
@@ -173,7 +174,7 @@ public:
 	/// <param name="width"> the width of the string </param>
 	/// <param name="afterDecimalPoint"> the number of digits after the decimal point </param>
 	/// <returns> the double as a formatted string </returns>
-	static std::string doubleToString(double value, int width, int afterDecimalPoint);
+	static string doubleToString(double value, int width, int afterDecimalPoint);
 
 	/// <summary>
 	/// Tests if a is equal to b.
@@ -189,14 +190,14 @@ public:
 	/// <param name="string"> the string </param>
 	/// <returns> the converted string </returns>
 	/// <seealso cref= #unbackQuoteChars(String) </seealso>
-	static std::string backQuoteChars(std::string inString);
+	static string backQuoteChars(string inString);
 
 	/// <summary>
 	/// Normalizes the doubles in the array by their sum.
 	/// </summary>
 	/// <param name="doubles"> the array of double </param>
 	/// <exception cref="IllegalArgumentException"> if sum is Zero or NaN </exception>
-	static void normalize(std::vector<double> &doubles);
+	static void normalize(double_array &doubles);
 
 	/// <summary>
 	/// Normalizes the doubles in the array using the given value.
@@ -204,7 +205,7 @@ public:
 	/// <param name="doubles"> the array of double </param>
 	/// <param name="sum"> the value by which the doubles are to be normalized </param>
 	/// <exception cref="IllegalArgumentException"> if sum is zero or NaN </exception>
-	static void normalize(std::vector<double> &doubles, double sum);
+	static void normalize(double_array &doubles, double sum);
 
 	/// <summary>
 	/// Converts an array containing the natural logarithms of probabilities stored
@@ -213,7 +214,7 @@ public:
 	/// </summary>
 	/// <param name="a"> an array holding the natural logarithms of the probabilities </param>
 	/// <returns> the converted array </returns>
-	static std::vector<double> logs2probs(std::vector<double> &a);
+	static double_array logs2probs(double_array &a);
 
 	/// <summary>
 	/// Returns the log-odds for a given probabilitiy.
@@ -237,7 +238,7 @@ public:
 	/// MAX_VALUE.
 	/// </summary>
 	/// <param name="array"> the array to be modified. </param>
-	static void replaceMissingWithMAX_VALUE(std::vector<double> &array_Renamed);
+	static void replaceMissingWithMAX_VALUE(double_array &array_Renamed);
 
 	/// <summary>
 	/// Rounds a double to the given number of decimal places.
@@ -266,7 +267,7 @@ public:
 	/// </summary>
 	/// <param name="array"> this array is not changed by the method! </param>
 	/// <returns> an array of integers with the positions in the sorted array. </returns>
-	static std::vector<int> Sort(std::vector<double> &array_Renamed);
+	static std::vector<int> Sort(double_array &array_Renamed);
 
 	/// <summary>
 	/// Sorts a given array of doubles in ascending order and returns an array of
@@ -277,7 +278,7 @@ public:
 	/// <param name="array"> the array to be sorted, which is modified if it has missing
 	///          values </param>
 	/// <returns> an array of integers with the positions in the sorted array. </returns>
-	static std::vector<int> sortWithNoMissingValues(std::vector<double> &array_Renamed);
+	static std::vector<int> sortWithNoMissingValues(double_array &array_Renamed);
 
 	/// <summary>
 	/// Sorts a given array of doubles in ascending order and returns an array of
@@ -287,21 +288,21 @@ public:
 	/// </summary>
 	/// <param name="array"> this array is not changed by the method! </param>
 	/// <returns> an array of integers with the positions in the sorted array. </returns>
-	static std::vector<int> stableSort(std::vector<double> &array_Renamed);
+	static std::vector<int> stableSort(double_array &array_Renamed);
 
 	/// <summary>
 	/// Computes the variance for an array of doubles.
 	/// </summary>
 	/// <param name="vector"> the array </param>
 	/// <returns> the variance </returns>
-	static double variance(std::vector<double> &vector);
+	static double variance(double_array &vector);
 
 	/// <summary>
 	/// Computes the sum of the elements of an array of doubles.
 	/// </summary>
 	/// <param name="doubles"> the array of double </param>
 	/// <returns> the sum of the elements </returns>
-	static double sum(std::vector<double> &doubles);
+	static double sum(double_array &doubles);
 
 	/// <summary>
 	/// Computes the sum of the elements of an array of integers.
@@ -322,7 +323,7 @@ public:
 	/// <param name="s"> the string to process </param>
 	/// <param name="columns"> the width in columns </param>
 	/// <returns> the processed string </returns>
-	static void trim(std::string &outString);
+	static void trim(string &outString);
 
 	/// <summary>
 	/// Initial index, filled with values from 0 to size - 1.
@@ -334,7 +335,7 @@ private:
 	/// Sorts left, right, and center elements only, returns resulting center as
 	/// pivot.
 	/// </summary>
-	static int sortLeftRightAndCenter(std::vector<double> &array_Renamed, std::vector<int> &index, int l, int r);
+	static int sortLeftRightAndCenter(double_array &array_Renamed, std::vector<int> &index, int l, int r);
 
 	/// <summary>
 	/// Swaps two elements in the given integer array.
@@ -344,7 +345,7 @@ private:
 	/// <summary>
 	/// Conditional swap for quick sort.
 	/// </summary>
-	static void conditionalSwap(std::vector<double> &array_Renamed, std::vector<int> &index, int left, int right);
+	static void conditionalSwap(double_array &array_Renamed, std::vector<int> &index, int left, int right);
 
 	/// <summary>
 	/// Partitions the instances around a pivot. Used by quicksort and
@@ -356,7 +357,7 @@ private:
 	/// <param name="r"> the last index of the subset
 	/// </param>
 	/// <returns> the index of the middle element </returns>
-	static int partition(std::vector<double> &array_Renamed, std::vector<int> &index, int l, int r, double pivot);
+	static int partition(double_array &array_Renamed, std::vector<int> &index, int l, int r, double pivot);
 
 	/// <summary>
 	/// Partitions the instances around a pivot. Used by quicksort and
@@ -383,7 +384,7 @@ private:
 	// index[i] < array.length);
 	// @ requires array != index;
 	// assignable index;
-	static void quickSort(std::vector<double> &array_Renamed, std::vector<int> &index, int left, int right);
+	static void quickSort(double_array &array_Renamed, std::vector<int> &index, int left, int right);
 
 	/// <summary>
 	/// Implements quicksort according to Manber's "Introduction to Algorithms".
@@ -411,7 +412,7 @@ private:
 	/// </param>
 	/// <returns> the index of the kth-smallest element </returns>
 	// @ requires 0 <= first && first <= right && right < array.length;
-	static int select(std::vector<double> &array_Renamed, std::vector<int> &index, int left, int right, int k);
+	static int select(double_array &array_Renamed, std::vector<int> &index, int left, int right, int k);
 
 	/// <summary>
 	/// Implements computation of the kth-smallest element according to Manber's

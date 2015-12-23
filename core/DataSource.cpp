@@ -6,7 +6,7 @@
 #include "Consts.h"
 #include <sstream>
 
-DataSource::DataSource(const std::string &location)
+DataSource::DataSource(const string &location)
 {
 	mNumAttribs = 0;
 	FILE *file = fopen(location.c_str(), "r");;
@@ -17,19 +17,19 @@ DataSource::DataSource(const std::string &location)
 		throw  "Source file is not found";
 	}
 
-	std::string fname = location.substr(location.find_last_of("/\\")+1, location.length());
-	std::string fileStem;
-	std::string path = location.substr(0, location.find_last_of("/\\"));
+	string fname = location.substr(location.find_last_of("/\\")+1, location.length());
+	string fileStem;
+	string path = location.substr(0, location.find_last_of("/\\"));
 
 	if (fname.find('.') < 0)
 	{
 		fileStem = fname;
-		fname += std::string(".names");
+		fname += string(".names");
 	}
 	else
 	{
 		fileStem = fname.substr(0, fname.rfind('.'));
-		fname = fileStem + std::string(".names");
+		fname = fileStem + string(".names");
 	}
 	mFileStem = fileStem;
 	mSourceFileName = path + "/" + fname;
@@ -39,17 +39,17 @@ DataSource::DataSource(const std::string &location)
 	}
 	catch (std::exception ex)
 	{
-		throw std::string("File not found : ") + (path + "/" + fname);
+		throw string("File not found : ") + (path + "/" + fname);
 	}
 
-	mSourceFileData = path + "/" + fileStem + std::string(".data");
+	mSourceFileData = path + "/" + fileStem + string(".data");
 	try
 	{
 		mDataReader.open(mSourceFileData, std::ios_base::in);
 	}
 	catch (std::exception ex)
 	{
-		throw std::string("File not found : ") + (path + "/" + fname);
+		throw string("File not found : ") + (path + "/" + fname);
 	}
 }
 
@@ -99,8 +99,8 @@ void DataSource::readHeader(std::fstream &inNameStream)
 
 	mNumAttribs = 1;
 	// Read the class values
-	std::vector<std::string> classVals;
-	std::string line;
+	string_array classVals;
+	string line;
 
 	while (std::getline(inNameStream, line))
 	{
@@ -109,7 +109,7 @@ void DataSource::readHeader(std::fstream &inNameStream)
 			continue;
 		}
 		std::stringstream ss(line);
-		std::string val;
+		string val;
 		while (std::getline(ss, val, ','))
 		{
 			if (val.length() > 0)
@@ -123,12 +123,12 @@ void DataSource::readHeader(std::fstream &inNameStream)
 
 	// read the attribute names and types
 	int counter = 0;
-	std::vector<std::string> attributeCollection;
+	string_array attributeCollection;
 	std::stringstream ss;
-	std::string token;
-	std::string attribName;
+	string token;
+	string attribName;
 	std::stringstream attributeType;
-	std::vector<std::string> attribVals;
+	string_array attribVals;
 	while (std::getline(inNameStream, line))
 	{
 		ss.clear();
@@ -219,26 +219,26 @@ void DataSource::readHeader(std::fstream &inNameStream)
 	}
 
 	mNumAttribs = mStructure->numAttributes() + (int)ignores.size();
-	mIgnore = std::vector<bool>(mNumAttribs);
+	mIgnore = bool_array(mNumAttribs);
 	for (int i = 0; i < (int)ignores.size(); i++)
 	{
 		mIgnore[ignores[i]] = true;
 	}
 }
-std::string DataSource::removeTrailingPeriod(std::string &val)
+string DataSource::removeTrailingPeriod(string &val)
 {
 	val.erase(val.find_last_not_of(TRIMCHARS) + 1);
 	val.erase(0, val.find_first_not_of(TRIMCHARS));
 	return val;
 }
 
-Instance *DataSource::getInstance(std::string inData)
+Instance *DataSource::getInstance(string inData)
 {
-	std::vector<double> instance = std::vector<double>(mStructure->numAttributes());
+	double_array instance = double_array(mStructure->numAttributes());
 
 	int i = 0, counter = 0;
 	std::stringstream dataStream;
-	std::string value;
+	string value;
 
 	dataStream << inData;
 	while (std::getline(dataStream, value, ','))
@@ -257,7 +257,7 @@ Instance *DataSource::getInstance(std::string inData)
 					int index = mStructure->attribute(counter)->indexOfValue(value);
 					if (index == -1)
 					{
-						throw std::string("nominal value not declared in header :") + value + std::string(" column ") + std::to_string(i);
+						throw string("nominal value not declared in header :") + value + string(" column ") + std::to_string(i);
 					}
 					instance[counter++] = index;
 				}
@@ -302,7 +302,7 @@ Instances *DataSource::getInstance(std::fstream& inDataStream)
 	{
 		throw  "premature end of file";
 	}
-	std::string line;
+	string line;
 
 	Instances *result = new Instances(mStructure);
 	while (std::getline(inDataStream, line))

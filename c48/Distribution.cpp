@@ -6,21 +6,21 @@
 #include <iterator>
 
 Distribution::Distribution(int numBags, int numClasses) :
-	//mperClassPerBag(std::vector<std::vector<double>>(1)),
-	mperBag(std::vector<double>(numBags)),
-	mperClass(std::vector<double>(numClasses))
+	//mperClassPerBag(double_2D_array(1)),
+	mperBag(double_array(numBags)),
+	mperClass(double_array(numClasses))
 {
 	for (int i = 0; i < numBags; i++)
 	{
-		this->mperClassPerBag.push_back( std::vector<double>(numClasses));
+		this->mperClassPerBag.push_back( double_array(numClasses));
 	}
 	totaL = 0;
 }
 
-Distribution::Distribution(std::vector<std::vector<double>> &table) :
+Distribution::Distribution(double_2D_array &table) :
 	mperClassPerBag(table),
-	mperBag(std::vector<double>(table.size())),
-	mperClass(std::vector<double>(table[0].size()))
+	mperBag(double_array(table.size())),
+	mperClass(double_array(table[0].size()))
 {
 
 	int i, j;
@@ -37,15 +37,15 @@ Distribution::Distribution(std::vector<std::vector<double>> &table) :
 }
 
 Distribution::Distribution(Instances *source) :
-	//mperClassPerBag(std::vector<std::vector<double>>(1)),
-	mperBag(std::vector<double>(1)),
-	mperClass(std::vector<double>(source->numClasses()))
+	//mperClassPerBag(double_2D_array(1)),
+	mperBag(double_array(1)),
+	mperClass(double_array(source->numClasses()))
 {
 	// Clear 
 	mperClassPerBag.clear();
 
 	totaL = 0;
-	mperClassPerBag.push_back(std::vector<double>(source->numClasses()));
+	mperClassPerBag.push_back(double_array(source->numClasses()));
 	int totalnum = source->numInstances();
 	for (int i = 0; i < totalnum; i++)
 	{
@@ -54,19 +54,19 @@ Distribution::Distribution(Instances *source) :
 }
 
 Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) :
-	//mperClassPerBag(std::vector<std::vector<double>>(1)),
-	mperBag(std::vector<double>(modelToUse->numSubsets())),
-	mperClass(std::vector<double>(source->numClasses())) {
+	//mperClassPerBag(double_2D_array(1)),
+	mperBag(double_array(modelToUse->numSubsets())),
+	mperClass(double_array(source->numClasses())) {
 
 	int index;
 
-	std::vector<double> weights;
+	double_array weights;
 
 	// Clear 
 	mperClassPerBag.clear();
 	totaL = 0;
 	for (int i = 0; i < modelToUse->numSubsets(); i++) {
-		mperClassPerBag.push_back(std::vector<double>(source->numClasses()));
+		mperClassPerBag.push_back(double_array(source->numClasses()));
 	}
 	int totalnum = source->numInstances();
 	for (int i = 0; i < totalnum; i++)
@@ -83,33 +83,33 @@ Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) 
 }
 
 Distribution::Distribution(Distribution *toMerge) // :
-	//mperClassPerBag(std::vector<std::vector<double>>(1)),
-	//mperBag(std::vector<double>(1)),
-	//mperClass(std::vector<double>(toMerge->numClasses()))
+	//mperClassPerBag(double_2D_array(1)),
+	//mperBag(double_array(1)),
+	//mperClass(double_array(toMerge->numClasses()))
 {
 	mperClassPerBag.clear();
 	mperBag.clear();
 	mperClass.clear();
 	totaL = toMerge->totaL;
 	std::copy(toMerge->mperClass.begin(), toMerge->mperClass.end(), std::back_inserter(mperClass));
-	mperClassPerBag.push_back(std::vector<double>(toMerge->numClasses()));
+	mperClassPerBag.push_back(double_array(toMerge->numClasses()));
 	std::copy(toMerge->mperClass.begin(), toMerge->mperClass.end(), std::back_inserter(mperClassPerBag[0]));
 	mperBag.push_back(totaL);
 }
 
 Distribution::Distribution(Distribution *toMerge, int index) :
-	mperClassPerBag(std::vector<std::vector<double>>(1)),
-	mperBag(std::vector<double>(2)),
-	mperClass(std::vector<double>(toMerge->numClasses()))
+	mperClassPerBag(double_2D_array(1)),
+	mperBag(double_array(2)),
+	mperClass(double_array(toMerge->numClasses()))
 {
 
 	int i;
 
 	totaL = toMerge->totaL;
 	std::copy(toMerge->mperClass.begin(), toMerge->mperClass.end(), std::back_inserter(mperClass));
-	mperClassPerBag[0] = std::vector<double>(toMerge->numClasses());
+	mperClassPerBag[0] = double_array(toMerge->numClasses());
 	std::copy(toMerge->mperClassPerBag[index].begin(), toMerge->mperClassPerBag[index].end(), std::back_inserter(mperClassPerBag[0]));
-	mperClassPerBag[1] = std::vector<double>(toMerge->numClasses());
+	mperClassPerBag[1] = double_array(toMerge->numClasses());
 	for (i = 0; i < toMerge->numClasses(); i++)
 	{
 		mperClassPerBag[1][i] = toMerge->mperClass[i] - mperClassPerBag[0][i];
@@ -197,7 +197,7 @@ void Distribution::sub(int bagIndex, Instance *instance)
 	totaL = totaL - weight;
 }
 
-void Distribution::add(int bagIndex, std::vector<double> &counts)
+void Distribution::add(int bagIndex, double_array &counts)
 {
 
 	double sum = Utils::sum(counts);
@@ -217,12 +217,12 @@ void Distribution::add(int bagIndex, std::vector<double> &counts)
 void Distribution::addInstWithUnknown(Instances *source, int attIndex)
 {
 
-	std::vector<double> probs;
+	double_array probs;
 	double weight, newWeight;
 	int classIndex;
 	int j;
 
-	probs = std::vector<double>(mperBag.size());
+	probs = double_array(mperBag.size());
 	for (j = 0; j < (int)mperBag.size(); j++)
 	{
 		if (Utils::eq(totaL, 0))
@@ -275,7 +275,7 @@ void Distribution::addRange(int bagIndex, Instances *source, int startIndex, int
 	totaL += sumOfWeights;
 }
 
-void Distribution::addWeights(Instance *instance, std::vector<double> &weights)
+void Distribution::addWeights(Instance *instance, double_array &weights)
 {
 
 	int classIndex;
@@ -372,19 +372,19 @@ void Distribution::delRange(int bagIndex, Instances *source, int startIndex, int
 	totaL -= sumOfWeights;
 }
 
-std::string Distribution::dumpDistribution()
+string Distribution::dumpDistribution()
 {
 
-	std::string text;
+	string text;
 	int i, j;
 
 	text = "";
 	for (i = 0; i < (int)mperBag.size(); i++)
 	{
-		text.append(std::string("Bag num ") + std::to_string(i) + std::string("\n"));
+		text.append(string("Bag num ") + std::to_string(i) + string("\n"));
 		for (j = 0; j < (int)mperClass.size(); j++)
 		{
-			text.append(std::string("Class num ") + std::to_string(j) + std::string(" ") + std::to_string(mperClassPerBag[i][j]) + std::string("\n"));
+			text.append(string("Class num ") + std::to_string(j) + string(" ") + std::to_string(mperClassPerBag[i][j]) + string("\n"));
 		}
 	}
 	return text;
@@ -411,7 +411,7 @@ void Distribution::initialize()
 	totaL = 0;
 }
 
-std::vector<std::vector<double>> Distribution::matrix()
+double_2D_array Distribution::matrix()
 {
 
 	return mperClassPerBag;

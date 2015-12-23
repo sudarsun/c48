@@ -5,13 +5,13 @@
 Matrix::Matrix( int m, int n ) {
   this->m = m;
   this->n = n;
-  A.resize(m, std::vector<double>(n));
+  A.resize(m, double_array(n));
 }
 
 Matrix::Matrix( int m, int n, double s ) {
   this->m = m;
   this->n = n;
-  A.resize(m, std::vector<double>(n));
+  A.resize(m, double_array(n));
   for( int i = 0; i < m; i++ ) {
     for( int j = 0; j < n; j++ ) {
       A[i][j] = s;
@@ -19,7 +19,7 @@ Matrix::Matrix( int m, int n, double s ) {
   }
 }
 
-Matrix::Matrix( std::vector<std::vector<double>> &A ) {
+Matrix::Matrix( double_2D_array &A ) {
   m = (int)A.size();
   n = (int)A[0].size();
   for( int i = 0; i < m; i++ ) {
@@ -30,19 +30,19 @@ Matrix::Matrix( std::vector<std::vector<double>> &A ) {
   this->A = A;
 }
 
-Matrix::Matrix( std::vector<std::vector<double>> &A, int m, int n ) {
+Matrix::Matrix( double_2D_array &A, int m, int n ) {
   this->A = A;
   this->m = m;
   this->n = n;
 }
 
-Matrix::Matrix( std::vector<double> &vals, int m ) {
+Matrix::Matrix( double_array &vals, int m ) {
   this->m = m;
   n = ( m != 0 ? (int)vals.size() / m : 0 );
   if( m*n != vals.size() ) {
     throw std::invalid_argument("Array length must be a multiple of m." );
   }
-  A.resize(m, std::vector<double>(n));
+  A.resize(m, double_array(n));
   for( int i = 0; i < m; i++ ) {
     for( int j = 0; j < n; j++ ) {
       A[i][j] = vals[i + j*m];
@@ -50,7 +50,7 @@ Matrix::Matrix( std::vector<double> &vals, int m ) {
   }
 }
 
-std::vector<std::vector<double>> Matrix::getArray() {
+double_2D_array Matrix::getArray() {
   return A;
 }
 
@@ -65,7 +65,7 @@ void Matrix::set( int i, int j, double s ) {
 }
 
 
-std::string Matrix::toString() {
+string Matrix::toString() {
 	// Determine the width required for the maximum element,
 	// and check for fractional display requirement.
 	double maxval = 0;
@@ -87,7 +87,7 @@ std::string Matrix::toString() {
 	}
 	int width = static_cast<int>(log(maxval) / log(10) + (fractional ? 4 : 1));
 
-	std::string text = "";
+	string text = "";
 	for (int i = 0; i < getRowDimension(); i++) {
 		for (int j = 0; j < getColumnDimension(); j++) {
 			text.append(" ").append(Utils::doubleToString(get(i, j), width, (fractional ? 2 : 0)));

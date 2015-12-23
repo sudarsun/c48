@@ -2,7 +2,6 @@
 #define _ATTRIBUTE_HPP
 
 #include "AttributeInfo.h"
-#include "AttributeMetaInfo.h"
 #include "NominalAttributeInfo.h"
 #include <vector>
 
@@ -11,55 +10,42 @@ class Attribute
 
 public:
 
-	const std::string mName;
+	const string mName;
 	int mType = 0;
 	int mIndex = -1;
 	double mWeight = 1.0;
 	AttributeInfo *mAttributeInfo;
-	AttributeMetaInfo *mAttributeMetaInfo;
 
-	Attribute(const std::string &attributeName);
-	Attribute(const std::string &attributeName, std::vector<std::string> &attributeValues);
-
-	void *copy();
-	bool equals(void *other);
-	int hashCode();
-
-	/// <summary>
-	/// Tests if given attribute is equal to this attribute. If they're not the
-	/// same a message detailing why they differ will be returned, otherwise null.
-	/// </summary>
-	/// <param name="other"> the Object to be compared to this attribute </param>
-	/// <returns> null if the given attribute is equal to this attribute </returns>
-	std::string equalsMsg(void *other);
+	Attribute(const string &attributeName);
+	Attribute(const string &attributeName, string_array &attributeValues);
 
 	/// <summary>
 	/// Returns a string representation of the attribute type.
 	/// </summary>
 	/// <param name="att"> the attribute to return the type string for </param>
 	/// <returns> the string representation of the attribute type </returns>
-	static std::string typeToString(Attribute *att);
+	static string typeToString(Attribute *att);
 
 	/// <summary>
 	/// Returns a string representation of the attribute type.
 	/// </summary>
 	/// <param name="type"> the type of the attribute </param>
 	/// <returns> the string representation of the attribute type </returns>
-	static std::string typeToString(int type);
+	static string typeToString(int type);
 
 	/// <summary>
 	/// Returns a short string representation of the attribute type.
 	/// </summary>
 	/// <param name="att"> the attribute to return the type string for </param>
 	/// <returns> the string representation of the attribute type </returns>
-	static std::string typeToStringShort(Attribute *att);
+	static string typeToStringShort(Attribute *att);
 
 	/// <summary>
 	/// Returns a short string representation of the attribute type.
 	/// </summary>
 	/// <param name="type"> the type of the attribute </param>
 	/// <returns> the string representation of the attribute type </returns>
-	static std::string typeToStringShort(int type);
+	static string typeToStringShort(int type);
 	/// <summary>
 	/// Returns the index of this attribute.
 	/// </summary>
@@ -74,7 +60,7 @@ public:
 	/// <param name="value"> the value for which the index is to be returned </param>
 	/// <returns> the index of the given attribute value if attribute is nominal or a
 	///         string, -1 if it is not or the value can't be found </returns>
-	int indexOfValue(const std::string &value);
+	int indexOfValue(const string &value);
 
 	/// <summary>
 	/// Test if the attribute is nominal.
@@ -116,7 +102,7 @@ public:
 	/// </summary>
 	/// <returns> the attribute's name as a string </returns>
 	// @ ensures \result == mName;
-	std::string name();
+	string name();
 
 	/// <summary>
 	/// Returns the number of attribute values. Returns 0 for attributes that are
@@ -126,13 +112,6 @@ public:
 	int numValues();
 
 	/// <summary>
-	/// Returns a description of this attribute in ARFF format. Quotes strings if
-	/// they contain whitespace characters, or if they are a question mark.
-	/// </summary>
-	/// <returns> a description of this attribute as a string </returns>
-	//virtual std::string toString();
-
-	/// <summary>
 	/// Returns the attribute's type as an integer.
 	/// </summary>
 	/// <returns> the attribute's type. </returns>
@@ -140,20 +119,13 @@ public:
 	int type();
 
 	/// <summary>
-	/// Returns the Date format pattern in case this attribute is of type DATE,
-	/// otherwise an empty string.
-	/// </summary>
-	/// <returns> the date format pattern </returns>
-	/// <seealso cref= java.text.SimpleDateFormat </seealso>
-	std::string getDateFormat();
-	/// <summary>
 	/// Returns a value of a nominal or string attribute. Returns an empty string
 	/// if the attribute is neither a string nor a nominal attribute.
 	/// </summary>
 	/// <param name="valIndex"> the value's index </param>
 	/// <returns> the attribute's value as a string </returns>
 
-	std::string value(int valIndex);
+	string value(int valIndex);
 	/// <summary>
 	/// Constructor for a numeric attribute with a particular index.
 	/// </summary>
@@ -163,20 +135,7 @@ public:
 	// @ requires index >= 0;
 	// @ ensures mName == attributeName;
 	// @ ensures mIndex == index;
-	Attribute(const std::string &attributeName, int index);
-
-	/// <summary>
-	/// Constructor for date attributes with a particular index.
-	/// </summary>
-	/// <param name="attributeName"> the name for the attribute </param>
-	/// <param name="dateFormat"> a string suitable for use with SimpleDateFormatter for
-	///          parsing dates. Null for a default format string. </param>
-	/// <param name="index"> the attribute's index </param>
-	// @ requires attributeName != null;
-	// @ requires index >= 0;
-	// @ ensures mName == attributeName;
-	// @ ensures mIndex == index;
-	Attribute(const std::string &attributeName, const std::string &dateFormat, int index);
+	Attribute(const string &attributeName, int index);
 
 	/// <summary>
 	/// Constructor for nominal attributes and string attributes with a particular
@@ -191,7 +150,7 @@ public:
 	// @ requires index >= 0;
 	// @ ensures mName == attributeName;
 	// @ ensures mIndex == index;
-	Attribute(const std::string &attributeName, std::vector<std::string> &attributeValues, int index);
+	Attribute(const string &attributeName, string_array &attributeValues, int index);
 
 	/// <summary>
 	/// Adds a string value to the list of valid strings for attributes of type
@@ -204,7 +163,7 @@ public:
 	 * @ requires value != null; ensures isString() && 0 <= \result && \result <
 	 * mValues.size() || ! isString() && \result == -1;
 	 */
-	virtual int addStringValue(const std::string &value);
+	virtual int addStringValue(const string &value);
 
 	/// <summary>
 	/// Clear the map and list of values and set them to contain just the supplied
@@ -212,7 +171,7 @@ public:
 	/// </summary>
 	/// <param name="value"> the current (and only) value of this String attribute. If null
 	/// then just the map is cleared. </param>
-	virtual void setStringValue(const std::string &value);
+	virtual void setStringValue(const string &value);
 
 	/// <summary>
 	/// Adds a string value to the list of valid strings for attributes of type
@@ -235,7 +194,7 @@ public:
 	/// adding it.
 	/// </summary>
 	/// <param name="value"> the attribute value </param>
-	void addValue(const std::string &value);
+	void addValue(const string &value);
 
 	/// <summary>
 	/// Produces a shallow copy of this attribute with a new name.
@@ -246,7 +205,7 @@ public:
 	// @ ensures \result.mName == newName;
 	// @ ensures \result.mIndex == mIndex;
 	// @ ensures \result.mType == mType;
-	Attribute *copy(const std::string &newName);
+	Attribute *copy(const string &newName);
 
 	/// <summary>
 	/// Removes a value of a nominal, string, or relation-valued attribute. Creates
@@ -265,7 +224,7 @@ public:
 	/// <param name="value"> the attribute value </param>
 	// @ requires value != null;
 	// @ ensures mValues.size() == \old(mValues.size()) + 1;
-	void forceAddValue(const std::string &value);
+	void forceAddValue(const string &value);
 
 	/// <summary>
 	/// Sets the index of this attribute.
@@ -286,36 +245,7 @@ public:
 	// @ requires string != null;
 	// @ requires isNominal() || isString();
 	// @ requires 0 <= index && index < mValues.size();
-	void setValue(int index, const std::string &string);
-
-	/// <summary>
-	/// Returns the ordering of the attribute. One of the following:
-	///
-	/// ORDERING_SYMBOLIC - attribute values should be treated as symbols.
-	/// ORDERING_ORDERED - attribute values have a global ordering. ORDERING_MODULO
-	/// - attribute values have an ordering which wraps.
-	/// </summary>
-	/// <returns> the ordering type of the attribute </returns>
-	int ordering();
-
-	/// <summary>
-	/// Returns whether the attribute values are equally spaced.
-	/// </summary>
-	/// <returns> whether the attribute is regular or not </returns>
-	bool isRegular();
-
-	/// <summary>
-	/// Returns whether the attribute can be averaged meaningfully.
-	/// </summary>
-	/// <returns> whether the attribute can be averaged or not </returns>
-	bool isAveragable();
-
-	/// <summary>
-	/// Returns whether the attribute has a zeropoint and may be added
-	/// meaningfully.
-	/// </summary>
-	/// <returns> whether the attribute has a zeropoint or not </returns>
-	bool hasZeropoint();
+	void setValue(int index, const string &string);
 
 	/// <summary>
 	/// Returns the attribute's weight.
@@ -329,37 +259,6 @@ public:
 	/// </summary>
 	/// <param name="value"> the new weight </param>
 	virtual void setWeight(double value);
-
-	/// <summary>
-	/// Returns the lower bound of a numeric attribute.
-	/// </summary>
-	/// <returns> the lower bound of the specified numeric range </returns>
-	double getLowerNumericBound();
-
-	/// <summary>
-	/// Returns whether the lower numeric bound of the attribute is open.
-	/// </summary>
-	/// <returns> whether the lower numeric bound is open or not (closed) </returns>
-	bool lowerNumericBoundIsOpen();
-
-	/// <summary>
-	/// Returns the upper bound of a numeric attribute.
-	/// </summary>
-	/// <returns> the upper bound of the specified numeric range </returns>
-	double getUpperNumericBound();
-
-	/// <summary>
-	/// Returns whether the upper numeric bound of the attribute is open.
-	/// </summary>
-	/// <returns> whether the upper numeric bound is open or not (closed) </returns>
-	bool upperNumericBoundIsOpen();
-
-	/// <summary>
-	/// Determines whether a value lies within the bounds of the attribute.
-	/// </summary>
-	/// <param name="value"> the value to check </param>
-	/// <returns> whether the value is in range </returns>
-	bool isInRange(double value);
 
 };
 

@@ -6,21 +6,26 @@
 class ClassifierSplitModel;
 class Instances;
 
-
+/**
+ * Abstract class for model selection criteria.
+ *
+ */
 class ModelSelection
 {
 
-	/// <summary>
-	/// Selects a model for the given dataset.
-	/// </summary>
-	/// <exception cref="Exception"> if model can't be selected </exception>
 public:
+  /**
+   * Selects a model for the given dataset.
+   *
+   * @exception Exception if model can't be selected
+   */
 	virtual ClassifierSplitModel *selectModel(Instances *data) = 0;
 
-	/// <summary>
-	/// Selects a model for the given train data using the given test data
-	/// </summary>
-	/// <exception cref="Exception"> if model can't be selected </exception>
+  /**
+   * Selects a model for the given train data using the given test data
+   *
+   * @exception Exception if model can't be selected
+   */
 	virtual ClassifierSplitModel *selectModel(Instances *train, Instances *test);
 };
 

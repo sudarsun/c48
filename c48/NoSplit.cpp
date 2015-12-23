@@ -24,25 +24,25 @@ int NoSplit::whichSubset(Instance *instance)
 	return 0;
 }
 
-std::vector<double> NoSplit::weights(Instance *instance)
+double_array NoSplit::weights(Instance *instance)
 {
 
-	return std::vector<double>(0);
+	return double_array(0);
 }
 
-std::string NoSplit::leftSide(Instances *instances)
-{
-
-	return "";
-}
-
-std::string NoSplit::rightSide(int index, Instances *instances)
+string NoSplit::leftSide(Instances *instances)
 {
 
 	return "";
 }
 
-std::string NoSplit::sourceExpression(int index, Instances *data)
+string NoSplit::rightSide(int index, Instances *instances)
+{
+
+	return "";
+}
+
+string NoSplit::sourceExpression(int index, Instances *data)
 {
 
 	return "true"; // or should this be false??

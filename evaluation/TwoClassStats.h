@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "core/Typedefs.h"
 
 // Forward class declarations:
 class ConfusionMatrix;
@@ -16,7 +17,7 @@ class TwoClassStats {
   /// <summary>
   /// The names used when converting this object to a confusion matrix </summary>
   private:
-  static std::vector<std::string> CATEGORY_NAMES;
+  static string_array CATEGORY_NAMES;
 
   /// <summary>
   /// Pos predicted as pos </summary>
@@ -173,7 +174,7 @@ class TwoClassStats {
   /// Returns a string containing the various performance measures
   /// for the current object 
   /// </summary>
-  virtual std::string toString();
+  virtual string toString();
 };
 
 

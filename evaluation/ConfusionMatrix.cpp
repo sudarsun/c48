@@ -3,9 +3,10 @@
 #include "TwoClassStats.h"
 #include "core/Utils.h"
 
-ConfusionMatrix::ConfusionMatrix(std::vector<std::string> classNames) :
-    Matrix((int)classNames.size(), (int)classNames.size()) {
+ConfusionMatrix::ConfusionMatrix(string_array classNames) :
+    Matrix::Matrix((int)classNames.size(), (int)classNames.size()) {
 	mClassNames = classNames;
+
 }
 
 ConfusionMatrix *ConfusionMatrix::makeWeighted(CostMatrix *costs) {
@@ -27,7 +28,7 @@ int ConfusionMatrix::size() {
 	return (int)mClassNames.size();
 }
 
-std::string ConfusionMatrix::className(int index) {
+string ConfusionMatrix::className(int index) {
 
 	return mClassNames[index];
 }
@@ -115,14 +116,14 @@ double ConfusionMatrix::errorRate() {
 	return incorrect() / total();
 }
 
-std::string ConfusionMatrix::toString() {
+string ConfusionMatrix::toString() {
 
 	return toString("=== Confusion Matrix ===\n");
 }
 
-std::string ConfusionMatrix::toString(const std::string &title) {
+string ConfusionMatrix::toString(const string &title) {
 
-	std::string text = "";
+	string text = "";
 	std::vector<char> IDChars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 	int IDWidth;
 	bool fractional = false;
@@ -168,7 +169,7 @@ std::string ConfusionMatrix::toString(const std::string &title) {
 	return text;
 }
 
-std::string ConfusionMatrix::num2ShortID(int num, std::vector<char> &IDChars, int IDWidth) {
+string ConfusionMatrix::num2ShortID(int num, std::vector<char> &IDChars, int IDWidth) {
 
 	std::vector<char> ID(IDWidth);
 	int i;
@@ -184,7 +185,7 @@ std::string ConfusionMatrix::num2ShortID(int num, std::vector<char> &IDChars, in
 		ID[i] = ' ';
 	}
 
-	return std::string(ID.begin(),ID.end());
+	return string(ID.begin(),ID.end());
 }
 
 
@@ -199,7 +200,7 @@ int ConfusionMatrix::getRowDimension() {
 int ConfusionMatrix::getColumnDimension() {
 	return getColumnDimension();
 }
-std::vector<std::vector<double>> ConfusionMatrix::getArray() {
+double_2D_array ConfusionMatrix::getArray() {
   return getArray();
 }
 

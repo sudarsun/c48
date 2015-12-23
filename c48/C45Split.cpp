@@ -11,21 +11,16 @@ InfoGainSplitCrit *C45Split::infoGainCrit = new InfoGainSplitCrit();
 GainRatioSplitCrit *C45Split::gainRatioCrit = new GainRatioSplitCrit();
 
 C45Split::C45Split(int attIndex, int minNoObj, double sumOfWeights, bool useMDLcorrection) :
-	mAttIndex(attIndex), mMinNoObj(minNoObj), mUseMDLcorrection(useMDLcorrection), mSumOfWeights(sumOfWeights)
+	mAttIndex(attIndex), // Get index of attribute to split on.
+	mMinNoObj(minNoObj), // Set minimum number of objects.
+	mUseMDLcorrection(useMDLcorrection), // Whether to use the MDL correction for numeric attributes
+	mSumOfWeights(sumOfWeights) // Set the sum of the weights
 {
-
-	// Get index of attribute to split on.
-
-	// Set minimum number of objects.
-
-	// Set the sum of the weights
-
-	// Whether to use the MDL correction for numeric attributes
+	
 }
 
 void C45Split::buildClassifier(Instances trainInstances)
 {
-
 	// Initialize the remaining instance variables.
 	mNumSubsets = 0;
 	mSplitPoint = std::numeric_limits<double>::max();
@@ -65,7 +60,7 @@ double C45Split::classProb(int classIndex, Instance *instance, int theSubset)
 
 	if (theSubset <= -1)
 	{
-		std::vector<double> _weights = weights(instance);
+		double_array _weights = weights(instance);
 		if (_weights.empty())
 		{
 			return mDistribution->prob(classIndex);
@@ -254,63 +249,32 @@ double C45Split::infoGain()
 	return mInfoGain;
 }
 
-std::string C45Split::leftSide(Instances *data)
+string C45Split::leftSide(Instances *data)
 {
 
 	return data->attribute(mAttIndex)->name();
 }
 
-std::string C45Split::rightSide(int index, Instances *data)
+string C45Split::rightSide(int index, Instances *data)
 {
 
-	std::string text;
+	string text;
 
 	text = "";
 	if (data->attribute(mAttIndex)->isNominal())
 	{
-		text.append(std::string(" = ") + data->attribute(mAttIndex)->value(index));
+		text.append(string(" = ") + data->attribute(mAttIndex)->value(index));
 	}
 	else if (index == 0)
 	{
-		text.append(std::string(" <= ") + Utils::doubleToString(mSplitPoint, 6));
+		text.append(string(" <= ") + Utils::doubleToString(mSplitPoint, 6));
 	}
 	else
 	{
-		text.append(std::string(" > ") + Utils::doubleToString(mSplitPoint, 6));
+		text.append(string(" > ") + Utils::doubleToString(mSplitPoint, 6));
 	}
 
 	return text;
-}
-
-std::string C45Split::sourceExpression(int index, Instances *data)
-{
-
-	std::string expr;
-	if (index < 0)
-	{
-		return std::string("i[") + std::to_string(mAttIndex) + std::string("] == null");
-	}
-	if (data->attribute(mAttIndex)->isNominal())
-	{
-		expr = "i[";
-		expr.append(std::to_string(mAttIndex)).append("]");
-		expr.append(".equals(\"").append(data->attribute(mAttIndex)->value(index)).append("\")");
-	}
-	else
-	{
-		expr = "((Double) i[";
-		expr.append(std::to_string(mAttIndex)).append("])");
-		if (index == 0)
-		{
-			expr.append(".doubleValue() <= ").append(std::to_string(mSplitPoint));
-		}
-		else
-		{
-			expr.append(".doubleValue() > ").append(std::to_string(mSplitPoint));
-		}
-	}
-
-	return expr;
 }
 
 void C45Split::setSplitPoint(Instances *allInstances)
@@ -339,10 +303,10 @@ void C45Split::setSplitPoint(Instances *allInstances)
 	}
 }
 
-std::vector<std::vector<double>> C45Split::minsAndMaxs(Instances *data, std::vector<std::vector<double>> &minsAndMaxs, int index)
+double_2D_array C45Split::minsAndMaxs(Instances *data, double_2D_array &minsAndMaxs, int index)
 {
 
-	std::vector<std::vector<double>> newMinsAndMaxs(data->numAttributes(), std::vector<double>(2, 0));
+	double_2D_array newMinsAndMaxs(data->numAttributes(), double_array(2, 0));
 
 	for (int i = 0; i < data->numAttributes(); i++)
 	{
@@ -380,15 +344,15 @@ void C45Split::resetDistribution(Instances *data)
 	mDistribution = newD;
 }
 
-std::vector<double> C45Split::weights(Instance *instance)
+double_array C45Split::weights(Instance *instance)
 {
 
-	std::vector<double> weights;
+	double_array weights;
 	int i;
 
 	if (instance->isMissing(mAttIndex))
 	{
-		weights = std::vector<double>(mNumSubsets);
+		weights = double_array(mNumSubsets);
 		for (i = 0; i < mNumSubsets; i++)
 		{
 			weights[i] = mDistribution->perBag(i) / mDistribution->total();

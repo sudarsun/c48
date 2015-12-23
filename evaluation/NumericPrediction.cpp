@@ -4,11 +4,11 @@ NumericPrediction::NumericPrediction(double actual, double predicted) : NumericP
 }
 
 NumericPrediction::NumericPrediction(double actual, double predicted, double weight) {
-	std::vector<std::vector<double>> value(0, std::vector<double>());
+	double_2D_array value(0, double_array());
 	NumericPrediction(actual, predicted, weight, value);
 }
 
-NumericPrediction::NumericPrediction(double actual, double predicted, double weight, std::vector<std::vector<double>> &predInt) {
+NumericPrediction::NumericPrediction(double actual, double predicted, double weight, double_2D_array &predInt) {
 
 	mActual = actual;
 	mPredicted = predicted;
@@ -35,16 +35,16 @@ double NumericPrediction::error() {
 	return mPredicted - mActual;
 }
 
-void NumericPrediction::setPredictionIntervals(std::vector<std::vector<double>> &predInt) {
+void NumericPrediction::setPredictionIntervals(double_2D_array &predInt) {
 	mPredictionIntervals = predInt;
 }
 
-std::vector<std::vector<double>> NumericPrediction::predictionIntervals() {
+double_2D_array NumericPrediction::predictionIntervals() {
 	return mPredictionIntervals;
 }
 
-std::string NumericPrediction::toString() {
-	std::string desc = "";
+string NumericPrediction::toString() {
+	string desc = "";
 	desc.append("NUM: ").append(std::to_string(actual())).append(" ").append(std::to_string(predicted()));
 	desc.append(" ").append(std::to_string(weight()));
 

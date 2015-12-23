@@ -15,29 +15,30 @@ class NominalAttributeInfo : public AttributeInfo
 {
 
     /// <summary>
-    /// The attribute's values. </summary>
+    /// The attribute's values.
+	/// </summary>
 protected:
-    std::vector<std::string> mValues; // @ spec_public @
+    string_array mValues;
 
     /// <summary>
     /// Mapping of values to indices. </summary>
-    std::unordered_map<std::string, int> mHashtable;
+    std::unordered_map<string, int> mHashtable;
 
     /// <summary>
     /// Constructs the info based on argument.
     /// </summary>
 public:
-    NominalAttributeInfo( std::vector<std::string> &attributeValues, const std::string &attributeName);
-    int getAttributeIndex(const std::string key);
+    NominalAttributeInfo( string_array &attributeValues, const string &attributeName);
+    int getAttributeIndex(const string key);
     size_t getSize(void);
     size_t getHashTableSize(void);
-    void setHashTable(std::unordered_map<std::string, int> hashtable);
-    std::unordered_map<std::string, int> getHashTable();
-    std::string getAttributeValue(const int key);
-    void setAttributeValue(const int key, std::string value);
-    void addAttribute(const std::string key, int index, bool overwriteIndex = false);
+    void setHashTable(std::unordered_map<string, int> hashtable);
+    std::unordered_map<string, int> getHashTable();
+    string getAttributeValue(const int key);
+    void setAttributeValue(const int key, string value);
+    void addAttribute(const string key, int index, bool overwriteIndex = false);
     void clearAttribute(void);
-    void removeHashTable(std::string key);
+    void removeHashTable(string key);
     void removeIndex(const int index);
 };
 

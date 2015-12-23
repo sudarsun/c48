@@ -21,14 +21,14 @@ class ConfusionMatrix : public Matrix {
 	/// <summary>
 	/// Stores the names of the classes </summary>
 protected:
-	std::vector<std::string> mClassNames;
+	string_array mClassNames;
 
 	/// <summary>
 	/// Creates the confusion matrix with the given class names.
 	/// </summary>
 	/// <param name="classNames"> an array containing the names the classes. </param>
 public:
-	ConfusionMatrix(std::vector<std::string> classNames);
+	ConfusionMatrix(string_array classNames);
 
 	/// <summary>
 	/// Makes a copy of this ConfusionMatrix after applying the supplied CostMatrix
@@ -52,7 +52,7 @@ public:
 	/// </summary>
 	/// <param name="index"> the index of the class. </param>
 	/// <returns> the class name. </returns>
-	virtual std::string className(int index);
+	virtual string className(int index);
 
 	/// <summary>
 	/// Includes a prediction in the confusion matrix.
@@ -110,7 +110,7 @@ public:
 	/// Calls toString() with a default title.
 	/// </summary>
 	/// <returns> the confusion matrix as a string </returns>
-	virtual std::string toString();
+	virtual string toString();
 
 	/// <summary>
 	/// Outputs the performance statistics as a classification confusion matrix.
@@ -118,7 +118,7 @@ public:
 	/// </summary>
 	/// <param name="title"> the title for the confusion matrix </param>
 	/// <returns> the confusion matrix as a String </returns>
-	virtual std::string toString(const std::string &title);
+	virtual string toString(const string &title);
 
 	/// <summary>
 	/// Method for generating indices for the confusion matrix.
@@ -132,7 +132,7 @@ public:
   /// <param name="j">    Column index. </param>
   /// <returns>     A(i,j) </returns>
   /// <exception cref="ArrayIndexOutOfBoundsException"> </exception>
-    virtual double get( int i, int j );
+  virtual double get( int i, int j );
 
   /**
   * Set a single element.
@@ -146,14 +146,13 @@ public:
   /// <summary>
   /// Access the internal two-dimensional array. </summary>
   /// <returns>     Pointer to the two-dimensional array of matrix elements. </returns>
-  virtual std::vector<std::vector<double>> getArray();
+  virtual double_2D_array getArray();
 
   virtual int getRowDimension();
 
   virtual int getColumnDimension();
-  
 private:
-	static std::string num2ShortID(int num, std::vector<char> &IDChars, int IDWidth);
+	static string num2ShortID(int num, std::vector<char> &IDChars, int IDWidth);
 
 };
 

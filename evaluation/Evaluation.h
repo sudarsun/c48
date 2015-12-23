@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "core/Typedefs.h"
 
 // Forward class declarations:
 class CostMatrix;
@@ -26,13 +27,13 @@ public:
 
 	void setPriors(Instances train);
 	double evaluateModelOnceAndRecordPrediction(Classifier * classifier, Instance * instance);
-	double evaluateModelOnceAndRecordPrediction(std::vector<double> dist, Instance *instance);
-	std::string toSummaryString(bool printComplexityStatistics);
-	std::string toSummaryString(std::string title,  bool printComplexityStatistics);
-	std::string toClassDetailsString(std::string title);
-	std::string toClassDetailsString();
-	std::string  toMatrixString();
-	std::string  toMatrixString(std::string title);
+	double evaluateModelOnceAndRecordPrediction(double_array dist, Instance *instance);
+	string toSummaryString(bool printComplexityStatistics);
+	string toSummaryString(string title,  bool printComplexityStatistics);
+	string toClassDetailsString(string title);
+	string toClassDetailsString();
+	string  toMatrixString();
+	string  toMatrixString(string title);
 	const double correct();
 	const double totalCost();
 	const double avgCost();
@@ -104,11 +105,11 @@ protected:
 
 	/// <summary>
 	/// Array for storing the confusion matrix. </summary>
-	std::vector<std::vector<double>> mConfusionMatrix;
+	double_2D_array mConfusionMatrix;
 
 	/// <summary>
 	/// The names of the classes. </summary>
-	std::vector<std::string> mClassNames;
+	string_array mClassNames;
 
 	/// <summary>
 	/// Is the class nominal or numeric? </summary>
@@ -116,7 +117,7 @@ protected:
 
 	/// <summary>
 	/// The prior probabilities of the classes. </summary>
-	std::vector<double> mClassPriors;
+	double_array mClassPriors;
 
 	/// <summary>
 	/// The sum of counts for priors. </summary>
@@ -180,7 +181,7 @@ protected:
 
 	/// <summary>
 	/// Cumulative margin distribution. </summary>
-	std::vector<double> mMarginCounts;
+	double_array mMarginCounts;
 
 	/// <summary>
 	/// Number of non-missing class training instances seen. </summary>
@@ -188,11 +189,11 @@ protected:
 
 	/// <summary>
 	/// Array containing all numeric training class values seen. </summary>
-	std::vector<double> mTrainClassVals;
+	double_array mTrainClassVals;
 
 	/// <summary>
 	/// Array containing all numeric training class weights. </summary>
-	std::vector<double> mTrainClassWeights;
+	double_array mTrainClassWeights;
 
 	/// <summary>
 	/// Numeric class estimator for prior. </summary>
@@ -268,22 +269,22 @@ protected:
 
 	/// <summary>
 	/// The list of metrics to display in the output </summary>
-	std::vector<std::string> mmetricsToDisplay;
+	string_array mmetricsToDisplay;
 
-	//double evaluationForSingleInstance(std::vector<double> dist, Instance *instance, bool storePredictions);
+	//double evaluationForSingleInstance(double_array dist, Instance *instance, bool storePredictions);
 	//double evaluationForSingleInstance(Classifier *classifier, Instance *instance, bool storePredictions);
-	void updateStatsForClassifier(std::vector<double> predictedDistribution, Instance *instance);
+	void updateStatsForClassifier(double_array predictedDistribution, Instance *instance);
 	void updateStatsForPredictor(double predictedValue, Instance *instance);
-	void updateMargins(std::vector<double> predictedDistribution, int actualClass, double weight);
-	void updateNumericScores(std::vector<double> predicted, std::vector<double> actual, double weight);
-	std::vector<double> makeDistribution(double predictedClass);
+	void updateMargins(double_array predictedDistribution, int actualClass, double weight);
+	void updateNumericScores(double_array predicted, double_array actual, double weight);
+	double_array makeDistribution(double predictedClass);
 	/// <summary>
 	/// Sets up the priors for numeric class attributes from the training class
 	/// values that have been seen so far.
 	/// </summary>
 	void setNumericPriorsFromBuffer();
 	void addNumericTrainClass(double classValue, double weight);
-	std::string num2ShortID(int num, std::vector<char> &IDChars, int IDWidth);
+	string num2ShortID(int num, std::vector<char> &IDChars, int IDWidth);
 
 };
 

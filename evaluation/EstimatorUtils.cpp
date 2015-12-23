@@ -35,7 +35,7 @@ double EstimatorUtils::findMinDistance( Instances *inst, int attrIndex ) {
   return min;
 }
 
-int EstimatorUtils::getMinMax( Instances *inst, int attrIndex, std::vector<double> &minMax ) {
+int EstimatorUtils::getMinMax( Instances *inst, int attrIndex, double_array &minMax ) {
   double min = std::numeric_limits<double>::quiet_NaN();;
   double max = std::numeric_limits<double>::quiet_NaN();;
   Instance *instance = nullptr;
@@ -119,16 +119,16 @@ Instances *EstimatorUtils::getInstancesFromValue( Instances *data, int index, do
   return workData;
 }
 
-std::string EstimatorUtils::cutpointsToString( std::vector<double> &cutPoints, std::vector<bool> &cutAndLeft ) {
-   std::string text = "";
+string EstimatorUtils::cutpointsToString( double_array &cutPoints, bool_array &cutAndLeft ) {
+   string text = "";
   if( cutPoints.empty() ) {
     text.append( "\n# no cutpoints found - attribute \n" );
   } else {
-    text.append( std::string( "\n#* " ) + std::to_string(cutPoints.size()) + std::string(" cutpoint(s) -\n") );
+    text.append( string( "\n#* " ) + std::to_string(cutPoints.size()) + string(" cutpoint(s) -\n") );
     for( int i = 0; i < cutPoints.size(); i++ ) {
-  text.append( std::string( "# " ) + std::to_string(cutPoints[i]) + std::string( " " ) );
+  text.append( string( "# " ) + std::to_string(cutPoints[i]) + string( " " ) );
 
-  text.append( std::string( "" ) + std::to_string( cutAndLeft[i] ) + std::string( "\n" ) );
+  text.append( string( "" ) + std::to_string( cutAndLeft[i] ) + string( "\n" ) );
     }
     text.append( "# end\n" );
   }

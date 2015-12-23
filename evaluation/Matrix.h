@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "core/Typedefs.h"
 
 class Matrix {
 
@@ -11,15 +12,14 @@ class Matrix {
   /// @serial internal array storage.
   /// </summary>
   protected:
-  std::vector<std::vector<double>> A;
+  double_2D_array A;
 
   /// <summary>
   /// Row and column dimensions.
   /// @serial row dimension.
   /// @serial column dimension.
   /// </summary>
-  int m = 0;
-  int n = 0;
+  int m = 0, n = 0;
 
   /// <summary>
   /// Construct an m-by-n matrix of zeros. </summary>
@@ -40,14 +40,14 @@ class Matrix {
   /// <param name="A">    Two-dimensional array of doubles. </param>
   /// <exception cref="IllegalArgumentException"> All rows must have the same length </exception>
   /// <seealso cref=        #constructWithCopy </seealso>
-  Matrix( std::vector<std::vector<double>> &A );
+  Matrix( double_2D_array &A );
 
   /// <summary>
   /// Construct a matrix quickly without checking arguments. </summary>
   /// <param name="A">    Two-dimensional array of doubles. </param>
   /// <param name="m">    Number of rows. </param>
   /// <param name="n">    Number of colums. </param>
-  Matrix( std::vector<std::vector<double>> &A, int m, int n );
+  Matrix( double_2D_array &A, int m, int n );
 
   /// <summary>
   /// Construct a matrix from a one-dimensional packed array </summary>
@@ -55,7 +55,7 @@ class Matrix {
   /// Fortran). </param>
   /// <param name="m">    Number of rows. </param>
   /// <exception cref="IllegalArgumentException"> Array length must be a multiple of m. </exception>
-  Matrix( std::vector<double> &vals, int m );
+  Matrix( double_array &vals, int m );
 
   /// <summary>
   /// Get a single element. </summary>
@@ -77,14 +77,14 @@ class Matrix {
   /// <summary>
   /// Access the internal two-dimensional array. </summary>
   /// <returns>     Pointer to the two-dimensional array of matrix elements. </returns>
-  virtual std::vector<std::vector<double>> getArray();
+  virtual double_2D_array getArray();
 
   /// <summary>
   /// Converts a matrix to a string.
   /// (FracPete: taken from old weka.core.Matrix class)
   /// </summary>
   /// <returns>    the converted string </returns>
-  virtual std::string toString();
+  virtual string toString();
 
   virtual int getRowDimension();
 

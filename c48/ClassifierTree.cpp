@@ -123,9 +123,9 @@ void ClassifierTree::cleanup(Instances *justHeaderInfo) {
 	}
 }
 
-std::vector<double> ClassifierTree::distributionForInstance(Instance *instance, bool useLaplace) {
+double_array ClassifierTree::distributionForInstance(Instance *instance, bool useLaplace) {
 
-	std::vector<double> doubles(instance->numClasses());
+	double_array doubles(instance->numClasses());
 
 	for (int i = 0; i < doubles.size(); i++) {
 		if (!useLaplace) {
@@ -183,10 +183,10 @@ int ClassifierTree::numNodes() {
 	return no;
 }
 
-std::string ClassifierTree::toString(bool isDumpTree) {
+string ClassifierTree::toString(bool isDumpTree) {
 
 	try {
-		std::string text = "";
+		string text = "";
 		if (isDumpTree)
 		{
 			if (mIsLeaf) {
@@ -197,8 +197,8 @@ std::string ClassifierTree::toString(bool isDumpTree) {
 				dumpTree(0, text);
 			}
 		}
-		text.append(std::string("\n\nNumber of Leaves  : \t") + std::to_string(numLeaves()) + std::string("\n"));
-		text.append(std::string("\nSize of the tree : \t") + std::to_string(numNodes()) + std::string("\n"));
+		text.append(string("\n\nNumber of Leaves  : \t") + std::to_string(numLeaves()) + string("\n"));
+		text.append(string("\nSize of the tree : \t") + std::to_string(numNodes()) + string("\n"));
 
 		return text;
 	}
@@ -223,7 +223,7 @@ ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) {
 	return newTree;
 }
 
-void ClassifierTree::dumpTree(int depth, std::string &text) {
+void ClassifierTree::dumpTree(int depth, string &text) {
 
 	int i, j;
 
@@ -255,7 +255,7 @@ double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, doubl
 	else {
 		int treeIndex = localModel()->whichSubset(instance);
 		if (treeIndex == -1) {
-			std::vector<double> weights = localModel()->weights(instance);
+			double_array weights = localModel()->weights(instance);
 			for (int i = 0; i < mSons.size(); i++) {
 				if (!son(i)->mIsEmpty) {
 					prob += son(i)->getProbsLaplace(classIndex, instance, weights[i] * weight);
@@ -284,7 +284,7 @@ double ClassifierTree::getProbs(int classIndex, Instance *instance, double weigh
 	else {
 		int treeIndex = localModel()->whichSubset(instance);
 		if (treeIndex == -1) {
-			std::vector<double> weights = localModel()->weights(instance);
+			double_array weights = localModel()->weights(instance);
 			for (int i = 0; i < mSons.size(); i++) {
 				if (!son(i)->mIsEmpty) {
 					prob += son(i)->getProbs(classIndex, instance, weights[i] * weight);
@@ -313,10 +313,10 @@ ClassifierTree *ClassifierTree::son(int index) {
 	return mSons[index];
 }
 
-std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) {
+double_array ClassifierTree::getMembershipValues(Instance *instance) {
 
 	// Set up array for membership values
-	std::vector<double> a(numNodes());
+	double_array a(numNodes());
 
 	// Initialize queues
 	std::list<double> queueOfWeights;
@@ -342,7 +342,7 @@ std::vector<double> ClassifierTree::getMembershipValues(Instance *instance) {
 		int treeIndex = node->localModel()->whichSubset(instance);
 
 		// Space for weight distribution
-		std::vector<double> weights(node->mSons.size());
+		double_array weights(node->mSons.size());
 
 		// Check for missing value
 		if (treeIndex == -1) {

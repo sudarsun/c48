@@ -3,10 +3,11 @@
 
 #include <vector>
 #include <string>
+#include "Typedefs.h"
 
-static std::string dummy = "";
-static std::vector<std::string> _dummy = {};
-static std::vector<bool> dummy_bool = {};
+static string dummy = "";
+static string_array _dummy = {};
+static bool_array dummy_bool = {};
 
 enum ATTRIBUTE {
 	NUMERIC = 0,
@@ -14,12 +15,6 @@ enum ATTRIBUTE {
 	STRING,
 	DATE,
 	RELATIONAL
-};
-
-enum ATTRIBUTE_ORDERING {
-	ORDERING_SYMBOLIC = 0,
-	ORDERING_ORDERED,
-	ORDERING_MODULO
 };
 
 static const char* TRIMCHARS = " \t\n\r\f\v.";

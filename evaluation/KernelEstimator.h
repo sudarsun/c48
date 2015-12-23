@@ -18,11 +18,11 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
   /// <summary>
   /// Vector containing all of the values seen </summary>
   private:
-  std::vector<double> m_Values;
+  double_array m_Values;
 
   /// <summary>
   /// Vector containing the associated weights </summary>
-  std::vector<double> m_Weights;
+  double_array m_Weights;
 
   /// <summary>
   /// Number of values stored in m_Weights and m_Values so far </summary>
@@ -92,7 +92,7 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
 
   /// <summary>
   /// Display a representation of this estimator </summary>
-  virtual std::string toString();
+  virtual string toString();
 
   /// <summary>
   /// Return the number of kernels in this kernel estimator
@@ -104,13 +104,13 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
   /// Return the means of the kernels.
   /// </summary>
   /// <returns> the means of the kernels </returns>
-  virtual std::vector<double> getMeans();
+  virtual double_array getMeans();
 
   /// <summary>
   /// Return the weights of the kernels.
   /// </summary>
   /// <returns> the weights of the kernels </returns>
-  virtual std::vector<double> getWeights();
+  virtual double_array getWeights();
 
   /// <summary>
   /// Return the precision of this kernel estimator.

@@ -49,7 +49,7 @@ double ClassifierSplitModel::classProb(int classIndex, Instance *instance, int t
 	}
 	else
 	{
-		std::vector<double> _weights = weights(instance);
+		double_array _weights = weights(instance);
 		if (_weights.empty())
 		{
 			return mDistribution->prob(classIndex);
@@ -75,7 +75,7 @@ double ClassifierSplitModel::classProbLaplace(int classIndex, Instance *instance
 	}
 	else
 	{
-		std::vector<double> _weights = weights(instance);
+		double_array _weights = weights(instance);
 		if (_weights.empty())
 		{
 			return mDistribution->laplaceProb(classIndex);
@@ -104,40 +104,34 @@ Distribution *ClassifierSplitModel::distribution()
 	return mDistribution;
 }
 
-std::string ClassifierSplitModel::dumpLabel(int index, Instances *data)
+string ClassifierSplitModel::dumpLabel(int index, Instances *data)
 {
 
-	std::string text;
+	string text;
 
 	text = "";
 	text.append((static_cast<Instances*>(data))->classAttribute()->value(mDistribution->maxClass(index)));
-	text.append(std::string(" (") + std::to_string(Utils::roundDouble(mDistribution->perBag(index), 2)));
+	text.append(string(" (") + std::to_string(Utils::roundDouble(mDistribution->perBag(index), 2)));
 	if (Utils::gr(mDistribution->numIncorrect(index), 0))
 	{
-		text.append(std::string("/") + std::to_string(Utils::roundDouble(mDistribution->numIncorrect(index), 2)));
+		text.append(string("/") + std::to_string(Utils::roundDouble(mDistribution->numIncorrect(index), 2)));
 	}
 	text.append(")");
 
 	return text;
 }
 
-std::string ClassifierSplitModel::sourceClass(int index, Instances *data)
-{
-	std::cout << "sourceClass";
-	return std::to_string(mDistribution->maxClass(index));
-}
-
-std::string ClassifierSplitModel::dumpModel(Instances *data)
+string ClassifierSplitModel::dumpModel(Instances *data)
 {
 
-	std::string text;
+	string text;
 	int i;
 
 	text = "";
 	for (i = 0; i < mNumSubsets; i++)
 	{
-		text.append(leftSide(data) + rightSide(i, data) + std::string(": "));
-		text.append(dumpLabel(i, data) + std::string("\n"));
+		text.append(leftSide(data) + rightSide(i, data) + string(": "));
+		text.append(dumpLabel(i, data) + string("\n"));
 	}
 	return text;
 }
@@ -174,7 +168,7 @@ std::vector<Instances*> ClassifierSplitModel::split(Instances *data)
 		}
 		else
 		{
-			std::vector<double> _weights = weights(instance);
+			double_array _weights = weights(instance);
 			for (int j = 0; j < mNumSubsets; j++)
 			{
 				if (Utils::gr(_weights[j], 0))

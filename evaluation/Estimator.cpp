@@ -12,7 +12,7 @@ void Estimator::addValue( double data, double weight ) {
 }
 
 void Estimator::addValues( Instances *data, int attrIndex ) {
-  std::vector<double> minMax( 2 );
+  double_array minMax( 2 );
 
   try {
     EstimatorUtils::getMinMax( data, attrIndex, minMax );
@@ -43,7 +43,7 @@ void Estimator::addValues( Instances *data, int attrIndex, int classIndex, int c
   m_noClass = false;
 
   // find the minimal and the maximal value
-  std::vector<double> minMax( 2 );
+  double_array minMax( 2 );
 
   try {
     EstimatorUtils::getMinMax( data, attrIndex, minMax );

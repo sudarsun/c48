@@ -8,7 +8,7 @@
 
 double AbstractClassifier::classifyInstance(Instance *instance) {
 
-	std::vector<double> dist = distributionForInstance(instance);
+	double_array dist = distributionForInstance(instance);
 	if (dist.empty()) {
 		throw "Null distribution predicted";
 	}
@@ -38,9 +38,9 @@ double AbstractClassifier::classifyInstance(Instance *instance) {
 	}
 }
 
-std::vector<double> AbstractClassifier::distributionForInstance(Instance *instance) {
+double_array AbstractClassifier::distributionForInstance(Instance *instance) {
 
-	std::vector<double> dist(instance->numClasses());
+	double_array dist(instance->numClasses());
 	switch (instance->classAttribute()->type()) {
 	case ATTRIBUTE::NOMINAL: {
 		double classification = classifyInstance(instance);
@@ -63,46 +63,36 @@ std::vector<double> AbstractClassifier::distributionForInstance(Instance *instan
 
 bool AbstractClassifier::getDebug() {
 
-	return m_Debug;
+	return mDebug;
 }
 
 void AbstractClassifier::setDebug(bool debug) {
 
-	m_Debug = debug;
-}
-
-bool AbstractClassifier::getDoNotCheckCapabilities() {
-
-	return m_DoNotCheckCapabilities;
-}
-
-void AbstractClassifier::setDoNotCheckCapabilities(bool doNotCheckCapabilities) {
-
-	m_DoNotCheckCapabilities = doNotCheckCapabilities;
+	mDebug = debug;
 }
 
 int AbstractClassifier::getNumDecimalPlaces() {
-	return m_numDecimalPlaces;
+	return mNumDecimalPlaces;
 }
 
 void AbstractClassifier::setNumDecimalPlaces(int num) {
-	m_numDecimalPlaces = num;
+	mNumDecimalPlaces = num;
 }
 
-void AbstractClassifier::setBatchSize(const std::string &size) {
-	m_BatchSize = size;
+void AbstractClassifier::setBatchSize(const string &size) {
+	mBatchSize = size;
 }
 
-std::string AbstractClassifier::getBatchSize() {
-	return m_BatchSize;
+string AbstractClassifier::getBatchSize() {
+	return mBatchSize;
 }
 
 bool AbstractClassifier::implementsMoreEfficientBatchPrediction() {
 	return false;
 }
 
-std::vector<std::vector<double>> AbstractClassifier::distributionsForInstances(Instances *batch) {
-	std::vector<std::vector<double>> batchPreds(batch->numInstances());
+double_2D_array AbstractClassifier::distributionsForInstances(Instances *batch) {
+	double_2D_array batchPreds(batch->numInstances());
 	for (int i = 0; i < batch->numInstances(); i++) {
 		batchPreds[i] = distributionForInstance(batch->instance(i));
 	}

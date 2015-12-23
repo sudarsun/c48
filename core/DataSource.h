@@ -7,7 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-
+#include "Typedefs.h"
 class Instance;
 class Instances;
 
@@ -26,8 +26,8 @@ private:
 	/// <summary>
 	/// Describe variable <code>msourceFileData</code> here.
 	/// </summary>
-	std::string mSourceFileData;
-	std::string mSourceFileName;
+	string mSourceFileData;
+	string mSourceFileName;
 
 	/// <summary>
 	/// Input stream for names file
@@ -42,7 +42,7 @@ private:
 	/// <summary>
 	/// Holds the filestem.
 	/// </summary>
-	std::string mFileStem;
+	string mFileStem;
 
 	/// <summary>
 	/// Number of attributes in the data (including ignore and label attributes).
@@ -53,18 +53,18 @@ private:
 	/// Which attributes are ignore or label. These are *not* included in the arff
 	/// representation.
 	/// </summary>
-	std::vector<bool> mIgnore;
+	bool_array mIgnore;
 
 	Instances *mStructure;
 
 	Instances *getInstance(std::fstream&);
-	Instance *getInstance(std::string);
-	std::string removeTrailingPeriod(std::string &val);
+	Instance *getInstance(string);
+	string removeTrailingPeriod(string &val);
 	void readHeader(std::fstream&);
 
 public:
 
-	DataSource(const std::string &location);
+	DataSource(const string &location);
 	Instances *getDataSet(int classIndex);
 	Instances *getStructure(int classIndex);
 	bool hasElements(Instances *structure);

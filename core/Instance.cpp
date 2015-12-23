@@ -8,7 +8,7 @@ Instance::Instance(Instance *instance)
 	mWeight = instance->mWeight;
 	mDataset = instance->mDataset;
 }
-Instance::Instance(double weight, std::vector<double> attValues)
+Instance::Instance(double weight, double_array attValues)
 {
 	mAttValues = attValues;
 	mWeight = weight;
@@ -45,9 +45,9 @@ void Instance::freshAttributeVector()
 {
 	mAttValues = toDoubleArray();
 }
-std::vector<double> Instance::toDoubleArray()
+double_array Instance::toDoubleArray()
 {
-	std::vector<double> newValues(mAttValues.size());
+	double_array newValues(mAttValues.size());
 	std::copy(std::begin(mAttValues), std::end(mAttValues), std::begin(newValues));
 	return newValues;
 }
@@ -68,7 +68,7 @@ void Instance::setMissing(int attIndex)
 	setValue(attIndex, Utils::missingValue());
 }
 
-void Instance::setValue(int attIndex, const std::string &value)
+void Instance::setValue(int attIndex, const string &value)
 {
 	int valIndex;
 

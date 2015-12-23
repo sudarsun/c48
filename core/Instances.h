@@ -19,7 +19,7 @@ class Instances
 
 protected:
 
-	std::string mRelationName;
+	string mRelationName;
 
 	/// <summary>
 	/// The attribute information. </summary>
@@ -27,7 +27,7 @@ protected:
 
 	/// <summary>
 	/// A map to quickly find attribute indices based on their names. </summary>
-	std::unordered_map<std::string, int> mNamesToAttributeIndices;
+	std::unordered_map<string, int> mNamesToAttributeIndices;
 
 	/// <summary>
 	/// The instances. </summary>
@@ -40,11 +40,11 @@ protected:
 	void initialize(Instances *dataset, int capacity);
 
 public:
-	Instances(const std::string &name, std::vector<Attribute*> &attInfo, int capacity);
+	Instances(const string &name, std::vector<Attribute*> &attInfo, int capacity);
 	Instances(Instances *dataset);
 	Instances(Instances *dataset, int capacity);
 	Attribute *attribute(int index);
-	Attribute *attribute(const std::string &name);
+	Attribute *attribute(const string &name);
 	int numAttributes();
 	int classIndex();
 	bool add(Instance *instance);
@@ -67,9 +67,9 @@ public:
 	double sumOfWeights();
 	Instances *trainCV(int numFolds, int numFold);
 	Instances *testCV(int numFolds, int numFold);
-	std::string getRelationName();
-	void setRelationName(const std::string name);
-	std::vector<double> attributeToDoubleArray(int index);
+	string getRelationName();
+	void setRelationName(const string name);
+	double_array attributeToDoubleArray(int index);
 
 };
 
