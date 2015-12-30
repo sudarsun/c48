@@ -2,15 +2,16 @@
 #define _ATTRIBUTEINFO_
 
 #include "Typedefs.h"
-/// <summary>
-/// Interface implemented by classes that store information for a particular attribute
-/// type.
-/// </summary>
+
+/**
+ * Interface implemented by classes that store information for a particular attribute
+ * type.
+ */
 class AttributeInfo
 {
-
-	/// <summary>
-	/// Methods depend on the information that is stored. </summary>
+    /**
+     * Methods depend on the information that is stored.
+     */
 };
 
-#endif	// _ATTRIBUTEINFO_
+#endif    // _ATTRIBUTEINFO_

@@ -18,31 +18,31 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
   /// <summary>
   /// Vector containing all of the values seen </summary>
   private:
-  double_array m_Values;
+  double_array mValues;
 
   /// <summary>
   /// Vector containing the associated weights </summary>
-  double_array m_Weights;
+  double_array mWeights;
 
   /// <summary>
-  /// Number of values stored in m_Weights and m_Values so far </summary>
-  int m_NumValues = 0;
+  /// Number of values stored in mWeights and mValues so far </summary>
+  int mNumValues = 0;
 
   /// <summary>
   /// The sum of the weights so far </summary>
-  double m_SumOfWeights = 0;
+  double mSumOfWeights = 0;
 
   /// <summary>
   /// The standard deviation </summary>
-  double m_StandardDev = 0;
+  double mStandardDev = 0;
 
   /// <summary>
   /// The precision of data values </summary>
-  double m_Precision = 0;
+  double mPrecision = 0;
 
   /// <summary>
   /// Whether we can optimise the kernel summation </summary>
-  bool m_AllWeightsOne = false;
+  bool mAllWeightsOne;
 
   /// <summary>
   /// Maximum percentage error permitted in probability calculations </summary>
@@ -127,4 +127,4 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
 };
 
 
-#endif	//#ifndef _KERNELESTIMATOR_
+#endif    //#ifndef _KERNELESTIMATOR_

@@ -8,174 +8,150 @@
 // Forward class declarations:
 class ConfusionMatrix;
 
-/// <summary>
-/// Encapsulates performance functions for two-class problems.
-/// 
-/// </summary>
+/**
+ * Encapsulates performance functions for two-class problems.
+ *
+ */
 class TwoClassStats {
 
-  /// <summary>
-  /// The names used when converting this object to a confusion matrix </summary>
-  private:
-  static string_array CATEGORY_NAMES;
+private:
 
-  /// <summary>
-  /// Pos predicted as pos </summary>
-  double mTruePos = 0;
+    /** The names used when converting this object to a confusion matrix */
+    static string_array CATEGORY_NAMES;
 
-  /// <summary>
-  /// Neg predicted as pos </summary>
-  double mFalsePos = 0;
+    /** Pos predicted as pos */
+    double mTruePos = 0;
 
-  /// <summary>
-  /// Neg predicted as neg </summary>
-  double mTrueNeg = 0;
+    /** Neg predicted as pos */
+    double mFalsePos = 0;
 
-  /// <summary>
-  /// Pos predicted as neg </summary>
-  double mFalseNeg = 0;
+    /** Neg predicted as neg */
+    double mTrueNeg = 0;
 
-  /// <summary>
-  /// Creates the TwoClassStats with the given initial performance values.
-  /// </summary>
-  /// <param name="tp"> the number of correctly classified positives </param>
-  /// <param name="fp"> the number of incorrectly classified negatives </param>
-  /// <param name="tn"> the number of correctly classified negatives </param>
-  /// <param name="fn"> the number of incorrectly classified positives </param>
-  public:
-  TwoClassStats( double tp, double fp, double tn, double fn );
+    /** Pos predicted as neg */
+    double mFalseNeg = 0;
 
-  /// <summary>
-  /// Sets the number of positive instances predicted as positive </summary>
-  virtual void setTruePositive( double tp );
+public:
 
-  /// <summary>
-  /// Sets the number of negative instances predicted as positive </summary>
-  virtual void setFalsePositive( double fp );
+    /**
+     * Creates the TwoClassStats with the given initial performance values.
+     *
+     * @param tp the number of correctly classified positives
+     * @param fp the number of incorrectly classified negatives
+     * @param tn the number of correctly classified negatives
+     * @param fn the number of incorrectly classified positives
+     */
+    TwoClassStats(double tp, double fp, double tn, double fn);
 
-  /// <summary>
-  /// Sets the number of negative instances predicted as negative </summary>
-  virtual void setTrueNegative( double tn );
+    /** Sets the number of positive instances predicted as positive */
+    virtual void setTruePositive(double tp);
 
-  /// <summary>
-  /// Sets the number of positive instances predicted as negative </summary>
-  virtual void setFalseNegative( double fn );
+    /** Sets the number of negative instances predicted as positive */
+    virtual void setFalsePositive(double fp);
 
-  /// <summary>
-  /// Gets the number of positive instances predicted as positive </summary>
-  virtual double getTruePositive();
+    /** Sets the number of negative instances predicted as negative */
+    virtual void setTrueNegative(double tn);
 
-  /// <summary>
-  /// Gets the number of negative instances predicted as positive </summary>
-  virtual double getFalsePositive();
+    /** Sets the number of positive instances predicted as negative */
+    virtual void setFalseNegative(double fn);
 
-  /// <summary>
-  /// Gets the number of negative instances predicted as negative </summary>
-  virtual double getTrueNegative();
+    /** Gets the number of positive instances predicted as positive  */
+    virtual double getTruePositive();
 
-  /// <summary>
-  /// Gets the number of positive instances predicted as negative </summary>
-  virtual double getFalseNegative();
+    /** Gets the number of negative instances predicted as positive  */
+    virtual double getFalsePositive();
 
-  /// <summary>
-  /// Calculate the true positive rate. 
-  /// This is defined as<para>
-  /// <pre>
-  /// correctly classified positives
-  /// ------------------------------
-  ///       total positives
-  /// </pre>
-  /// 
-  /// </para>
-  /// </summary>
-  /// <returns> the true positive rate </returns>
-  virtual double getTruePositiveRate();
+    /** Gets the number of negative instances predicted as negative  */
+    virtual double getTrueNegative();
 
-  /// <summary>
-  /// Calculate the false positive rate. 
-  /// This is defined as<para>
-  /// <pre>
-  /// incorrectly classified negatives
-  /// --------------------------------
-  ///        total negatives
-  /// </pre>
-  /// 
-  /// </para>
-  /// </summary>
-  /// <returns> the false positive rate </returns>
-  virtual double getFalsePositiveRate();
+    /** Gets the number of positive instances predicted as negative  */
+    virtual double getFalseNegative();
 
-  /// <summary>
-  /// Calculate the precision. 
-  /// This is defined as<para>
-  /// <pre>
-  /// correctly classified positives
-  /// ------------------------------
-  ///  total predicted as positive
-  /// </pre>
-  /// 
-  /// </para>
-  /// </summary>
-  /// <returns> the precision </returns>
-  virtual double getPrecision();
+    /**
+     * Calculate the true positive rate. This is defined as
+     *
+     * correctly classified positives
+     * ------------------------------
+     *       total positives
+     *
+     *
+     * @return the true positive rate
+     */
+    virtual double getTruePositiveRate();
 
-  /// <summary>
-  /// Calculate the recall. 
-  /// This is defined as<para>
-  /// <pre>
-  /// correctly classified positives
-  /// ------------------------------
-  ///       total positives
-  /// </para>
-  /// </pre><para>
-  /// (Which is also the same as the truePositiveRate.)
-  /// 
-  /// </para>
-  /// </summary>
-  /// <returns> the recall </returns>
-  virtual double getRecall();
+    /**
+    * Calculate the false positive rate. This is defined as
+    *
+    * incorrectly classified negatives
+    * --------------------------------
+    *        total negatives
+    *
+    * @return the false positive rate
+    */
+    virtual double getFalsePositiveRate();
 
-  /// <summary>
-  /// Calculate the F-Measure. 
-  /// This is defined as<para>
-  /// <pre>
-  /// 2 * recall * precision
-  /// ----------------------
-  ///   recall + precision
-  /// </pre>
-  /// 
-  /// </para>
-  /// </summary>
-  /// <returns> the F-Measure </returns>
-  virtual double getFMeasure();
+    /**
+     * Calculate the precision. This is defined as
+     *
+     * correctly classified positives
+     * ------------------------------
+     *  total predicted as positive
+     *
+     * @return the precision
+     */
+    virtual double getPrecision();
 
-  /// <summary>
-  /// Calculate the fallout. 
-  /// This is defined as<para>
-  /// <pre>
-  /// incorrectly classified negatives
-  /// --------------------------------
-  ///   total predicted as positive
-  /// </pre>
-  /// 
-  /// </para>
-  /// </summary>
-  /// <returns> the fallout </returns>
-  virtual double getFallout();
+    /**
+     * Calculate the recall. This is defined as
+     * <p>
+     *
+     * <pre>
+     * correctly classified positives
+     * ------------------------------
+     *       total positives
+     * (Which is also the same as the truePositiveRate.)
+     *
+     * @return the recall
+     */
+    virtual double getRecall();
 
-  /// <summary>
-  /// Generates a <code>ConfusionMatrix</code> representing the current
-  /// two-class statistics, using class names "negative" and "positive".
-  /// </summary>
-  /// <returns> a <code>ConfusionMatrix</code>. </returns>
-  virtual ConfusionMatrix *getConfusionMatrix();
+    /**
+     * Calculate the F-Measure. This is defined as
+     *
+     * 2 * recall * precision
+     * ----------------------
+     *   recall + precision
+     *
+     *
+     * @return the F-Measure
+     */
+    virtual double getFMeasure();
 
-  /// <summary>
-  /// Returns a string containing the various performance measures
-  /// for the current object 
-  /// </summary>
-  virtual string toString();
+    /**
+     * Calculate the fallout. This is defined as
+     *
+     * incorrectly classified negatives
+     * --------------------------------
+     *   total predicted as positive
+     *
+     * @return the fallout
+     */
+    virtual double getFallout();
+
+    /**
+     * Generates a <code>ConfusionMatrix</code> representing the current two-class
+     * statistics, using class names "negative" and "positive".
+     *
+     * @return a <code>ConfusionMatrix</code>.
+     */
+    virtual ConfusionMatrix *getConfusionMatrix();
+
+    /**
+     * Returns a string containing the various performance measures for the
+     * current object
+     */
+    virtual string toString();
 };
 
 
-#endif	//#ifndef _TWOCLASSSTATS_
+#endif    //#ifndef _TWOCLASSSTATS_

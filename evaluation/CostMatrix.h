@@ -9,180 +9,168 @@
 
 // Forward class declarations:
 class Instances;
-class InstanceExpression;
 class Instance;
 
-/// <summary>
-/// Class for storing and manipulating a misclassification cost matrix. The
-/// element at position i,j in the matrix is the penalty for classifying an
-/// instance of class j as class i. Cost values can be fixed or computed on a
-/// per-instance basis (cost sensitive evaluation only) from the value of an
-/// attribute or a mathematical expression involving attribute(s).<br>
-/// <br>
-/// 
-/// Values in an instance are accessed in an expression by prefixing their index
-/// (starting at 1) with the character 'a'. E.g.<br>
-/// <br>
-/// 
-/// a1 &circ; 2 * a5 / log(a7 * 4.0) <br>
-/// 
-/// Supported opperators: +, -, *, /, ^, log, abs, cos, exp, sqrt, floor, ceil,
-/// rint, tan, sin, (, ).
-/// 
-/// </summary>
+/**
+ * Class for storing and manipulating a misclassification cost matrix. The
+ * element at position i,j in the matrix is the penalty for classifying an
+ * instance of class j as class i. Cost values can be fixed or computed on a
+ * per-instance basis (cost sensitive evaluation only) from the value of an
+ * attribute or a mathematical expression involving attribute(s).<br>
+ * <br>
+ *
+ * Values in an instance are accessed in an expression by prefixing their index
+ * (starting at 1) with the character 'a'. E.g.<br>
+ * <br>
+ *
+ * a1 &circ; 2 * a5 / log(a7 * 4.0) <br>
+ *
+ * Supported opperators: +, -, *, /, ^, log, abs, cos, exp, sqrt, floor, ceil,
+ * rint, tan, sin, (, ).
+ *
+ *
+ *
+ */
 class CostMatrix {
 
-  private:
-  int m_size = 0;
+protected:
 
-  bool replaceStrings(Instances *dataset);
-  /// <summary>
-  /// [rows][columns] </summary>
-  protected:
-  std::vector<std::vector<void*>> m_matrix;
+    /** [rows][columns] */
+    std::vector<std::vector<void*>> mMatrix;
 
-  /// <summary>
-  /// The deafult file extension for cost matrix files </summary>
-  public:
-  static string FILE_EXTENSION;
+public:
 
-  /// <summary>
-  /// Creates a default cost matrix of a particular size. All diagonal values
-  /// will be 0 and all non-diagonal values 1.
-  /// </summary>
-  /// <param name="numOfClasses"> the number of classes that the cost matrix holds. </param>
-  CostMatrix( int numOfClasses );
+    /** The deafult file extension for cost matrix files */
+    static string FILE_EXTENSION;
 
-  /// <summary>
-  /// Creates a cost matrix that is a copy of another.
-  /// </summary>
-  /// <param name="toCopy"> the matrix to copy. </param>
-  CostMatrix( CostMatrix *toCopy );
+    /**
+      * Creates a default cost matrix of a particular size. All diagonal values
+      * will be 0 and all non-diagonal values 1.
+      *
+      * @param numOfClasses the number of classes that the cost matrix holds.
+      */
+    CostMatrix(int numOfClasses);
 
-  /// <summary>
-  /// Initializes the matrix
-  /// </summary>
-  void initialize();
+    /**
+     * Creates a cost matrix that is a copy of another.
+     *
+     * @param toCopy the matrix to copy.
+     */
+    CostMatrix(CostMatrix *toCopy);
 
-  /// <summary>
-  /// The number of rows (and columns)
-  /// </summary>
-  /// <returns> the size of the matrix </returns>
-  int size();
+    /**
+     * Initializes the matrix
+     */
+    void initialize();
 
-  /// <summary>
-  /// Same as size
-  /// </summary>
-  /// <returns> the number of columns </returns>
-  int numColumns();
+    /**
+     * The number of rows (and columns)
+     *
+     */
+    int size();
 
-  /// <summary>
-  /// Same as size
-  /// </summary>
-  /// <returns> the number of rows </returns>
-  int numRows();
+    /**
+     * Same as size
+     *
+     * @return the number of columns
+     */
+    int numColumns();
 
-  /// <summary>
-  /// Applies the cost matrix to a set of instances. If a random number generator
-  /// is supplied the instances will be resampled, otherwise they will be
-  /// rewighted. Adapted from code once sitting in Instances.java
-  /// </summary>
-  /// <param name="data"> the instances to reweight. </param>
-  /// <param name="random"> a random number generator for resampling, if null then
-  ///          instances are rewighted. </param>
-  /// <returns> a new dataset reflecting the cost of misclassification. </returns>
-  /// <exception cref="Exception"> if the data has no class or the matrix in
-  ///              inappropriate. </exception>
- 
-  //Instances *applyCostMatrix( Instances *data, Random *random );
+    /**
+    * Same as size
+    *
+    * @return the number of rows
+    */
+    int numRows();
 
-  /// <summary>
-  /// Calculates the expected misclassification cost for each possible class
-  /// value, given class probability estimates.
-  /// </summary>
-  /// <param name="classProbs"> the class probability estimates. </param>
-  /// <returns> the expected costs. </returns>
-  /// <exception cref="Exception"> if the wrong number of class probabilities is
-  ///              supplied. </exception>
-  double_array expectedCosts( double_array &classProbs );
+    /**
+     * Calculates the expected misclassification cost for each possible class
+     * value, given class probability estimates.
+     *
+     * @param classProbs the class probability estimates.
+     * @return the expected costs.
+     * @exception Exception if the wrong number of class probabilities is
+     *              supplied.
+     */
+    double_array expectedCosts(double_array &classProbs);
 
-  /// <summary>
-  /// Calculates the expected misclassification cost for each possible class
-  /// value, given class probability estimates.
-  /// </summary>
-  /// <param name="classProbs"> the class probability estimates. </param>
-  /// <param name="inst"> the current instance for which the class probabilites apply. Is
-  ///          used for computing any non-fixed cost values. </param>
-  /// <returns> the expected costs. </returns>
-  /// <exception cref="Exception"> if something goes wrong </exception>
-  //double_array expectedCosts( double_array &classProbs, Instance *inst );
+    /**
+     * Gets the maximum cost for a particular class value.
+     *
+     * @param classVal the class value.
+     * @return the maximum cost.
+     * @exception Exception if cost matrix contains non-fixed costs
+     */
+    double getMaxCost(int classVal);
 
-  /// <summary>
-  /// Gets the maximum cost for a particular class value.
-  /// </summary>
-  /// <param name="classVal"> the class value. </param>
-  /// <returns> the maximum cost. </returns>
-  /// <exception cref="Exception"> if cost matrix contains non-fixed costs </exception>
-  double getMaxCost( int classVal );
+    /**
+     * Gets the maximum cost for a particular class value.
+     *
+     * @param classVal the class value.
+     * @return the maximum cost.
+     * @exception Exception if cost matrix contains non-fixed costs
+     */
+    double getMaxCost(int classVal, Instance *inst);
 
-  /// <summary>
-  /// Gets the maximum cost for a particular class value.
-  /// </summary>
-  /// <param name="classVal"> the class value. </param>
-  /// <returns> the maximum cost. </returns>
-  /// <exception cref="Exception"> if cost matrix contains non-fixed costs </exception>
-  double getMaxCost( int classVal, Instance *inst );
+    /**
+     * Normalizes the matrix so that the diagonal contains zeros.
+     *
+     */
+    void normalize();
 
-  /// <summary>
-  /// Normalizes the matrix so that the diagonal contains zeros.
-  /// 
-  /// </summary>
-  void normalize();
+    /**
+    * Set the value of a particular cell in the matrix
+    *
+    * @param rowIndex the row
+    * @param columnIndex the column
+    * @param value the value to set
+    */
+    void setCell(int rowIndex, int columnIndex, void *value);
 
-  /// <summary>
-  /// Set the value of a particular cell in the matrix
-  /// </summary>
-  /// <param name="rowIndex"> the row </param>
-  /// <param name="columnIndex"> the column </param>
-  /// <param name="value"> the value to set </param>
-  void setCell( int rowIndex, int columnIndex, void *value );
+    /**
+    * Return the contents of a particular cell. Note: this method returns the
+    * Object stored at a particular cell.
+    *
+    * @param rowIndex the row
+    * @param columnIndex the column
+    * @return the value at the cell
+    */
+    void *getCell(int rowIndex, int columnIndex);
 
-  /// <summary>
-  /// Return the contents of a particular cell. Note: this method returns the
-  /// Object stored at a particular cell.
-  /// </summary>
-  /// <param name="rowIndex"> the row </param>
-  /// <param name="columnIndex"> the column </param>
-  /// <returns> the value at the cell </returns>
-  void *getCell( int rowIndex, int columnIndex );
+    /**
+     * Return the value of a cell as a double (for legacy code)
+     *
+     * @param rowIndex the row
+     * @param columnIndex the column
+     * @return the value at a particular cell as a double
+     * @exception Exception if the value is not a double
+     */
+    double getElement(int rowIndex, int columnIndex);
 
-  /// <summary>
-  /// Return the value of a cell as a double (for legacy code)
-  /// </summary>
-  /// <param name="rowIndex"> the row </param>
-  /// <param name="columnIndex"> the column </param>
-  /// <returns> the value at a particular cell as a double </returns>
-  /// <exception cref="Exception"> if the value is not a double </exception>
-  double getElement( int rowIndex, int columnIndex );
+    /**
+     * Return the value of a cell as a double. Computes the value for non-fixed
+     * costs using the supplied Instance
+     *
+     * @param rowIndex the row
+     * @param columnIndex the column
+     * @return the value from a particular cell
+     * @exception Exception if something goes wrong
+     */
+    double getElement(int rowIndex, int columnIndex, Instance *inst);
 
-  /// <summary>
-  /// Return the value of a cell as a double. Computes the value for non-fixed
-  /// costs using the supplied Instance
-  /// </summary>
-  /// <param name="rowIndex"> the row </param>
-  /// <param name="columnIndex"> the column </param>
-  /// <returns> the value from a particular cell </returns>
-  /// <exception cref="Exception"> if something goes wrong </exception>
-  double getElement( int rowIndex, int columnIndex, Instance *inst );
+    /**
+    * Set the value of a cell as a double
+    *
+    * @param rowIndex the row
+    * @param columnIndex the column
+    * @param value the value (double) to set
+    */
+    void setElement(int rowIndex, int columnIndex, double value);
 
-  /// <summary>
-  /// Set the value of a cell as a double
-  /// </summary>
-  /// <param name="rowIndex"> the row </param>
-  /// <param name="columnIndex"> the column </param>
-  /// <param name="value"> the value (double) to set </param>
-  void setElement( int rowIndex, int columnIndex, double value );
+private:
+    int mSize = 0;
+    bool replaceStrings(Instances *dataset);
 };
 
 
-#endif	// _COSTMATRIX_
+#endif    // _COSTMATRIX_

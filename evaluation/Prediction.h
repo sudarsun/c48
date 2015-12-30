@@ -4,46 +4,48 @@
 #include <limits>
 #include "core/Typedefs.h"
 
-/// <summary>
-/// Encapsulates a single evaluatable prediction: the predicted value plus the
-/// actual class value.
-///
-/// </summary>
+/**
+ * Encapsulates a single evaluatable prediction: the predicted value plus the
+ * actual class value.
+ *
+ */
 class Prediction {
 
-  /// <summary>
-  /// Constant representing a missing value. This should have the same value
-  /// as weka.core.Instance.MISSING_VALUE
-  /// </summary>
-  public:
+public:
+    /**
+     * Constant representing a missing value.
+     */
 #ifdef _WIN64
-	  static const double MISSING_VALUE;
+    static const double MISSING_VALUE;
 #else
-  static constexpr double MISSING_VALUE = std::numeric_limits<double>::quiet_NaN();
+    static constexpr double MISSING_VALUE = std::numeric_limits<double>::quiet_NaN();
 #endif
 
-  /// <summary>
-  /// Gets the weight assigned to this prediction. This is typically the weight
-  /// of the test instance the prediction was made for.
-  /// </summary>
-  /// <returns> the weight assigned to this prediction. </returns>
-  virtual double weight() = 0;
+    /**
+    * Gets the weight assigned to this prediction. This is typically the weight
+    * of the test instance the prediction was made for.
+    *
+    * @return the weight assigned to this prediction.
+    */
+    virtual double weight() = 0;
 
-  /// <summary>
-  /// Gets the actual class value.
-  /// </summary>
-  /// <returns> the actual class value, or MISSING_VALUE if no
-  /// prediction was made.   </returns>
-  virtual double actual() = 0;
+    /**
+     * Gets the actual class value.
+     *
+     * @return the actual class value, or MISSING_VALUE if no
+     * prediction was made.
+     */
+    virtual double actual() = 0;
 
-  /// <summary>
-  /// Gets the predicted class value.
-  /// </summary>
-  /// <returns> the predicted class value, or MISSING_VALUE if no
-  /// prediction was made.   </returns>
-  virtual double predicted() = 0;
+    /**
+     * Gets the predicted class value.
+     *
+     * @return the predicted class value, or MISSING_VALUE if no
+     * prediction was made.
+     */
+    virtual double predicted() = 0;
 
 };
 
 
-#endif	//#ifndef _PREDICTION_
+#endif    //#ifndef _PREDICTION_

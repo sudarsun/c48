@@ -3,47 +3,53 @@
 
 #include <string>
 #include <vector>
+#include <core/Typedefs.h>
 
-/// <summary>
-/// Interface to something that can produce predictions in a batch manner 
-/// when presented with a set of Instances.
-/// 
-/// @author Mark Hall (mhall{[at]}pentaho{[dot]}com)
-/// @version $Revision: 11958 $
-/// </summary>
+class Instances;
+
+/**
+ * Interface to something that can produce predictions in a batch manner
+ * when presented with a set of Instances.
+ *
+ */
 class BatchPredictor {
 
-	/// <summary>
-	/// Set the batch size to use. The implementer will  
-	/// prefer (but not necessarily expect) this many instances 
-	/// to be passed in to distributionsForInstances().
-	/// </summary>
-	/// <param name="size"> the batch size to use </param>
 public:
-	virtual void setBatchSize(const string &size) = 0;
+    /**
+     * Set the batch size to use. The implementer will
+     * prefer (but not necessarily expect) this many instances
+     * to be passed in to distributionsForInstances().
+     *
+     * @param size the batch size to use
+     */
+    virtual void setBatchSize(const string &size) = 0;
 
-	/// <summary>
-	/// Get the batch size to use. The implementer will prefer (but not  
-	/// necessarily expect) this many instances to be passed in to 
-	/// distributionsForInstances(). Allows the preferred batch size 
-	/// to be encapsulated with the client.
-	/// </summary>
-	/// <returns> the batch size to use </returns>
-	virtual string getBatchSize() = 0;
+    /**
+     * Get the batch size to use. The implementer will prefer (but not
+     * necessarily expect) this many instances to be passed in to
+     * distributionsForInstances(). Allows the preferred batch size
+     * to be encapsulated with the client.
+     *
+     * @return the batch size to use
+     */
+    virtual string getBatchSize() = 0;
 
-	/// <summary>
-	/// Batch scoring method
-	/// </summary>
-	/// <param name="insts"> the instances to get predictions for </param>
-	/// <returns> an array of probability distributions, one for each instance </returns>
-	/// <exception cref="Exception"> if a problem occurs </exception>
-	virtual double_2D_array distributionsForInstances(Instances *insts) = 0;
+    /**
+     * Batch scoring method
+     *
+     * @param insts the instances to get predictions for
+     * @return an array of probability distributions, one for each instance
+     *
+     * @exception Exception if a problem occurs
+     */
+    virtual double_2D_array distributionsForInstances(Instances *insts) = 0;
 
-	/// <summary>
-	/// Returns true if this BatchPredictor can generate batch predictions
-	/// in an efficient manner.
-	/// </summary>
-	/// <returns> true if batch predictions can be generated efficiently </returns>
-	virtual bool implementsMoreEfficientBatchPrediction() = 0;
+    /**
+     * Returns true if this BatchPredictor can generate batch predictions
+     * in an efficient manner.
+     *
+     * @return true if batch predictions can be generated efficiently
+     */
+    virtual bool implementsMoreEfficientBatchPrediction() = 0;
 };
-#endif	//#ifndef _BATCHPREDICTOR_
+#endif    //#ifndef _BATCHPREDICTOR_

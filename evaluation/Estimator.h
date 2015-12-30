@@ -10,147 +10,134 @@
 //Forward class declarations:
 class Instances;
 
-/// 
-/// <summary>
-/// Abstract class for all estimators.
-/// 
-/// </summary>
+/**
+ * Abstract class for all estimators.
+ */
 class Estimator {
 
+protected:
 
-  /// <summary>
-  /// Debugging mode </summary>
-  private:
-  bool m_Debug = false;
+    /** The class value index is > -1 if subset is taken with specific class value only*/
+    double mClassValueIndex = -1.0;
 
-  /// <summary>
-  /// The class value index is > -1 if subset is taken with specific class value only </summary>
-  protected:
-  double m_classValueIndex = -1.0;
+    /** set if class is not important */
+    bool mNoClass = true;
 
-  /// <summary>
-  /// set if class is not important </summary>
-  bool m_noClass = true;
-
-  /// <summary>
-  /// Class to support a building process of an estimator.
-  /// </summary>
-  private:
-  class Builder {
-
-    /// <summary>
-    /// instances of the builder </summary>
 public:
-    Instances *m_instances = nullptr;
+    /**
+     * Add a new data value to the current estimator.
+     *
+     * @param data the new data value
+     * @param weight the weight assigned to the data value
+     */
+    virtual void addValue(double data, double weight);
 
-    /// <summary>
-    /// attribute index of the builder </summary>
-    int m_attrIndex = -1;
+    /**
+     * Initialize the estimator with a new dataset.
+     * Finds min and max first.
+     *
+     * @param data the dataset used to build this estimator
+     * @param attrIndex attribute the estimator is for
+     * @exception Exception if building of estimator goes wrong
+     */
+    virtual void addValues(Instances *data, int attrIndex);
 
-    /// <summary>
-    /// class index of the builder, only relevant if class value index is set </summary>
-    int m_classIndex = -1;
+    /**
+     * Initialize the estimator with all values of one attribute of a dataset.
+     * Some estimator might ignore the min and max values.
+     *
+     * @param data the dataset used to build this estimator
+     * @param attrIndex attribute the estimator is for
+     * @param min minimal border of range
+     * @param max maximal border of range
+     * @param factor number of instances has been reduced to that factor
+     * @exception Exception if building of estimator goes wrong
+     */
+    virtual void addValues(Instances *data, int attrIndex, double min, double max, double factor);
 
-    /// <summary>
-    /// class value index of the builder </summary>
-    int m_classValueIndex = -1;
+    /**
+    * Initialize the estimator using only the instance of one class.
+    * It is using the values of one attribute only.
+    *
+    * @param data the dataset used to build this estimator
+    * @param attrIndex attribute the estimator is for
+    * @param classIndex index of the class attribute
+    * @param classValue the class value
+    * @exception Exception if building of estimator goes wrong
+    */
+    virtual void addValues(Instances *data, int attrIndex, int classIndex, int classValue);
 
-  };
+    /**
+     * Initialize the estimator using only the instance of one class.
+     * It is using the values of one attribute only.
+     *
+     * @param data the dataset used to build this estimator
+     * @param attrIndex attribute the estimator is for
+     * @param classIndex index of the class attribute
+     * @param classValue the class value
+     * @param min minimal value of this attribute
+     * @param max maximal value of this attribute
+     * @exception Exception if building of estimator goes wrong
+     */
+    virtual void addValues(Instances *data, int attrIndex, int classIndex, int classValue, double min, double max);
 
-  /// <summary>
-  /// Add a new data value to the current estimator.
-  /// </summary>
-  /// <param name="data"> the new data value </param>
-  /// <param name="weight"> the weight assigned to the data value  </param>
-  public:
-  virtual void addValue( double data, double weight );
+    /**
+     * Get a probability estimate for a value.
+     *
+     * @param data the value to estimate the probability of
+     * @return the estimated probability of the supplied value
+     */
+    virtual double getProbability(double data) = 0;
 
-  /// <summary>
-  /// Initialize the estimator with a new dataset.
-  /// Finds min and max first.
-  /// </summary>
-  /// <param name="data"> the dataset used to build this estimator </param>
-  /// <param name="attrIndex"> attribute the estimator is for </param>
-  /// <exception cref="Exception"> if building of estimator goes wrong </exception>
-  virtual void addValues( Instances *data, int attrIndex );
+    /**
+      * Set debugging mode.
+      *
+      * @param debug true if debug output should be printed
+      */
+    virtual void setDebug(bool debug);
 
-  /// <summary>
-  /// Initialize the estimator with all values of one attribute of a dataset. 
-  /// Some estimator might ignore the min and max values.
-  /// </summary>
-  /// <param name="data"> the dataset used to build this estimator </param>
-  /// <param name="attrIndex"> attribute the estimator is for </param>
-  /// <param name="min"> minimal border of range </param>
-  /// <param name="max"> maximal border of range </param>
-  /// <param name="factor"> number of instances has been reduced to that factor </param>
-  /// <exception cref="Exception"> if building of estimator goes wrong </exception>
-  virtual void addValues( Instances *data, int attrIndex, double min, double max, double factor );
+    /**
+     * Get whether debugging is turned on.
+     *
+     * @return true if debugging output is on
+     */
+    virtual bool getDebug();
 
-  /// <summary>
-  /// Initialize the estimator using only the instance of one class. 
-  /// It is using the values of one attribute only.
-  /// </summary>
-  /// <param name="data"> the dataset used to build this estimator </param>
-  /// <param name="attrIndex"> attribute the estimator is for </param>
-  /// <param name="classIndex"> index of the class attribute </param>
-  /// <param name="classValue"> the class value </param>
-  /// <exception cref="Exception"> if building of estimator goes wrong </exception>
-  virtual void addValues( Instances *data, int attrIndex, int classIndex, int classValue );
+private:
 
-  /// <summary>
-  /// Initialize the estimator using only the instance of one class. 
-  /// It is using the values of one attribute only.
-  /// </summary>
-  /// <param name="data"> the dataset used to build this estimator </param>
-  /// <param name="attrIndex"> attribute the estimator is for </param>
-  /// <param name="classIndex"> index of the class attribute </param>
-  /// <param name="classValue"> the class value </param>
-  /// <param name="min"> minimal value of this attribute </param>
-  /// <param name="max"> maximal value of this attribute </param>
-  /// <exception cref="Exception"> if building of estimator goes wrong </exception>
-  virtual void addValues( Instances *data, int attrIndex, int classIndex, int classValue, double min, double max );
+    /** Debugging mode */
+    bool mDebug;
 
+    /**
+     * Returns a dataset that contains all instances of a certain class value.
+     *
+     * @param data dataset to select the instances from
+     * @param attrIndex index of the relevant attribute
+     * @param classIndex index of the class attribute
+     * @param classValue the relevant class value
+     * @return a dataset with only
+     */
+    double getInstancesFromClass(Instances *data, int attrIndex, int classIndex, double classValue, Instances *workData);
 
-  /// <summary>
-  /// Returns a dataset that contains all instances of a certain class value.
-  /// </summary>
-  /// <param name="data"> dataset to select the instances from </param>
-  /// <param name="attrIndex"> index of the relevant attribute </param>
-  /// <param name="classIndex"> index of the class attribute </param>
-  /// <param name="classValue"> the relevant class value </param>
-  /// <returns> a dataset with only  </returns>
-  private:
-  double getInstancesFromClass( Instances *data, int attrIndex, int classIndex, double classValue, Instances *workData );
+    /**
+     * Class to support a building process of an estimator.
+     */
+    class Builder {
 
-  /// <summary>
-  /// Get a probability estimate for a value.
-  /// </summary>
-  /// <param name="data"> the value to estimate the probability of </param>
-  /// <returns> the estimated probability of the supplied value </returns>
-  public:
-  virtual double getProbability( double data ) = 0;
+    public:
+        /** instances of the builder */
+        Instances *mInstances = nullptr;
 
-  /// <summary>
-  /// Tests whether the current estimation object is equal to another
-  /// estimation object
-  /// </summary>
-  /// <param name="obj"> the object to compare against </param>
-  /// <returns> true if the two objects are equal </returns>
-  virtual bool equals( void *obj );
+        /** attribute index of the builder */
+        int mAttrIndex = -1;
 
- /// <summary>
- /// Set debugging mode.
- /// </summary>
- /// <param name="debug"> true if debug output should be printed </param>
-  virtual void setDebug( bool debug );
+        /** class index of the builder, only relevant if class value index is set*/
+        int mClassIndex = -1;
 
-  /// <summary>
-  /// Get whether debugging is turned on.
-  /// </summary>
-  /// <returns> true if debugging output is on </returns>
-  virtual bool getDebug();
-
+        /** class value index of the builder */
+        int mClassValueIndex = -1;
+    };
 
 };
 
-#endif	//#ifndef _ESTIMATOR_
+#endif    //#ifndef _ESTIMATOR_

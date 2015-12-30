@@ -11,149 +11,173 @@
 class CostMatrix;
 class TwoClassStats;
 
-/// <summary>
-/// Cells of this matrix correspond to counts of the number (or weight) of
-/// predictions for each actual value / predicted value combination.
-/// 
-/// </summary>
+/**
+ * Cells of this matrix correspond to counts of the number (or weight) of
+ * predictions for each actual value / predicted value combination.
+ *
+ */
 class ConfusionMatrix : public Matrix {
 
-	/// <summary>
-	/// Stores the names of the classes </summary>
 protected:
-	string_array mClassNames;
+    /** Stores the names of the classes */
+    string_array mClassNames;
 
-	/// <summary>
-	/// Creates the confusion matrix with the given class names.
-	/// </summary>
-	/// <param name="classNames"> an array containing the names the classes. </param>
 public:
-	ConfusionMatrix(string_array classNames);
+    /**
+     * Creates the confusion matrix with the given class names.
+     *
+     * @param classNames an array containing the names the classes.
+     */
+    ConfusionMatrix(string_array classNames);
 
-	/// <summary>
-	/// Makes a copy of this ConfusionMatrix after applying the supplied CostMatrix
-	/// to the cells. The resulting ConfusionMatrix can be used to get
-	/// cost-weighted statistics.
-	/// </summary>
-	/// <param name="costs"> the CostMatrix. </param>
-	/// <returns> a ConfusionMatrix that has had costs applied. </returns>
-	/// <exception cref="Exception"> if the CostMatrix is not of the same size as this
-	///              ConfusionMatrix. </exception>
-	virtual ConfusionMatrix *makeWeighted(CostMatrix *costs);
+    /**
+    * Makes a copy of this ConfusionMatrix after applying the supplied CostMatrix
+    * to the cells. The resulting ConfusionMatrix can be used to get
+    * cost-weighted statistics.
+    *
+    * @param costs the CostMatrix.
+    * @return a ConfusionMatrix that has had costs applied.
+    * @exception Exception if the CostMatrix is not of the same size as this
+    *              ConfusionMatrix.
+    */
+    virtual ConfusionMatrix *makeWeighted(CostMatrix *costs);
 
-	/// <summary>
-	/// Gets the number of classes.
-	/// </summary>
-	/// <returns> the number of classes </returns>
-	virtual int size();
+    /**
+    * Gets the number of classes.
+    *
+    * @return the number of classes
+    */
+    virtual int size();
 
-	/// <summary>
-	/// Gets the name of one of the classes.
-	/// </summary>
-	/// <param name="index"> the index of the class. </param>
-	/// <returns> the class name. </returns>
-	virtual string className(int index);
+    /**
+     * Gets the name of one of the classes.
+     *
+     * @param index the index of the class.
+     * @return the class name.
+     */
+    virtual string className(int index);
 
-	/// <summary>
-	/// Includes a prediction in the confusion matrix.
-	/// </summary>
-	/// <param name="pred"> the NominalPrediction to include </param>
-	/// <exception cref="Exception"> if no valid prediction was made (i.e. unclassified). </exception>
-	virtual void addPrediction(NominalPrediction *pred);
+    /**
+    * Includes a prediction in the confusion matrix.
+    *
+    * @param pred the NominalPrediction to include
+    * @exception Exception if no valid prediction was made (i.e. unclassified).
+    */
+    virtual void addPrediction(NominalPrediction *pred);
 
-	/// <summary>
-	/// Includes a whole bunch of predictions in the confusion matrix.
-	/// </summary>
-	/// <param name="predictions"> a FastVector containing the NominalPredictions to
-	///          include </param>
-	/// <exception cref="Exception"> if no valid prediction was made (i.e. unclassified). </exception>
-	virtual void addPredictions(std::vector<Prediction*> &predictions);
+    /**
+     * Includes a whole bunch of predictions in the confusion matrix.
+     *
+     * @param predictions a FastVector containing the NominalPredictions to
+     *          include
+     * @exception Exception if no valid prediction was made (i.e. unclassified).
+     */
+    virtual void addPredictions(std::vector<Prediction*> &predictions);
 
-	/// <summary>
-	/// Gets the performance with respect to one of the classes as a TwoClassStats
-	/// object.
-	/// </summary>
-	/// <param name="classIndex"> the index of the class of interest. </param>
-	/// <returns> the generated TwoClassStats object. </returns>
-	virtual TwoClassStats *getTwoClassStats(int classIndex);
+    /**
+      * Gets the performance with respect to one of the classes as a TwoClassStats
+      * object.
+      *
+      * @param classIndex the index of the class of interest.
+      * @return the generated TwoClassStats object.
+      */
+    virtual TwoClassStats *getTwoClassStats(int classIndex);
 
-	/// <summary>
-	/// Gets the number of correct classifications (that is, for which a correct
-	/// prediction was made). (Actually the sum of the weights of these
-	/// classifications)
-	/// </summary>
-	/// <returns> the number of correct classifications </returns>
-	virtual double correct();
+    /**
+     * Gets the number of correct classifications (that is, for which a correct
+     * prediction was made). (Actually the sum of the weights of these
+     * classifications)
+     *
+     * @return the number of correct classifications
+     */
+    virtual double correct();
 
-	/// <summary>
-	/// Gets the number of incorrect classifications (that is, for which an
-	/// incorrect prediction was made). (Actually the sum of the weights of these
-	/// classifications)
-	/// </summary>
-	/// <returns> the number of incorrect classifications </returns>
-	virtual double incorrect();
+    /**
+     * Gets the number of incorrect classifications (that is, for which an
+     * incorrect prediction was made). (Actually the sum of the weights of these
+     * classifications)
+     *
+     * @return the number of incorrect classifications
+     */
+    virtual double incorrect();
 
-	/// <summary>
-	/// Gets the number of predictions that were made (actually the sum of the
-	/// weights of predictions where the class value was known).
-	/// </summary>
-	/// <returns> the number of predictions with known class </returns>
-	virtual double total();
+    /**
+     * Gets the number of predictions that were made (actually the sum of the
+     * weights of predictions where the class value was known).
+     *
+     * @return the number of predictions with known class
+     */
+    virtual double total();
 
-	/// <summary>
-	/// Returns the estimated error rate.
-	/// </summary>
-	/// <returns> the estimated error rate (between 0 and 1). </returns>
-	virtual double errorRate();
+    /**
+     * Returns the estimated error rate.
+     *
+     * @return the estimated error rate (between 0 and 1).
+     */
+    virtual double errorRate();
 
-	/// <summary>
-	/// Calls toString() with a default title.
-	/// </summary>
-	/// <returns> the confusion matrix as a string </returns>
-	virtual string toString();
+    /**
+     * Calls toString() with a default title.
+     *
+     * @return the confusion matrix as a string
+     */
+    virtual string toString();
 
-	/// <summary>
-	/// Outputs the performance statistics as a classification confusion matrix.
-	/// For each class value, shows the distribution of predicted class values.
-	/// </summary>
-	/// <param name="title"> the title for the confusion matrix </param>
-	/// <returns> the confusion matrix as a String </returns>
-	virtual string toString(const string &title);
+    /**
+     * Outputs the performance statistics as a classification confusion matrix.
+     * For each class value, shows the distribution of predicted class values.
+     *
+     * @param title the title for the confusion matrix
+     * @return the confusion matrix as a String
+     */
+    virtual string toString(const string &title);
 
-	/// <summary>
-	/// Method for generating indices for the confusion matrix.
-	/// </summary>
-	/// <param name="num"> integer to format </param>
-	/// <returns> the formatted integer as a string </returns>
+    /**
+    * Get a single element.
+    *
+    * @param i Row index.
+    * @param j Column index.
+    * @return A(i,j)
+    * @throws ArrayIndexOutOfBoundsException
+    */
+    virtual double get(int i, int j);
 
-	    /// <summary>
-  /// Get a single element. </summary>
-  /// <param name="i">    Row index. </param>
-  /// <param name="j">    Column index. </param>
-  /// <returns>     A(i,j) </returns>
-  /// <exception cref="ArrayIndexOutOfBoundsException"> </exception>
-  virtual double get( int i, int j );
+    /**
+    * Set a single element.
+    * @param i    Row index.
+    * @param j    Column index.
+    * @param s    A(i,j).
+    * @throws  ArrayIndexOutOfBoundsException
+    */
+    virtual void set(int i, int j, double s);
 
-  /**
-  * Set a single element.
-  * @param i    Row index.
-  * @param j    Column index.
-  * @param s    A(i,j).
-  * @throws  ArrayIndexOutOfBoundsException
-  */
-  virtual void set(int i, int j, double s);
+    /**
+     * Access the internal two-dimensional array.
+     *
+     * @return Pointer to the two-dimensional array of matrix elements.
+     */
+    virtual double_2D_array getArray();
 
-  /// <summary>
-  /// Access the internal two-dimensional array. </summary>
-  /// <returns>     Pointer to the two-dimensional array of matrix elements. </returns>
-  virtual double_2D_array getArray();
+    /**
+     * Get row dimension.
+     *
+     * @return m, the number of rows.
+     *
+     */
+    virtual int getRowDimension();
+    /**
+     * Get column dimension.
+     *
+     * @return n, the number of columns.
+     */
+    virtual int getColumnDimension();
 
-  virtual int getRowDimension();
-
-  virtual int getColumnDimension();
 private:
-	static string num2ShortID(int num, std::vector<char> &IDChars, int IDWidth);
+    /**
+     * Helper method to convert the confusion matrix into string format
+     */
+    static string num2ShortID(int num, char_array &IDChars, int IDWidth);
 
 };
 
-#endif	//#ifndef _CONFUSIONMATRIX_
+#endif    //#ifndef _CONFUSIONMATRIX_

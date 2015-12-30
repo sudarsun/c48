@@ -5,42 +5,29 @@
 #include <cmath>
 #include "Typedefs.h"
 
-/// <summary>
-/// Class implementing some statistical routines for contingency tables.
-/// 
-/// @author Eibe Frank (eibe@cs.waikato.ac.nz)
-/// @version $Revision: 10057 $
-/// </summary>
+/**
+ * Class implementing some statistical routines for contingency tables.
+ *
+ */
 class ContingencyTables {
 
-  /// <summary>
-   /// <summary>
-  /// Cache of integer logs </summary>
-  private:
-  static const double MAX_INT_FOR_CACHE_PLUS_ONE;
-  static double_array INT_N_LOG_N_CACHE;
+private:
 
-  /// <summary>
-  /// Initialize cache </summary>
-//JAVA TO C++ CONVERTER TODO TASK: Static constructors are not available in native C++:
-  ContingencyTables();
+    /** Cache of integer logs */
+    static const double MAX_INT_FOR_CACHE_PLUS_ONE;
+    static double_array INT_N_LOG_N_CACHE;
 
-/// <summary>
-/// Help method for computing entropy.
-/// </summary>
-  public:
-  static double lnFunc( double num );
+    /**
+     * Initialize cache
+     */
+    ContingencyTables();
 
+    /**
+     * Help method for computing entropy.
+     */
+public:
+    static double lnFunc(double num);
 
 };
 
-
-
-
-
-
-
-
-
-
-#endif	//#ifndef _CONTINGENCYTABLES_
+#endif    //#ifndef _CONTINGENCYTABLES_

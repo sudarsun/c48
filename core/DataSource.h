@@ -12,67 +12,127 @@ class Instance;
 class Instances;
 
 
-/// <summary>
-/// Utility routines for the converter package.
-/// </summary>
+/**
+ * Helper class for loading data from files. Reads a file that is C45 format. Can take a filestem or filestem with .names or .data appended.
+ * Assumes that path/&lt;filestem&gt;.names and path/&lt;filestem&gt;.data exist and contain the names and data respectively.
+ */
 class DataSource {
-	/// <summary>
-	/// Helper class for loading data from files. Before the data can be read again, one has to
-	/// call the <code>reset</code> method. The data source can also be initialized
-	/// with an Instances object, in order to provide a unified interface to files
-	/// and already loaded datasets.
-	/// </summary>
+
 private:
-	/// <summary>
-	/// Describe variable <code>msourceFileData</code> here.
-	/// </summary>
-	string mSourceFileData;
-	string mSourceFileName;
 
-	/// <summary>
-	/// Input stream for names file
-	/// </summary>
-	std::fstream mNamesReader;
+    /**
+     * The source filename.
+     */
+    string mSourceFileData;
+    string mSourceFileName;
 
-	/// <summary>
-	/// Input stream for data file
-	/// </summary>
-	std::fstream mDataReader;
+    /**
+     * Input stream for names file
+     */
+    std::fstream mNamesReader;
 
-	/// <summary>
-	/// Holds the filestem.
-	/// </summary>
-	string mFileStem;
+    /**
+     *    Input stream for data file
+     */
+    std::fstream mDataReader;
 
-	/// <summary>
-	/// Number of attributes in the data (including ignore and label attributes).
-	/// </summary>
-	int mNumAttribs;
+    /**
+     * Holds the filestem.
+     */
+    string mFileStem;
 
-	/// <summary>
-	/// Which attributes are ignore or label. These are *not* included in the arff
-	/// representation.
-	/// </summary>
-	bool_array mIgnore;
+    /**
+     * Number of attributes in the data (including ignore and label attributes).
+     */
+    int mNumAttribs;
 
-	Instances *mStructure;
+    /**
+     * Which attributes are ignore or label. These are *not* included in the
+     * arff representation.
+     */
+    bool_array mIgnore;
 
-	Instances *getInstance(std::fstream&);
-	Instance *getInstance(string);
-	string removeTrailingPeriod(string &val);
-	void readHeader(std::fstream&);
+    /** Holds the determined structure (header) of the data set. */
+    Instances *mStructure;
+
+    /**
+     * Reads an instance using the supplied file stream.
+     *
+     * @param inStream the file stream to use
+     * @return an Instance or null if there are no more instances to read
+     * @exception IOException if an error occurs
+     */
+    Instances *getInstance(std::fstream& inStream);
+
+    /**
+     * Reads an instance from the given line.
+     *
+     * @param inLine the file stream to use
+     * @return an Instance or null if there are no more instances to read
+     * @exception IOException if an error occurs
+     */
+    Instance *getInstance(string inLine);
+
+    /**
+     * removes the trailing period
+     *
+     * @param val the string to work on
+     * @return the processed string
+     */
+    string removeTrailingPeriod(string &val);
+
+    /**
+     * Reads header (from the names file) using the file stream.
+     *
+     * @param inStream the file stream to use
+     * @exception IOException if an error occurs
+     */
+    void readHeader(std::fstream& inStream);
 
 public:
 
-	DataSource(const string &location);
-	Instances *getDataSet(int classIndex);
-	Instances *getStructure(int classIndex);
-	bool hasElements(Instances *structure);
-	Instance *nextElement(Instances *dataset);
-	void reset();
-	Instances *getStructure();
-	Instances *getDataSet();
-	Instance *getNextInstance(Instances *structure);
+    /**
+     * Constructor for Data source
+     *
+     * @throws IOException if something goes wrong
+     */
+    DataSource(const string &location);
+
+    /**
+     * Returns the structure of the data set using the given class index.
+     *
+     * @param classIndex Class Index
+     * @return the structure of the data set as an empty set of Instances
+     * @exception IOException if an error occurs
+     */
+    Instances *getStructure(int classIndex);
+
+    /**
+     * Resets the Loader ready to read a new data set or the
+     * same data set again.
+     *
+     * @throws IOException if something goes wrong
+     */
+    void reset();
+
+    /**
+     * Determines and returns (if possible) the structure (internally the
+     * header) of the data set as an empty set of instances.
+     *
+     * @return the structure of the data set as an empty set of Instances
+     * @exception IOException if an error occurs
+     */
+    Instances *getStructure();
+
+    /**
+     * Return the full data set. If the structure hasn't yet been determined
+     * by a call to getStructure then method should do so before processing
+     * the rest of the data set.
+     *
+     * @return the structure of the data set as an empty set of Instances
+     * @exception IOException if there is no source or parsing fails
+     */
+    Instances *getDataSet();
 };
 
-#endif	// _DATASOURCE_
+#endif    // _DATASOURCE_

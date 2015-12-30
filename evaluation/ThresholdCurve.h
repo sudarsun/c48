@@ -12,161 +12,168 @@ class Instance;
 class Vector;
 class Prediction;
 
-
-/// <summary>
-/// Generates points illustrating prediction tradeoffs that can be obtained
-/// by varying the threshold value between classes. For example, the typical 
-/// threshold value of 0.5 means the predicted probability of "positive" must be
-/// higher than 0.5 for the instance to be predicted as "positive". The 
-/// resulting dataset can be used to visualize precision/recall tradeoff, or 
-/// for ROC curve analysis (true positive rate vs false positive rate).
-/// Weka just varies the threshold on the class probability estimates in each 
-/// case. The Mann Whitney statistic is used to calculate the AUC.
-/// 
-/// </summary>
+/**
+ * Generates points illustrating prediction tradeoffs that can be obtained by
+ * varying the threshold value between classes. For example, the typical
+ * threshold value of 0.5 means the predicted probability of "positive" must be
+ * higher than 0.5 for the instance to be predicted as "positive". The resulting
+ * dataset can be used to visualize precision/recall tradeoff, or for ROC curve
+ * analysis (true positive rate vs false positive rate). Weka just varies the
+ * threshold on the class probability estimates in each case. The Mann Whitney
+ * statistic is used to calculate the AUC.
+ *
+ */
 class ThresholdCurve {
 
-  /// <summary>
-  /// The name of the relation used in threshold curve datasets </summary>
-  public:
-  static const string RELATION_NAME;
+public:
+    /** The name of the relation used in threshold curve datasets */
+    static const string RELATION_NAME;
 
-  /// <summary>
-  /// attribute name: True Positives </summary>
-  static const string TRUE_POS_NAME;
-  /// <summary>
-  /// attribute name: False Negatives </summary>
-  static const string FALSE_NEG_NAME;
-  /// <summary>
-  /// attribute name: False Positives </summary>
-  static const string FALSE_POS_NAME;
-  /// <summary>
-  /// attribute name: True Negatives </summary>
-  static const string TRUE_NEG_NAME;
-  /// <summary>
-  /// attribute name: False Positive Rate" </summary>
-  static const string FP_RATE_NAME;
-  /// <summary>
-  /// attribute name: True Positive Rate </summary>
-  static const string TP_RATE_NAME;
-  /// <summary>
-  /// attribute name: Precision </summary>
-  static const string PRECISION_NAME;
-  /// <summary>
-  /// attribute name: Recall </summary>
-  static const string RECALL_NAME;
-  /// <summary>
-  /// attribute name: Fallout </summary>
-  static const string FALLOUT_NAME;
-  /// <summary>
-  /// attribute name: FMeasure </summary>
-  static const string FMEASURE_NAME;
-  /// <summary>
-  /// attribute name: Sample Size </summary>
-  static const string SAMPLE_SIZE_NAME;
-  /// <summary>
-  /// attribute name: Lift </summary>
-  static const string LIFT_NAME;
-  /// <summary>
-  /// attribute name: Threshold </summary>
-  static const string THRESHOLD_NAME;
+    /** attribute name: True Positives  */
+    static const string TRUE_POS_NAME;
 
-  /// <summary>
-  /// Calculates the performance stats for the default class and return 
-  /// results as a set of Instances. The
-  /// structure of these Instances is as follows:<para> <ul> 
-  /// <li> <b>True Positives </b>
-  /// <li> <b>False Negatives</b>
-  /// <li> <b>False Positives</b>
-  /// <li> <b>True Negatives</b>
-  /// <li> <b>False Positive Rate</b>
-  /// <li> <b>True Positive Rate</b>
-  /// <li> <b>Precision</b>
-  /// <li> <b>Recall</b>  
-  /// <li> <b>Fallout</b>  
-  /// <li> <b>Threshold</b> contains the probability threshold that gives
-  /// rise to the previous performance values. 
-  /// </para>
-  /// </ul> <para>
-  /// </para>
-  /// For the definitions of these measures, see TwoClassStats <para>
-  /// 
-  /// </para>
-  /// </summary>
-  /// <seealso cref= TwoClassStats </seealso>
-  /// <param name="predictions"> the predictions to base the curve on </param>
-  /// <returns> datapoints as a set of instances, null if no predictions
-  /// have been made. </returns>
-  Instances *getCurve(std::vector<Prediction*> predictions );
+    /** attribute name: False Negatives  */
+    static const string FALSE_NEG_NAME;
 
-  /// <summary>
-  /// Calculates the performance stats for the desired class and return 
-  /// results as a set of Instances.
-  /// </summary>
-  /// <param name="predictions"> the predictions to base the curve on </param>
-  /// <param name="classIndex"> index of the class of interest. </param>
-  /// <returns> datapoints as a set of instances. </returns>
-  Instances *getCurve(std::vector<Prediction*> predictions, int classIndex );
+    /** attribute name: False Positives  */
+    static const string FALSE_POS_NAME;
 
-  /// <summary>
-  /// Calculates the n point precision result, which is the precision averaged
-  /// over n evenly spaced (w.r.t recall) samples of the curve.
-  /// </summary>
-  /// <param name="tcurve"> a previously extracted threshold curve Instances. </param>
-  /// <param name="n"> the number of points to average over. </param>
-  /// <returns> the n-point precision. </returns>
-  static double getNPointPrecision( Instances *tcurve, int n );
+    /** attribute name: True Negatives  */
+    static const string TRUE_NEG_NAME;
 
-  /// <summary>
-  /// Calculates the area under the ROC curve as the Wilcoxon-Mann-Whitney statistic.
-  /// </summary>
-  /// <param name="tcurve"> a previously extracted threshold curve Instances. </param>
-  /// <returns> the ROC area, or Double.NaN if you don't pass in 
-  /// a ThresholdCurve generated Instances.  </returns>
-  static double getROCArea( Instances *tcurve );
+    /** attribute name: False Positive Rate"  */
+    static const string FP_RATE_NAME;
 
-  /// <summary>
-  /// Gets the index of the instance with the closest threshold value to the
-  /// desired target
-  /// </summary>
-  /// <param name="tcurve"> a set of instances that have been generated by this class </param>
-  /// <param name="threshold"> the target threshold </param>
-  /// <returns> the index of the instance that has threshold closest to
-  /// the target, or -1 if this could not be found (i.e. no data, or
-  /// bad threshold target) </returns>
-  static int getThresholdInstance( Instances *tcurve, double threshold );
+    /** attribute name: True Positive Rate  */
+    static const string TP_RATE_NAME;
 
-  /// <summary>
-  /// performs a binary search
-  /// </summary>
-  /// <param name="index"> the indices </param>
-  /// <param name="vals"> the values </param>
-  /// <param name="target"> the target to look for </param>
-  /// <returns> the index of the target </returns>
-  private:
-  static int binarySearch( std::vector<int> &index, double_array &vals, double target );
+    /** attribute name: Precision  */
+    static const string PRECISION_NAME;
 
-  /// 
-  /// <param name="predictions"> the predictions to use </param>
-  /// <param name="classIndex"> the class index </param>
-  /// <returns> the probabilities </returns>
-  double_array getProbabilities( std::vector<Prediction*> predictions, int classIndex );
+    /** attribute name: Recall  */
+    static const string RECALL_NAME;
 
-  /// <summary>
-  /// generates the header
-  /// </summary>
-  /// <returns> the header </returns>
-  Instances *makeHeader();
+    /** attribute name: Fallout  */
+    static const string FALLOUT_NAME;
 
-  /// <summary>
-  /// generates an instance out of the given data
-  /// </summary>
-  /// <param name="tc"> the statistics </param>
-  /// <param name="prob"> the probability </param>
-  /// <returns> the generated instance </returns>
-  Instance *makeInstance( TwoClassStats *tc, double prob );
+    /** attribute name: FMeasure  */
+    static const string FMEASURE_NAME;
+
+    /** attribute name: Sample Size  */
+    static const string SAMPLE_SIZE_NAME;
+
+    /** attribute name: Lift  */
+    static const string LIFT_NAME;
+
+    /** attribute name: Threshold  */
+    static const string THRESHOLD_NAME;
+
+    /**
+     * Calculates the performance stats for the default class and return results
+     * as a set of Instances. The structure of these Instances is as follows:
+     * <p>
+     * <ul>
+     * <li><b>True Positives </b>
+     * <li><b>False Negatives</b>
+     * <li><b>False Positives</b>
+     * <li><b>True Negatives</b>
+     * <li><b>False Positive Rate</b>
+     * <li><b>True Positive Rate</b>
+     * <li><b>Precision</b>
+     * <li><b>Recall</b>
+     * <li><b>Fallout</b>
+     * <li><b>Threshold</b> contains the probability threshold that gives rise to
+     * the previous performance values.
+     * </ul>
+     * <p>
+     * For the definitions of these measures, see TwoClassStats
+     * <p>
+     *
+     * @see TwoClassStats
+     * @param predictions the predictions to base the curve on
+     * @return datapoints as a set of instances, null if no predictions have been
+     *         made.
+     */
+    Instances *getCurve(std::vector<Prediction*> predictions);
+
+    /**
+    * Calculates the performance stats for the desired class and return results
+    * as a set of Instances.
+    *
+    * @param predictions the predictions to base the curve on
+    * @param classIndex index of the class of interest.
+    * @return datapoints as a set of instances.
+    */
+    Instances *getCurve(std::vector<Prediction*> predictions, int classIndex);
+
+    /**
+     * Calculates the n point precision result, which is the precision averaged
+     * over n evenly spaced (w.r.t recall) samples of the curve.
+     *
+     * @param tcurve a previously extracted threshold curve Instances.
+     * @param n the number of points to average over.
+     * @return the n-point precision.
+     */
+    static double getNPointPrecision(Instances *tcurve, int n);
+
+    /**
+     * Calculates the area under the ROC curve as the Wilcoxon-Mann-Whitney
+     * statistic.
+     *
+     * @param tcurve a previously extracted threshold curve Instances.
+     * @return the ROC area, or Double.NaN if you don't pass in a ThresholdCurve
+     *         generated Instances.
+     */
+    static double getROCArea(Instances *tcurve);
+
+    /**
+    * Gets the index of the instance with the closest threshold value to the
+    * desired target
+    *
+    * @param tcurve a set of instances that have been generated by this class
+    * @param threshold the target threshold
+    * @return the index of the instance that has threshold closest to the target,
+    *         or -1 if this could not be found (i.e. no data, or bad threshold
+    *         target)
+    */
+    static int getThresholdInstance(Instances *tcurve, double threshold);
+
+private:
+    /**
+    * performs a binary search
+    *
+    * @param index the indices
+    * @param vals the values
+    * @param target the target to look for
+    * @return the index of the target
+    */
+    static int binarySearch(int_array &index, double_array &vals, double target);
+
+    /**
+     *
+     * @param predictions the predictions to use
+     * @param classIndex the class index
+     * @return the probabilities
+     */
+    double_array getProbabilities(std::vector<Prediction*> predictions, int classIndex);
+
+    /**
+     * generates the header
+     *
+     * @return the header
+     */
+    Instances *makeHeader();
+
+    /**
+    * generates an instance out of the given data
+    *
+    * @param tc the statistics
+    * @param prob the probability
+    * @return the generated instance
+    */
+    Instance *makeInstance(TwoClassStats *tc, double prob);
 
 };
 
 
-#endif	//#ifndef _THRESHOLDCURVE_
+#endif    //#ifndef _THRESHOLDCURVE_
