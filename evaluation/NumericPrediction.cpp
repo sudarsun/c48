@@ -4,8 +4,9 @@ NumericPrediction::NumericPrediction(double actual, double predicted) : NumericP
 }
 
 NumericPrediction::NumericPrediction(double actual, double predicted, double weight) {
-    double_2D_array value(0, double_array());
-    NumericPrediction(actual, predicted, weight, value);
+    mActual = actual;
+    mPredicted = predicted;
+    mWeight = weight;
 }
 
 double NumericPrediction::actual() {
