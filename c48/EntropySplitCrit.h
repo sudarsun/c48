@@ -14,15 +14,15 @@ class EntropySplitCrit : public EntropyBasedSplitCrit {
 
 public:
 
-	/**
-	 * Computes entropy for given distribution.
-	 */
-	double splitCritValue(Distribution *bags);
+    /**
+     * Computes entropy for given distribution.
+     */
+    double splitCritValue(Distribution *bags);
 
-	/**
-	 * Computes entropy of test distribution with respect to training distribution.
-	 */
-	double splitCritValue(Distribution *train, Distribution *test);
+    /**
+     * Computes entropy of test distribution with respect to training distribution.
+     */
+    double splitCritValue(Distribution *train, Distribution *test);
 };
 
-#endif	//#ifndef _ENTROPYSPLITCRIT_
+#endif    //#ifndef _ENTROPYSPLITCRIT_

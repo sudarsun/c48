@@ -19,117 +19,117 @@ class Distribution;
 class C45PruneableClassifierTree : public ClassifierTree
 {
 protected:
-	/** True if the tree is to be pruned. */
-	bool mPruneTheTree = false;
+    /** True if the tree is to be pruned. */
+    bool mPruneTheTree = false;
 
-	/** True if the tree is to be collapsed. */
-	bool mCollapseTheTree = false;
+    /** True if the tree is to be collapsed. */
+    bool mCollapseTheTree = false;
 
-	/** The confidence factor for pruning. */
-	float mCF = 0.25f;
+    /** The confidence factor for pruning. */
+    float mCF = 0.25f;
 
-	/** Is subtree raising to be performed? */
-	bool mSubtreeRaising = true;
+    /** Is subtree raising to be performed? */
+    bool mSubtreeRaising = true;
 
-	/** Cleanup after the tree has been built. */
-	bool mCleanup = true;
+    /** Cleanup after the tree has been built. */
+    bool mCleanup = true;
 
-	/**
-	   * Returns a newly created tree.
-	   *
-	   * @param data the data to work with
-	   * @return the new tree
-	   * @throws Exception if something goes wrong
-	   */
-	virtual ClassifierTree *getNewTree(Instances *data);
+    /**
+       * Returns a newly created tree.
+       *
+       * @param data the data to work with
+       * @return the new tree
+       * @throws Exception if something goes wrong
+       */
+    virtual ClassifierTree *getNewTree(Instances *data);
 
 public:
-	/**
-	 * Constructor for pruneable tree structure. Stores reference
-	 * to associated training data at each node.
-	 *
-	 * @param toSelectLocModel selection method for local splitting model
-	 * @param pruneTree true if the tree is to be pruned
-	 * @param cf the confidence factor for pruning
-	 * @param raiseTree
-	 * @param cleanup
-	 * @throws Exception if something goes wrong
-	 */
-	C45PruneableClassifierTree(ModelSelection *toSelectLocModel, bool pruneTree, float cf, bool raiseTree, bool cleanup, bool collapseTree);
+    /**
+     * Constructor for pruneable tree structure. Stores reference
+     * to associated training data at each node.
+     *
+     * @param toSelectLocModel selection method for local splitting model
+     * @param pruneTree true if the tree is to be pruned
+     * @param cf the confidence factor for pruning
+     * @param raiseTree
+     * @param cleanup
+     * @throws Exception if something goes wrong
+     */
+    C45PruneableClassifierTree(ModelSelection *toSelectLocModel, bool pruneTree, float cf, bool raiseTree, bool cleanup, bool collapseTree);
 
-	/**
-	 * Method for building a pruneable classifier tree.
-	 *
-	 * @param data the data for building the tree
-	 * @throws Exception if something goes wrong
-	 */
-	virtual void buildClassifier(Instances *data);
+    /**
+     * Method for building a pruneable classifier tree.
+     *
+     * @param data the data for building the tree
+     * @throws Exception if something goes wrong
+     */
+    virtual void buildClassifier(Instances *data);
 
-	/**
-	 * Collapses a tree to a node if training error doesn't increase.
-	 */
-	void collapse();
+    /**
+     * Collapses a tree to a node if training error doesn't increase.
+     */
+    void collapse();
 
-	/**
-	 * Prunes a tree using C4.5's pruning procedure.
-	 *
-	 * @throws Exception if something goes wrong
-	 */
-	virtual void prune();
+    /**
+     * Prunes a tree using C4.5's pruning procedure.
+     *
+     * @throws Exception if something goes wrong
+     */
+    virtual void prune();
 
 private:
-	/**
-	 * Computes estimated errors for tree.
-	 *
-	 * @return the estimated errors
-	 */
-	double getEstimatedErrors();
+    /**
+     * Computes estimated errors for tree.
+     *
+     * @return the estimated errors
+     */
+    double getEstimatedErrors();
 
-	/**
-	 * Computes estimated errors for one branch.
-	 *
-	 * @param data the data to work with
-	 * @return the estimated errors
-	 * @throws Exception if something goes wrong
-	 */
-	double getEstimatedErrorsForBranch(Instances *data);
+    /**
+     * Computes estimated errors for one branch.
+     *
+     * @param data the data to work with
+     * @return the estimated errors
+     * @throws Exception if something goes wrong
+     */
+    double getEstimatedErrorsForBranch(Instances *data);
 
-	/**
-	 * Computes estimated errors for leaf.
-	 *
-	 * @param theDistribution the distribution to use
-	 * @return the estimated errors
-	 */
-	double getEstimatedErrorsForDistribution(Distribution *theDistribution);
+    /**
+     * Computes estimated errors for leaf.
+     *
+     * @param theDistribution the distribution to use
+     * @return the estimated errors
+     */
+    double getEstimatedErrorsForDistribution(Distribution *theDistribution);
 
-	/**
-	 * Computes errors of tree on training data.
-	 *
-	 * @return the training errors
-	 */
-	double getTrainingErrors();
+    /**
+     * Computes errors of tree on training data.
+     *
+     * @return the training errors
+     */
+    double getTrainingErrors();
 
-	/**
-	 * Method just exists to make program easier to read.
-	 *
-	 * @return the local split model
-	 */
-	ClassifierSplitModel *localModel();
+    /**
+     * Method just exists to make program easier to read.
+     *
+     * @return the local split model
+     */
+    ClassifierSplitModel *localModel();
 
-	/**
-	 * Computes new distributions of instances for nodes
-	 * in tree.
-	 *
-	 * @param data the data to compute the distributions for
-	 * @throws Exception if something goes wrong
-	 */
-	void newDistribution(Instances *data);
+    /**
+     * Computes new distributions of instances for nodes
+     * in tree.
+     *
+     * @param data the data to compute the distributions for
+     * @throws Exception if something goes wrong
+     */
+    void newDistribution(Instances *data);
 
-	/**
-	 * Method just exists to make program easier to read.
-	 */
-	C45PruneableClassifierTree *son(int index);
+    /**
+     * Method just exists to make program easier to read.
+     */
+    C45PruneableClassifierTree *son(int index);
 
 };
 
-#endif	// _C45PRUNEABLECLASSIFIERTREE_
+#endif    // _C45PRUNEABLECLASSIFIERTREE_

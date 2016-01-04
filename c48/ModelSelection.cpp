@@ -4,5 +4,5 @@
 
 ClassifierSplitModel *ModelSelection::selectModel(Instances *train, Instances *test)
 {
-	throw  "Model selection method not implemented";
+    throw  "Model selection method not implemented";
 }
