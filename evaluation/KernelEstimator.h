@@ -7,121 +7,122 @@
 #include <vector>
 #include <cmath>
 
-/// <summary>
-/// Simple kernel density estimator. Uses one gaussian kernel per observed
-/// data value.
-/// 
-/// </summary>
+/** 
+ * Simple kernel density estimator. Uses one gaussian kernel per observed
+ * data value.
+ *
+ */
 class KernelEstimator : public Estimator, public IncrementalEstimator {
 
 
-  /// <summary>
-  /// Vector containing all of the values seen </summary>
+  /** Vector containing all of the values seen  */
   private:
   double_array mValues;
 
-  /// <summary>
-  /// Vector containing the associated weights </summary>
+  /** Vector containing the associated weights  */
   double_array mWeights;
 
-  /// <summary>
-  /// Number of values stored in mWeights and mValues so far </summary>
+  /** Number of values stored in mWeights and mValues so far  */
   int mNumValues = 0;
 
-  /// <summary>
-  /// The sum of the weights so far </summary>
+  /** The sum of the weights so far  */
   double mSumOfWeights = 0;
 
-  /// <summary>
-  /// The standard deviation </summary>
+  /** The standard deviation  */
   double mStandardDev = 0;
 
-  /// <summary>
-  /// The precision of data values </summary>
+  /** The precision of data values  */
   double mPrecision = 0;
 
-  /// <summary>
-  /// Whether we can optimise the kernel summation </summary>
+  /** Whether we can optimise the kernel summation  */
   bool mAllWeightsOne;
 
-  /// <summary>
-  /// Maximum percentage error permitted in probability calculations </summary>
+  /** Maximum percentage error permitted in probability calculations  */
   static double MAX_ERROR;
 
 
-  /// <summary>
-  /// Execute a binary search to locate the nearest data value
-  /// </summary>
-  /// <param name="the"> data value to locate </param>
-  /// <returns> the index of the nearest data value </returns>
+  /**
+   * Execute a binary search to locate the nearest data value
+   *
+   * @param the data value to locate
+   * @return the index of the nearest data value
+   */
   int findNearestValue( double key );
 
-  /// <summary>
-  /// Round a data value using the defined precision for this estimator
-  /// </summary>
-  /// <param name="data"> the value to round </param>
-  /// <returns> the rounded data value </returns>
+  /**
+   * Round a data value using the defined precision for this estimator
+   *
+   * @param data the value to round
+   * @return the rounded data value
+   */
   double round( double data );
 
   // ===============
   // Public methods.
   // ===============
 
-  /// <summary>
-  /// Constructor that takes a precision argument.
-  /// </summary>
-  /// <param name="precision"> the  precision to which numeric values are given. For
-  /// example, if the precision is stated to be 0.1, the values in the
-  /// interval (0.25,0.35] are all treated as 0.3.  </param>
   public:
-  KernelEstimator( double precision );
+  /**
+   * Constructor that takes a precision argument.
+   *
+   * @param precision the  precision to which numeric values are given. For
+   * example, if the precision is stated to be 0.1, the values in the
+   * interval (0.25,0.35] are all treated as 0.3. 
+   */
+   KernelEstimator( double precision );
 
-  /// <summary>
-  /// Add a new data value to the current estimator.
-  /// </summary>
-  /// <param name="data"> the new data value </param>
-  /// <param name="weight"> the weight assigned to the data value  </param>
+  /**
+   * Add a new data value to the current estimator.
+   *
+   * @param data the new data value 
+   * @param weight the weight assigned to the data value 
+   */
   virtual void addValue( double data, double weight );
 
-  /// <summary>
-  /// Get a probability estimate for a value.
-  /// </summary>
-  /// <param name="data"> the value to estimate the probability of </param>
-  /// <returns> the estimated probability of the supplied value </returns>
+   /**
+   * Get a probability estimate for a value.
+   *
+   * @param data the value to estimate the probability of
+   * @return the estimated probability of the supplied value
+   */
   virtual double getProbability( double data );
 
-  /// <summary>
-  /// Display a representation of this estimator </summary>
+  /** Display a representation of this estimator */
   virtual string toString();
 
-  /// <summary>
-  /// Return the number of kernels in this kernel estimator
-  /// </summary>
-  /// <returns> the number of kernels </returns>
+  /**
+   * Return the number of kernels in this kernel estimator
+   *
+   * @return the number of kernels
+   */
   virtual int getNumKernels();
 
-  /// <summary>
-  /// Return the means of the kernels.
-  /// </summary>
-  /// <returns> the means of the kernels </returns>
+  /**
+   * Return the means of the kernels.
+   *
+   * @return the means of the kernels
+   */
   virtual double_array getMeans();
 
-  /// <summary>
-  /// Return the weights of the kernels.
-  /// </summary>
-  /// <returns> the weights of the kernels </returns>
+   /**
+   * Return the weights of the kernels.
+   *
+   * @return the weights of the kernels
+   */
   virtual double_array getWeights();
 
-  /// <summary>
-  /// Return the precision of this kernel estimator.
-  /// </summary>
-  /// <returns> the precision </returns>
+  /**
+   * Return the precision of this kernel estimator.
+   *
+   * @return the precision
+   */
   virtual double getPrecision();
 
-  /// <summary>
-  /// Return the standard deviation of this kernel estimator.
-  /// </summary>
-  /// <returns> the standard deviation </returns>
+  /**
+   * Return the standard deviation of this kernel estimator.
+   *
+   * @return the standard deviation
+   */
   virtual double getStdDev();
 
 };

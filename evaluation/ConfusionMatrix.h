@@ -173,8 +173,14 @@ public:
     virtual int getColumnDimension();
 
 private:
+
     /**
-     * Helper method to convert the confusion matrix into string format
+     * Method for generating indices for the confusion matrix.
+     *
+     * @param num integer to format
+     * @param IDChars the characters to use
+     * @param IDWidth the width of the entry
+     * @return the formatted integer as a string
      */
     static string num2ShortID(int num, char_array &IDChars, int IDWidth);
 

@@ -59,21 +59,21 @@ public:
     */
     static Instances *getInstancesFromClass(Instances *data, int classIndex, double classValue);
 
-   /**
-    * Returns a dataset that contains of all instances of a certain value
-    * for the given attribute.
-    * @param data dataset to select the instances from
-    * @param index the index of the attribute
-    * @param v the value
-    * @return a subdataset with only instances of one value for the attribute
-    */
-   static Instances *getInstancesFromValue(Instances *data, int index, double v);
+    /**
+     * Returns a dataset that contains of all instances of a certain value
+     * for the given attribute.
+     * @param data dataset to select the instances from
+     * @param index the index of the attribute
+     * @param v the value
+     * @return a subdataset with only instances of one value for the attribute
+     */
+    static Instances *getInstancesFromValue(Instances *data, int index, double v);
 
 
-   /**
-    * Returns a string representing the cutpoints
-    */
-   static string cutpointsToString(double_array &cutPoints, bool_array &cutAndLeft);
+    /**
+     * Returns a string representing the cutpoints
+     */
+    static string cutpointsToString(double_array &cutPoints, bool_array &cutAndLeft);
 };
 
 

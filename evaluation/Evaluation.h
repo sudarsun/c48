@@ -20,56 +20,406 @@ class CostMatrix;
 class Evaluation
 {
 public:
+
+    /**
+     * Initializes all the counters for the evaluation.
+     *
+     * @param data set of training instances, to get some header information and
+     *          prior class distribution information
+     * @throws Exception if the class is not defined
+     */
     Evaluation(Instances data);
+
+    /**
+     * Initializes all the counters for the evaluation and also takes a cost
+     * matrix as parameter.
+     *
+     * @param data set of training instances, to get some header information and
+     *          prior class distribution information
+     * @param costMatrix the cost matrix---if null, default costs will be used
+     * @throws Exception if cost matrix is not compatible with data, the class is
+     *           not defined or the class is numeric
+     */
     Evaluation(Instances data, CostMatrix costMatrix);
+
+    /**
+     * Destructor.
+     *
+     */
     ~Evaluation();
 
     void setPriors(Instances train);
+    /**
+     * Evaluates the classifier on a single instance and records the prediction
+     * (if the class is nominal).
+     *
+     * @param classifier machine learning classifier
+     * @param instance the test instance to be classified
+     * @return the prediction made by the clasifier
+     * @throws Exception if model could not be evaluated successfully or the data
+     *           contains string attributes
+     */
     double evaluateModelOnceAndRecordPrediction(Classifier * classifier, Instance * instance);
+    /**
+     * Evaluates the supplied distribution on a single instance.
+     *
+     * @param dist the supplied distribution
+     * @param instance the test instance to be classified
+     * @return the prediction
+     * @throws Exception if model could not be evaluated successfully
+     */
     double evaluateModelOnceAndRecordPrediction(double_array dist, Instance *instance);
+
+    /**
+     * Calls toSummaryString() with a default title.
+     *
+     * @param printComplexityStatistics if true, complexity statistics are
+     *          returned as well
+     * @return the summary string
+     */
     string toSummaryString(bool printComplexityStatistics);
+
+    /**
+     * Outputs the performance statistics in summary form. Lists number (and
+     * percentage) of instances classified correctly, incorrectly and
+     * unclassified. Outputs the total number of instances classified, and the
+     * number of instances (if any) that had no class value provided.
+     *
+     * @param title the title for the statistics
+     * @param printComplexityStatistics if true, complexity statistics are
+     *          returned as well
+     * @return the summary as a String
+     */
     string toSummaryString(string title, bool printComplexityStatistics);
+
+    /**
+      * Generates a breakdown of the accuracy for each class, incorporating various
+      * information-retrieval statistics, such as true/false positive rate,
+      * precision/recall/F-Measure. Should be useful for ROC curves,
+      * recall/precision curves.
+      *
+      * @param title the title to prepend the stats string with
+      * @return the statistics presented as a string
+      * @throws Exception if class is not nominal
+      */
     string toClassDetailsString(string title);
+
+    /**
+     * Generates a breakdown of the accuracy for each class (with default title),
+     * incorporating various information-retrieval statistics, such as true/false
+     * positive rate, precision/recall/F-Measure. Should be useful for ROC curves,
+     * recall/precision curves.
+     *
+     * @return the statistics presented as a string
+     * @throws Exception if class is not nominal
+     */
     string toClassDetailsString();
+
+    /**
+     * Calls toMatrixString() with a default title.
+     *
+     * @return the confusion matrix as a string
+     * @throws Exception if the class is numeric
+     */
     string  toMatrixString();
+
+    /**
+     * Outputs the performance statistics as a classification confusion matrix.
+     * For each class value, shows the distribution of predicted class values.
+     *
+     * @param title the title for the confusion matrix
+     * @return the confusion matrix as a String
+     * @throws Exception if the class is numeric
+     */
     string  toMatrixString(string title);
+
+    /**
+     * Gets the number of instances correctly classified (that is, for which a
+     * correct prediction was made). (Actually the sum of the weights of these
+     * instances)
+     *
+     * @return the number of correctly classified instances
+     */
     const double correct();
+
+    /**
+     * Gets the total cost, that is, the cost of each prediction times the weight
+     * of the instance, summed over all instances.
+     *
+     * @return the total cost
+     */
     const double totalCost();
+    /**
+     * Gets the average cost, that is, total cost of misclassifications (incorrect
+     * plus unclassified) over the total number of instances.
+     *
+     * @return the average cost.
+     */
     const double avgCost();
+    /**
+     * Returns value of kappa statistic if class is nominal.
+     *
+     * @return the value of the kappa statistic
+     */
     const double kappa();
+    /**
+     * Gets the number of instances incorrectly classified (that is, for which an
+     * incorrect prediction was made). (Actually the sum of the weights of these
+     * instances)
+     *
+     * @return the number of incorrectly classified instances
+     */
     const double inCorrect();
+    /**
+     * Gets the percentage of instances incorrectly classified (that is, for which
+     * an incorrect prediction was made).
+     *
+     * @return the percent of incorrectly classified instances (between 0 and 100)
+     */
     const double pctCorrect();
+    /**
+     * Gets the percentage of instances incorrectly classified (that is, for which
+     * an incorrect prediction was made).
+     *
+     * @return the percent of incorrectly classified instances (between 0 and 100)
+     */
     const double pctIncorrect();
+    /**
+     * Return the Kononenko & Bratko Relative Information score
+     *
+     * @return the K&B relative information score
+     * @throws Exception if the class is not nominal
+     */
     const double KBRelativeInformation();
+    /**
+     * Return the total Kononenko & Bratko Information score in bits
+     *
+     * @return the K&B information score
+     * @throws Exception if the class is not nominal
+     */
     const double KBInformation();
+    /**
+     * Return the Kononenko & Bratko Information score in bits per instance.
+     *
+     * @return the K&B information score
+     * @throws Exception if the class is not nominal
+     */
     const double KBMeanInformation();
+    /**
+     * Returns the correlation coefficient if the class is numeric.
+     *
+     * @return the correlation coefficient
+     * @throws Exception if class is not numeric
+     */
     const double correlationCoefficient();
+    /**
+     * Returns the total entropy for the null model
+     *
+     * @return the total null model entropy
+     */
     const double SFPriorEntropy();
+    /**
+     * Returns the entropy per instance for the null model
+     *
+     * @return the null model entropy per instance
+     */
     const double SFMeanPriorEntropy();
+    /**
+     * Returns the total entropy for the scheme
+     *
+     * @return the total scheme entropy
+     */
     const double SFSchemeEntropy();
+
+    /**
+     * Returns the entropy per instance for the scheme
+     *
+     * @return the scheme entropy per instance
+     */
     const double SFMeanSchemeEntropy();
+    /**
+     * Returns the total SF, which is the null model entropy minus the scheme
+     * entropy.
+     *
+     * @return the total SF
+     */
     const double SFEntropyGain();
+
+    /**
+     * Returns the SF per instance, which is the null model entropy minus the
+     * scheme entropy, per instance.
+     *
+     * @return the SF per instance
+     */
     const double SFMeanEntropyGain();
+
+    /**
+     * Returns the mean absolute error. Refers to the error of the predicted
+     * values for numeric classes, and the error of the predicted probability
+     * distribution for nominal classes.
+     *
+     * @return the mean absolute error
+     */
     const double meanAbsoluteError();
+    /**
+     * Returns the root mean squared error.
+     *
+     * @return the root mean squared error
+     */
     const double rootMeanSquaredError();
+    /**
+     * Returns the relative absolute error.
+     *
+     * @return the relative absolute error
+     * @throws Exception if it can't be computed
+     */
     const double relativeAbsoluteError();
+    /**
+     * Returns the root relative squared error if the class is numeric.
+     *
+     * @return the root relative squared error
+     */
     const double rootRelativeSquaredError();
+    /**
+     * Gets the number of instances not classified (that is, for which no
+     * prediction was made by the classifier). (Actually the sum of the weights of
+     * these instances)
+     *
+     * @return the number of unclassified instances
+     */
     const double unclassified();
+    /**
+     * Gets the percentage of instances not classified (that is, for which no
+     * prediction was made by the classifier).
+     *
+     * @return the percent of unclassified instances (between 0 and 100)
+     */
     const double pctUnclassified();
+    /**
+    * Returns the mean absolute error of the prior.
+    *
+    * @return the mean absolute error
+    */
     const double meanPriorAbsoluteError();
+    /**
+     * Calculate the entropy of the prior distribution
+     *
+     * @return the entropy of the prior distribution
+     * @throws Exception if the class is not nominal
+     */
     const double priorEntropy();
+    /**
+     * Returns the root mean prior squared error.
+     *
+     * @return the root mean prior squared error
+     */
     const double rootMeanPriorSquaredError();
+    /**
+     * Calculate the true positive rate with respect to a particular class. This
+     * is defined as
+     *
+     * correctly classified positives
+     * ------------------------------
+     *       total positives
+     *
+     * @param classIndex the index of the class to consider as "positive"
+     * @return the true positive rate
+     */
     double truePositiveRate(int classIndex);
+    /**
+     * Calculate the false positive rate with respect to a particular class. This
+     * is defined as
+     *
+     *
+     *
+     * incorrectly classified negatives
+     * --------------------------------
+     *        total negatives
+     *
+     *
+     * @param classIndex the index of the class to consider as "positive"
+     * @return the false positive rate
+     */
     double falsePositiveRate(int classIndex);
+    /**
+     * Calculate the precision with respect to a particular class. This is defined
+     * as
+     *
+     * correctly classified positives
+     * ------------------------------
+     *  total predicted as positive
+     *
+     * @param classIndex the index of the class to consider as "positive"
+     * @return the precision
+     */
     double precision(int classIndex);
+    /**
+     * Calculate the recall with respect to a particular class. This is defined as
+     *
+     * correctly classified positives
+     * ------------------------------
+     *       total positives
+
+     * (Which is also the same as the truePositiveRate.)
+     *
+     * @param classIndex the index of the class to consider as "positive"
+     * @return the recall
+     */
     double recall(int classIndex);
+    /**
+     * Calculate the F-Measure with respect to a particular class. This is defined
+     * as
+     *
+     * 2 * recall * precision
+     * ----------------------
+     *   recall + precision
+     *
+     * @param classIndex the index of the class to consider as "positive"
+     * @return the F-Measure
+     */
     double fMeasure(int classIndex);
+
+    /**
+     * Returns the area under ROC for those predictions that have been collected
+     * in the evaluateClassifier(Classifier, Instances) method. Returns
+     * Instance.missingValue() if the area is not available.
+     *
+     * @param classIndex the index of the class to consider as "positive"
+     * @return the area under the ROC curve or not a number
+     */
     double areaUnderROC(int classIndex);
+
+    /**
+     * Calculates the weighted (by class size) true positive rate.
+     *
+     * @return the weighted true positive rate.
+     */
     double weightedTruePositiveRate();
+    /**
+     * Calculates the weighted (by class size) false positive rate.
+     *
+     * @return the weighted false positive rate.
+     */
     double weightedFalsePositiveRate();
+    /**
+     * Calculates the weighted (by class size) false precision.
+     *
+     * @return the weighted precision.
+     */
     double weightedPrecision();
     double weightedRecall();
+    /**
+     * Calculates the weighted (by class size) F-Measure.
+     *
+     * @return the weighted F-Measure.
+     */
     double weightedFMeasure();
+
+    /**
+     * Calculates the weighted (by class size) recall.
+     *
+     * @return the weighted recall.
+     */
     double weightedAreaUnderROC();
 
 
@@ -220,10 +570,53 @@ protected:
     /** The list of metrics to display in the output  */
     string_array mmetricsToDisplay;
 
+    /**
+     * Updates all the statistics about a classifiers performance for the current
+     * test instance.
+     *
+     * @param predictedDistribution the probabilities assigned to each class
+     * @param instance the instance to be classified
+     * @throws Exception if the class of the instance is not set
+     */
     void updateStatsForClassifier(double_array predictedDistribution, Instance *instance);
+    /**
+     * Updates all the statistics about a predictors performance for the current
+     * test instance.
+     *
+     * @param predictedValue the numeric value the classifier predicts
+     * @param instance the instance to be classified
+     * @throws Exception if the class of the instance is not set
+     */
     void updateStatsForPredictor(double predictedValue, Instance *instance);
+
+    /**
+     * Update the cumulative record of classification margins
+     *
+     * @param predictedDistribution the probability distribution predicted for the
+     *          current instance
+     * @param actualClass the index of the actual instance class
+     * @param weight the weight assigned to the instance
+     */
     void updateMargins(double_array predictedDistribution, int actualClass, double weight);
+
+    /**
+     * Update the numeric accuracy measures. For numeric classes, the accuracy is
+     * between the actual and predicted class values. For nominal classes, the
+     * accuracy is between the actual and predicted class probabilities.
+     *
+     * @param predicted the predicted values
+     * @param actual the actual value
+     * @param weight the weight associated with this prediction
+     */
     void updateNumericScores(double_array predicted, double_array actual, double weight);
+
+    /**
+     * Convert a single prediction into a probability distribution with all zero
+     * probabilities except the predicted value which has probability 1.0;
+     *
+     * @param predictedClass the index of the predicted class
+     * @return the probability distribution
+     */
     double_array makeDistribution(double predictedClass);
 
     /** Sets up the priors for numeric class attributes from the training class
@@ -231,10 +624,22 @@ protected:
      */
     void setNumericPriorsFromBuffer();
 
+    /**
+     * Adds a numeric (non-missing) training class value and weight to the buffer
+     * of stored values.
+     *
+     * @param classValue the class value
+     * @param weight the instance weight
+     */
     void addNumericTrainClass(double classValue, double weight);
 
     /**
-     * Helper method to convert the confusion matrix into string format
+     * Method for generating indices for the confusion matrix.
+     *
+     * @param num integer to format
+     * @param IDChars the characters to use
+     * @param IDWidth the width of the entry
+     * @return the formatted integer as a string
      */
     string num2ShortID(int num, char_array &IDChars, int IDWidth);
 
