@@ -8,47 +8,69 @@
 #include <iostream>
 #include <ctime>
 
-void classify(char *fileName, bool isDumpTree = false);
+void classify(char *trainFile, char *testFile, bool isDumpTree = false);
 void processClassifierPrediction(Instance *toPredict,
     Classifier *classifier, Evaluation &eval);
 
 int main( int argc, char *argv[]  )
 {
-    if (argc != 3)
+    char *trainFile = nullptr, *testFile = nullptr;
+    bool isDumpTree;
+
+    if (argc < 4)
     {
-        std::cout << std::endl;
-        std::cout << "please check the argument(s). the tool expects min. 2 arguments " << std::endl;
-        std::cout << "1.\tfileStem.names|fileStem.data\n2.\t<dump tree structure for classification> => enable->1, disable->0" << std::endl;
-        std::cout << "\nExample: " << argv[0] << " sample.names|sample.data <0|1>" << std::endl;
+        std::cout << "C++ 4.8 Decision Tree Tool" << std::endl;
+        std::cout << "-train <training data> - fileStem.names|fileStem.data" << std::endl;
+        std::cout << "-test <testing data> - fileStem.test (optional)" << std::endl;
+        std::cout << "-display <0|1> - dump tree structure for classification" << std::endl;
+        std::cout << "Example: " << argv[0] << " -train sample.names -display 0" << std::endl;
+        std::cout << "Example: " << argv[0] << " -train sample.data -test sample.test -display 1" << std::endl;
         std::cout << std::endl;
         exit(0);
     }
-    bool isDumpTree = atoi(argv[2]) == 0 ? false : true;
-    classify(argv[1], isDumpTree);
+    else
+    {
+        for (int i = 1; i < argc; i++) {
+            if (strcmp(argv[i],"-train") == 0) {
+                // We know the next argument *should* be the filename:
+                trainFile = argv[i + 1];
+            }
+            else if (strcmp(argv[i],"-test") == 0) {
+                testFile = argv[i + 1];
+            }
+            else if (strcmp(argv[i], "-display") == 0) {
+                isDumpTree = atoi(argv[i + 1]) == 0 ? false : true;;
+            }
+            else {
+            }
+        }
+    }
+
+    classify(trainFile, testFile, isDumpTree);
     return 0;
 }
 
-void classify(char *fileName, bool isDumpTree)
+void classify(char *trainFile, char *testFile, bool isDumpTree)
 {
     time_t startTime, TimeElapsed;
     
-    string path(fileName);
+    string trainFilePpath(trainFile);
 
     // Set data source
-    DataSource data(path);
-    Instances *inst = nullptr;
+    DataSource trainSource(trainFilePpath);
+    Instances *instTrain = nullptr;
     time(&startTime);
-    inst = data.getDataSet(); // Read data from *.data file
+    instTrain = trainSource.getDataSet(); // Read data from *.data file
     time(&TimeElapsed);
 
-    int num = inst->numAttributes(); // Get total number of attributes
-    int totalInst = inst->numInstances();
+    int num = instTrain->numAttributes(); // Get total number of attributes
+    int totalInst = instTrain->numInstances();
     std::cout << "Schema:       " << "C++ 4.8 Decision Tree Implementation" << std::endl;
-    std::cout << "Relation:     " << inst->getRelationName() << std::endl;
+    std::cout << "Relation:     " << instTrain->getRelationName() << std::endl;
     std::cout << "Instances:    " << totalInst << std::endl;
     std::cout << "Attributes:   " << std::endl;
     for (int i = 0; i<num; i++)
-        std::cout << "              " << inst->attribute(i)->name() << std::endl;
+        std::cout << "              " << instTrain->attribute(i)->name() << std::endl;
 
     std::cout << "\nTime taken to read data : "
         << difftime(TimeElapsed, startTime)
@@ -57,7 +79,7 @@ void classify(char *fileName, bool isDumpTree)
     std::cout << "Test mode : evaluate on training data" << std::endl;
     C48 *classifier = new C48();
     time(&startTime);
-    classifier->buildClassifier(inst);
+    classifier->buildClassifier(instTrain);
     time(&TimeElapsed);
     std::cout << "=== Classifier model (full training set) ===" << std::endl << std::endl;
     std::cout << classifier->toString(isDumpTree) << std::endl;
@@ -66,12 +88,32 @@ void classify(char *fileName, bool isDumpTree)
          << " seconds\n\n";
     Evaluation *eval = nullptr;
     CostMatrix *costMatrix = nullptr;
-    eval = new Evaluation(*inst, costMatrix);
-    for (int i = 0; i < totalInst; i++)
+    eval = new Evaluation(*instTrain, costMatrix);
+    if (testFile != nullptr)
     {
-        Instance *instance = inst->instance(i);
-        processClassifierPrediction(instance, classifier, *eval);
+        string testFilePath(testFile);
+        DataSource testSource(testFilePath);
+        Instances *instTest = nullptr;
+        instTest = testSource.getDataSet(); // Read data from *.test file
+
+        totalInst = instTest->numInstances();
+        for (int i = 0; i < totalInst; i++)
+        {
+            Instance *instance = instTest->instance(i);
+            processClassifierPrediction(instance, classifier, *eval);
+        }
     }
+    else
+    {
+        totalInst = instTrain->numInstances();
+        for (int i = 0; i < totalInst; i++)
+        {
+            Instance *instance = instTrain->instance(i);
+            processClassifierPrediction(instance, classifier, *eval);
+        }
+    }
+
+    
     std::cout << " === Evaluation on training set ===" << std::endl;
     std::cout << eval->toSummaryString(true);
     std::cout << eval->toClassDetailsString() << std::endl;

@@ -84,10 +84,11 @@ public:
      *
      * @param index the attribute's index (index starts with 0)
      * @return the attribute at the given position
+     *
+     * @ requires 0 <= index;
+     * @ requires index < mAttributes.size();
+     * @ ensures \result != null;
      */
-     // @ requires 0 <= index;
-     // @ requires index < mAttributes.size();
-     // @ ensures \result != null;  
     Attribute *attribute(int index);
 
     /**
@@ -105,8 +106,9 @@ public:
      * Returns the number of attributes.
      *
      * @return the number of attributes as an integer
+     *
+     * @ ensures \result == mAttributes.size();
      */
-     // @ ensures \result == mAttributes.size();
     int numAttributes();
 
     /**
@@ -114,8 +116,9 @@ public:
      * undefined.
      *
      * @return the class index as an integer
+     *
+     * ensures \result == mClassIndex;
      */
-     // ensures \result == mClassIndex;
     int classIndex();
 
     /**
@@ -149,8 +152,9 @@ public:
      * Returns the number of instances in the dataset.
      *
      * @return the number of instances in the dataset as an integer
+     *
+     * @ensures result == mInstances.size();
      */
-     // @ ensures \result == mInstances.size();
     int numInstances();
 
     /**
@@ -159,9 +163,10 @@ public:
      * @param from the position of the first instance to be copied
      * @param dest the destination for the instances
      * @param num the number of instances to be copied
+
+     * @ requires 0 <= from && from <= numInstances() - num;
+     * @ requires 0 <= num;
      */
-     // @ requires 0 <= from && from <= numInstances() - num;
-     // @ requires 0 <= num;
     void copyInstances(int from, Instances *dest, int num);
 
     /**
@@ -169,9 +174,10 @@ public:
      *
      * @param index the instance's index (index starts with 0)
      * @return the instance at the given position
+     *
+     * @ requires 0 <= index;
+     * @ requires index < numInstances();
      */
-     // @ requires 0 <= index;
-     // @ requires index < numInstances();
     Instance *instance(int index);
 
     /**
@@ -179,8 +185,9 @@ public:
      *
      * @return the class attribute
      * @throws UnassignedClassException if the class is not set
+     *
+     * @ requires classIndex() >= 0;
      */
-     // @ requires classIndex() >= 0;	
     Attribute *classAttribute();
 
     /**
@@ -189,16 +196,18 @@ public:
      * @return the number of class labels as an integer if the class attribute is
      *         nominal, 1 otherwise.
      * @throws UnassignedClassException if the class is not set
+     *
+     * @ requires classIndex() >= 0;
      */
-     // @ requires classIndex() >= 0;
     int numClasses();
 
     /**
      * Returns the last instance in the set.
      *
      * @return the last instance in the set
+     *
+     * @ requires numInstances() > 0;
      */
-     // @ requires numInstances() > 0;
     Instance *lastInstance();
 
     /**
@@ -258,8 +267,9 @@ public:
      * the dataset.
      *
      * @param attIndex the attribute's index (index starts with 0)
+     *
+     * @ requires 0 <= attIndex && attIndex < numAttributes();
      */
-     // @ requires 0 <= attIndex && attIndex < numAttributes();
     void deleteWithMissing(int attIndex);
 
     /**
@@ -271,9 +281,10 @@ public:
      * @return the training set
      * @throws IllegalArgumentException if the number of folds is less than 2 or
      *           greater than the number of instances.
+     *
+     * @ requires 2 <= numFolds && numFolds < numInstances();
+     * @ requires 0 <= numFold && numFold < numFolds;
      */
-     // @ requires 2 <= numFolds && numFolds < numInstances();
-     // @ requires 0 <= numFold && numFold < numFolds;
     Instances *trainCV(int numFolds, int numFold);
 
     /**
@@ -285,17 +296,19 @@ public:
      * @return the test set as a set of weighted instances
      * @throws IllegalArgumentException if the number of folds is less than 2 or
      *           greater than the number of instances.
+     *
+     * @ requires 2 <= numFolds && numFolds < numInstances();
+     * @ requires 0 <= numFold && numFold < numFolds;
      */
-     // @ requires 2 <= numFolds && numFolds < numInstances();
-     // @ requires 0 <= numFold && numFold < numFolds;
     Instances *testCV(int numFolds, int numFold);
 
     /**
      * Returns the relation's name.
      *
      * @return the relation's name as a string
+     *
+     * @ ensures \result == mRelationName;
      */
-     // @ ensures \result == mRelationName;
     string getRelationName();
 
     /**
@@ -313,8 +326,9 @@ public:
      * @param index the index of the attribute.
      * @return an array containing the value of the desired attribute for each
      *         instance in the dataset.
+     *
+     * @ requires 0 <= index && index < numAttributes();
      */
-     // @ requires 0 <= index && index < numAttributes();
     double_array attributeToDoubleArray(int index);
 
 };
