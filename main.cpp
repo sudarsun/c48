@@ -7,6 +7,7 @@
 #include "evaluation/CostMatrix.h"
 #include <iostream>
 #include <ctime>
+#include <string.h>
 
 void classify(char *trainFile, char *testFile, bool isDumpTree = false);
 void processClassifierPrediction(Instance *toPredict,

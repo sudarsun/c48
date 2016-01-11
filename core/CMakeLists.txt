@@ -4,8 +4,6 @@ set(core_SRCS
 Attribute.cpp
 Attribute.h
 AttributeInfo.h
-AttributeMetaInfo.cpp
-AttributeMetaInfo.h
 AttributeStats.cpp
 AttributeStats.h
 Consts.h
