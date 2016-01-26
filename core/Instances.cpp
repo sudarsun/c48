@@ -8,7 +8,7 @@
 #include <exception>
 #include <stdexcept>
 
-Instances::Instances(const string &name, std::vector<Attribute*> &attInfo, int capacity)
+Instances::Instances(const string &name, std::vector<Attribute*> &attInfo, const int capacity)
 {
     // check whether the attribute names are unique
     std::unordered_set<string> attr_names;
@@ -44,12 +44,12 @@ Instances::Instances(Instances *dataset) :Instances(dataset, 0)
     this->copyInstances(0, dataset, dataset->numInstances());
 }
 
-Instances::Instances(Instances *dataset, int capacity)
+Instances::Instances(Instances *dataset, const int capacity)
 {
     initialize(dataset, capacity);
 }
 
-Attribute *Instances::attribute(int index)
+Attribute *Instances::attribute(const int index) const
 {
     return mAttributes[index];
 }
@@ -66,17 +66,17 @@ Attribute *Instances::attribute(const string &name)
     return nullptr;
 }
 
-int Instances::numAttributes()
+int Instances::numAttributes() const
 {
     return (int)mAttributes.size();
 }
 
-int Instances::classIndex()
+int Instances::classIndex() const
 {
     return mClassIndex;
 }
 
-void Instances::setClassIndex(int classIndex)
+void Instances::setClassIndex(const int classIndex)
 {
     if (classIndex >= numAttributes())
     {
@@ -93,19 +93,19 @@ bool Instances::add(Instance *instance)
     return true;
 }
 
-void Instances::add(int index, Instance *instance)
+void Instances::add(const int index, Instance *instance)
 {
     Instance *newInstance = static_cast<Instance*>(instance);
     newInstance->setDataset(this);
     mInstances[index] = instance;
 }
 
-int Instances::numInstances()
+int Instances::numInstances() const
 {
     return (int)mInstances.size();
 }
 
-void Instances::copyInstances(int from, Instances *dest, int num)
+void Instances::copyInstances(const int from, Instances *dest, const int num)
 {
     for (int i = 0; i < num; i++)
     {
@@ -115,7 +115,7 @@ void Instances::copyInstances(int from, Instances *dest, int num)
     }
 }
 
-Instance *Instances::instance(int index)
+Instance *Instances::instance(const int index) const
 {
     return mInstances[index];
 }
@@ -136,7 +136,7 @@ void Instances::initialize(Instances *dataset, int capacity)
     mInstances = std::vector<Instance*>(capacity);
 }
 
-Attribute *Instances::classAttribute()
+Attribute *Instances::classAttribute() const
 {
     if (mClassIndex < 0)
     {
@@ -144,7 +144,7 @@ Attribute *Instances::classAttribute()
     }
     return attribute(mClassIndex);
 }
-int Instances::numClasses()
+int Instances::numClasses() const
 {
     if (mClassIndex < 0)
     {
@@ -160,12 +160,12 @@ int Instances::numClasses()
     }
 }
 
-Instance *Instances::lastInstance()
+Instance *Instances::lastInstance() const
 {
     return mInstances[mInstances.size() - 1];
 }
 
-void Instances::deleteWithMissing(int attIndex)
+void Instances::deleteWithMissing(const int attIndex)
 {
     std::vector<Instance*> newInstances;
     int totalInst = numInstances();
@@ -186,7 +186,6 @@ void Instances::deleteWithMissing(Attribute *att)
 
 void Instances::deleteWithMissingClass()
 {
-
     if (mClassIndex < 0)
     {
         throw "Class index is negative (not set)!";
@@ -194,7 +193,7 @@ void Instances::deleteWithMissingClass()
     deleteWithMissing(mClassIndex);
 }
 
-double Instances::sumOfWeights()
+double Instances::sumOfWeights() const
 {
     double sum = 0;
 
@@ -205,7 +204,7 @@ double Instances::sumOfWeights()
     return sum;
 }
 
-Instances *Instances::trainCV(int numFolds, int numFold)
+Instances *Instances::trainCV(const int numFolds, const int numFold)
 {
     int numInstForFold, first, offset;
     Instances *train;
@@ -236,7 +235,7 @@ Instances *Instances::trainCV(int numFolds, int numFold)
     return train;
 }
 
-Instances *Instances::testCV(int numFolds, int numFold)
+Instances *Instances::testCV(const int numFolds, const int numFold)
 {
     int numInstForFold, first, offset;
     Instances *test;
@@ -265,7 +264,7 @@ Instances *Instances::testCV(int numFolds, int numFold)
     return test;
 }
 
-void Instances::Sort(int attIndex)
+void Instances::Sort(const int attIndex)
 {
     if (!attribute(attIndex)->isNominal())
     {
@@ -304,7 +303,7 @@ void Instances::Sort(Attribute *att)
     Sort(att->index());
 }
 
-void Instances::sortBasedOnNominalAttribute(int attIndex)
+void Instances::sortBasedOnNominalAttribute(const int attIndex)
 {
     // Figure out number of instances for each attribute value
     // and store original list of instances away
@@ -342,7 +341,7 @@ void Instances::sortBasedOnNominalAttribute(int attIndex)
     }
 }
 
-string Instances::getRelationName()
+string Instances::getRelationName() const
 {
     return mRelationName;
 }
@@ -352,7 +351,7 @@ void Instances::setRelationName(const string name)
     mRelationName = name;
 }
 
-double_array Instances::attributeToDoubleArray(int index)
+double_array Instances::attributeToDoubleArray(const int index) const
 {
     int totalInst = numInstances();
     double_array result;

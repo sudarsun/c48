@@ -26,7 +26,7 @@ private:
      * Help method for computing entropy.
      */
 public:
-    static double lnFunc(double num);
+    static double lnFunc(const double num);
 
 };
 

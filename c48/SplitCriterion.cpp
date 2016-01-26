@@ -2,22 +2,22 @@
 #include "Distribution.h"
 
 
-double SplitCriterion::splitCritValue(Distribution *bags) {
+double SplitCriterion::splitCritValue(Distribution *bags) const {
 
     return 0;
 }
 
-double SplitCriterion::splitCritValue(Distribution *train, Distribution *test) {
+double SplitCriterion::splitCritValue(Distribution *train, Distribution *test) const {
 
     return 0;
 }
 
-double SplitCriterion::splitCritValue(Distribution *train, Distribution *test, int noClassesDefault) {
+double SplitCriterion::splitCritValue(Distribution *train, Distribution *test, int noClassesDefault) const {
 
     return 0;
 }
 
-double SplitCriterion::splitCritValue(Distribution *train, Distribution *test, Distribution *defC) {
+double SplitCriterion::splitCritValue(Distribution *train, Distribution *test, Distribution *defC) const {
 
     return 0;
 }

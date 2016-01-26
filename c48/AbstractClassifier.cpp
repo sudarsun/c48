@@ -5,7 +5,8 @@
 #include "core/Consts.h"
 #include "core/Utils.h"
 
-double AbstractClassifier::classifyInstance(Instance *instance) {
+double AbstractClassifier::classifyInstance(Instance *instance) const
+{
 
     double_array dist = distributionForInstance(instance);
     if (dist.empty()) {
@@ -37,7 +38,8 @@ double AbstractClassifier::classifyInstance(Instance *instance) {
     }
 }
 
-double_array AbstractClassifier::distributionForInstance(Instance *instance) {
+double_array AbstractClassifier::distributionForInstance(Instance *instance) const
+{
 
     double_array dist(instance->numClasses());
     switch (instance->classAttribute()->type()) {
@@ -60,37 +62,44 @@ double_array AbstractClassifier::distributionForInstance(Instance *instance) {
     }
 }
 
-bool AbstractClassifier::getDebug() {
-
+bool AbstractClassifier::getDebug() const
+{
     return mDebug;
 }
 
-void AbstractClassifier::setDebug(bool debug) {
+void AbstractClassifier::setDebug(bool debug)
+{
 
     mDebug = debug;
 }
 
-int AbstractClassifier::getNumDecimalPlaces() {
+int AbstractClassifier::getNumDecimalPlaces()  const
+{
     return mNumDecimalPlaces;
 }
 
-void AbstractClassifier::setNumDecimalPlaces(int num) {
+void AbstractClassifier::setNumDecimalPlaces(int num)
+{
     mNumDecimalPlaces = num;
 }
 
-void AbstractClassifier::setBatchSize(const string &size) {
+void AbstractClassifier::setBatchSize(const string &size)
+{
     mBatchSize = size;
 }
 
-string AbstractClassifier::getBatchSize() {
+string AbstractClassifier::getBatchSize()  const
+{
     return mBatchSize;
 }
 
-bool AbstractClassifier::implementsMoreEfficientBatchPrediction() {
+bool AbstractClassifier::implementsMoreEfficientBatchPrediction() const
+{
     return false;
 }
 
-double_2D_array AbstractClassifier::distributionsForInstances(Instances *batch) {
+double_2D_array AbstractClassifier::distributionsForInstances(Instances *batch) const
+{
     double_2D_array batchPreds(batch->numInstances());
     for (int i = 0; i < batch->numInstances(); i++) {
         batchPreds[i] = distributionForInstance(batch->instance(i));

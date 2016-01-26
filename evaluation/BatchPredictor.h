@@ -32,7 +32,7 @@ public:
      *
      * @return the batch size to use
      */
-    virtual string getBatchSize() = 0;
+    virtual string getBatchSize() const = 0;
 
     /**
      * Batch scoring method
@@ -42,7 +42,7 @@ public:
      *
      * @exception Exception if a problem occurs
      */
-    virtual double_2D_array distributionsForInstances(Instances *insts) = 0;
+    virtual double_2D_array distributionsForInstances(Instances *insts) const = 0;
 
     /**
      * Returns true if this BatchPredictor can generate batch predictions
@@ -50,6 +50,6 @@ public:
      *
      * @return true if batch predictions can be generated efficiently
      */
-    virtual bool implementsMoreEfficientBatchPrediction() = 0;
+    virtual bool implementsMoreEfficientBatchPrediction() const = 0;
 };
 #endif    //#ifndef _BATCHPREDICTOR_

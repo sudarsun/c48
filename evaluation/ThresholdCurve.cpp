@@ -109,7 +109,7 @@ Instances *ThresholdCurve::getCurve(std::vector<Prediction*> predictions, int cl
     return insts;
 }
 
-double ThresholdCurve::getNPointPrecision(Instances *tcurve, int n) {
+double ThresholdCurve::getNPointPrecision(Instances *tcurve, const int n) {
 
     if (RELATION_NAME != tcurve->getRelationName() || (tcurve->numInstances() == 0)) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -175,7 +175,7 @@ double ThresholdCurve::getROCArea(Instances *tcurve) {
     return area;
 }
 
-int ThresholdCurve::getThresholdInstance(Instances *tcurve, double threshold) {
+int ThresholdCurve::getThresholdInstance(Instances *tcurve, const double threshold) {
 
     if (RELATION_NAME != tcurve->getRelationName() || (tcurve->numInstances() == 0) || (threshold < 0) || (threshold > 1.0)) {
         return -1;
@@ -188,7 +188,7 @@ int ThresholdCurve::getThresholdInstance(Instances *tcurve, double threshold) {
     return binarySearch(sorted, tvals, threshold);
 }
 
-int ThresholdCurve::binarySearch(int_array &index, double_array &vals, double target) {
+int ThresholdCurve::binarySearch(const int_array &index, const double_array &vals, const double target) {
 
     int lo = 0, hi = (int)index.size() - 1;
     while (hi - lo > 1) {
@@ -210,7 +210,7 @@ int ThresholdCurve::binarySearch(int_array &index, double_array &vals, double ta
     return lo;
 }
 
-double_array ThresholdCurve::getProbabilities(std::vector<Prediction*> predictions, int classIndex) {
+double_array ThresholdCurve::getProbabilities(std::vector<Prediction*> predictions, const int classIndex) const {
 
     // sort by predicted probability of the desired class.
     double_array probs(predictions.size());
@@ -240,7 +240,7 @@ Instances *ThresholdCurve::makeHeader() {
     return new Instances(RELATION_NAME, fv, 0);
 }
 
-Instance *ThresholdCurve::makeInstance(TwoClassStats *tc, double prob) {
+Instance *ThresholdCurve::makeInstance(TwoClassStats *tc, const double prob) {
 
     int count = 0;
     double_array vals(13);

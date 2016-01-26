@@ -15,27 +15,27 @@ NominalPrediction::NominalPrediction(double actual, double_array &distribution, 
     updatePredicted();
 }
 
-double_array NominalPrediction::distribution() {
+double_array NominalPrediction::distribution() const {
 
     return mDistribution;
 }
 
-double NominalPrediction::actual() {
+double NominalPrediction::actual() const {
 
     return mActual;
 }
 
-double NominalPrediction::predicted() {
+double NominalPrediction::predicted() const {
 
     return mPredicted;
 }
 
-double NominalPrediction::weight() {
+double NominalPrediction::weight() const {
 
     return mWeight;
 }
 
-double NominalPrediction::margin() {
+double NominalPrediction::margin() const {
 
     if ((mActual == MISSING_VALUE) || (mPredicted == MISSING_VALUE)) {
         return MISSING_VALUE;
@@ -51,7 +51,7 @@ double NominalPrediction::margin() {
     return probActual - probNext;
 }
 
-double_array NominalPrediction::makeDistribution(double predictedClass, int numClasses) {
+double_array NominalPrediction::makeDistribution(const double predictedClass, const int numClasses) {
 
     double_array dist(numClasses);
     if (predictedClass == MISSING_VALUE) {
@@ -61,7 +61,7 @@ double_array NominalPrediction::makeDistribution(double predictedClass, int numC
     return dist;
 }
 
-double_array NominalPrediction::makeUniformDistribution(int numClasses) {
+double_array NominalPrediction::makeUniformDistribution(const int numClasses) {
 
     double_array dist(numClasses);
     for (int i = 0; i < numClasses; i++) {
@@ -89,7 +89,7 @@ void NominalPrediction::updatePredicted() {
     }
 }
 
-string NominalPrediction::toString() {
+string NominalPrediction::toString() const {
 
     string desc = "";
     desc.append("NOM: ").append(std::to_string(actual())).append(" ").append(std::to_string(predicted()));

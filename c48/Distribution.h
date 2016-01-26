@@ -76,17 +76,17 @@ public:
     /**
      * Returns number of non-empty bags of distribution.
      */
-    int actualNumBags();
+    int actualNumBags() const;
 
     /**
      * Returns number of classes actually occuring in distribution.
      */
-    int actualNumClasses();
+    int actualNumClasses() const;
 
     /**
      * Returns number of classes actually occuring in given bag.
      */
-    int actualNumClasses(int bagIndex);
+    int actualNumClasses(int bagIndex) const;
 
     /**
      * Adds given instance to given bag.
@@ -132,7 +132,7 @@ public:
     /**
      * Checks if at least two bags contain a minimum number of instances.
      */
-    bool check(double minNoObj);
+    bool check(double minNoObj) const;
 
     /**
      * Deletes given instance from given bag.
@@ -151,7 +151,7 @@ public:
     /**
      * Prints distribution.
      */
-    string dumpDistribution();
+    string dumpDistribution() const;
 
     /**
      * Sets all counts to zero.
@@ -166,95 +166,95 @@ public:
     /**
      * Returns index of bag containing maximum number of instances.
      */
-    int maxBag();
+    int maxBag() const;
 
     /**
      * Returns class with highest frequency over all bags.
      */
-    int maxClass();
+    int maxClass() const;
 
     /**
      * Returns class with highest frequency for given bag.
      */
-    int maxClass(int index);
+    int maxClass(int index) const;
 
     /**
      * Returns number of bags.
      */
-    int numBags();
+    int numBags() const;
 
     /**
      * Returns number of classes.
      */
-    int numClasses();
+    int numClasses() const;
 
     /**
      * Returns perClass(maxClass()).
      */
-    double numCorrect();
+    double numCorrect() const;
 
     /**
      * Returns perClassPerBag(index,maxClass(index)).
      */
-    double numCorrect(int index);
+    double numCorrect(int index) const;
 
     /**
      * Returns total-numCorrect().
      */
-    double numIncorrect();
+    double numIncorrect() const;
 
     /**
      * Returns perBag(index)-numCorrect(index).
      */
-    double numIncorrect(int index);
+    double numIncorrect(int index) const;
 
     /**
      * Returns number of (possibly fractional) instances of given class in
      * given bag.
      */
-    double perClassPerBag(int bagIndex, int classIndex);
+    double perClassPerBag(int bagIndex, int classIndex) const;
 
     /**
      * Returns number of (possibly fractional) instances in given bag.
      */
-    double perBag(int bagIndex);
+    double perBag(int bagIndex) const;
 
     /**
      * Returns number of (possibly fractional) instances of given class.
      */
-    double perClass(int classIndex);
+    double perClass(int classIndex) const;
 
     /**
      * Returns relative frequency of class over all bags with
      * Laplace correction.
      */
-    double laplaceProb(int classIndex);
+    double laplaceProb(int classIndex) const;
 
     /**
      * Returns relative frequency of class for given bag.
      */
-    double laplaceProb(int classIndex, int intIndex);
+    double laplaceProb(int classIndex, int intIndex) const;
 
     /**
      * Returns relative frequency of class over all bags.
      */
-    double prob(int classIndex);
+    double prob(int classIndex) const;
 
     /**
      * Returns relative frequency of class for given bag.
      */
-    double prob(int classIndex, int intIndex);
+    double prob(int classIndex, int intIndex) const;
 
     /**
      * Subtracts the given distribution from this one. The results
      * has only one bag.
      */
-    Distribution *subtract(Distribution *toSubstract);
+    Distribution *subtract(Distribution *toSubstract) const;
 
     /**
      * Returns total number of (possibly fractional) instances.
      */
-    double total();
+    double total() const;
 
     /**
      * Shifts given instance from one bag to another one.

@@ -2,70 +2,67 @@
 #include "core/Utils.h"
 #include <exception>
 
-Matrix::Matrix(int m, int n) {
-    this->m = m;
-    this->n = n;
-    A.resize(m, double_array(n));
+Matrix::Matrix(const int row, const int col) {
+    this->mRow = row;
+    this->mCol = col;
+    mElements.resize(row, double_array(col));
 }
 
-Matrix::Matrix(int m, int n, double s) {
-    this->m = m;
-    this->n = n;
-    A.resize(m, double_array(n));
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            A[i][j] = s;
+Matrix::Matrix(const int row, const int col, const double scalarValue) {
+    this->mRow = row;
+    this->mCol = col;
+    mElements.resize(row, double_array(col));
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            mElements[i][j] = scalarValue;
         }
     }
 }
 
 Matrix::Matrix(double_2D_array &A) {
-    m = (int)A.size();
-    n = (int)A[0].size();
-    for (int i = 0; i < m; i++) {
-        if (A[i].size() != n) {
+    mRow = (int)A.size();
+    mCol = (int)A[0].size();
+    for (int i = 0; i < mRow; i++) {
+        if (A[i].size() != mCol) {
             throw std::invalid_argument("All rows must have the same length.");
         }
     }
-    this->A = A;
+    this->mElements = A;
 }
 
-Matrix::Matrix(double_2D_array &A, int m, int n) {
-    this->A = A;
-    this->m = m;
-    this->n = n;
+Matrix::Matrix(double_2D_array &A, const int row, const int col) {
+    this->mElements = A;
+    this->mRow = row;
+    this->mCol = col;
 }
 
-Matrix::Matrix(double_array &vals, int m) {
-    this->m = m;
-    n = (m != 0 ? (int)vals.size() / m : 0);
-    if (m*n != vals.size()) {
-        throw std::invalid_argument("Array length must be a multiple of m.");
+Matrix::Matrix(double_array &vals, const int row) {
+    this->mRow = row;
+    mCol = (mRow != 0 ? (int)vals.size() / mRow : 0);
+    if (mRow*mCol != vals.size()) {
+        throw std::invalid_argument("Array length must be a multiple of Row.");
     }
-    A.resize(m, double_array(n));
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            A[i][j] = vals[i + j*m];
+    mElements.resize(mRow, double_array(mCol));
+    for (int i = 0; i < mRow; i++) {
+        for (int j = 0; j < mCol; j++) {
+            mElements[i][j] = vals[i + j*mRow];
         }
     }
 }
 
-double_2D_array Matrix::getArray() {
-    return A;
+double_2D_array Matrix::getArray() const {
+    return mElements;
 }
 
-
-double Matrix::get(int i, int j) {
-    return A[i][j];
+double Matrix::get(const int i, const int j) const {
+    return mElements[i][j];
 }
 
-
-void Matrix::set(int i, int j, double s) {
-    A[i][j] = s;
+void Matrix::set(const int i, const int j, const double s) {
+    mElements[i][j] = s;
 }
 
-
-string Matrix::toString() {
+string Matrix::toString() const {
     // Determine the width required for the maximum element,
     // and check for fractional display requirement.
     double maxval = 0;
@@ -97,10 +94,11 @@ string Matrix::toString() {
 
     return text;
 }
-int Matrix::getRowDimension() {
-    return m;
+
+int Matrix::getRowDimension() const {
+    return mRow;
 }
 
-int Matrix::getColumnDimension() {
-    return n;
+int Matrix::getColumnDimension() const {
+    return mCol;
 }

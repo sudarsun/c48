@@ -41,7 +41,7 @@ public:
    * @param weight the instance's weight
    * @param attValues a vector of attribute values 
    */
-    Instance(double weight, double_array attValues);
+    Instance(const double weight, double_array attValues);
 
   /**
    * Returns the attribute with the given index.
@@ -52,7 +52,7 @@ public:
    * dataset
    */ 
   //@ requires mDataset != null;
-    Attribute *attribute(int index);
+    Attribute *attribute(const int index) const;
 	
   /**
    * Returns the class attribute's index.
@@ -62,7 +62,7 @@ public:
    */
   //@ requires mDataset != null;
   //@ ensures  \result == mDataset.classIndex();
-  int classIndex();
+  int classIndex() const;
   
   /**
    * Returns the number of attributes.
@@ -70,7 +70,7 @@ public:
    * @return the number of attributes as an integer
    */
   //@ ensures \result == mAttValues.length;
-  int numAttributes();
+  int numAttributes() const;
 
   /**
    * Sets the class value of an instance to be "missing". A deep copy of
@@ -91,7 +91,7 @@ public:
    *
    * @param attIndex the attribute's index
    */
-   void setMissing(int attIndex);
+   void setMissing(const int attIndex);
    
   /**
    * Sets a value of a nominal or string attribute to the given
@@ -108,7 +108,7 @@ public:
    * be found for a nominal attribute 
    */
   //@ requires mDataset != null;	
-  void setValue(int attIndex, const string &value);
+  void setValue(const int attIndex, const string &value);
   
   /**
    * Sets a specific value in the instance to the given value 
@@ -120,7 +120,7 @@ public:
    * attribute is nominal (or a string) then this is the new value's
    * index as a double).  
    */
-   void setValue(int attIndex, double value);
+   void setValue(const int attIndex, const double value);
    
   /**
    * Sets the reference to the dataset. Does not check if the instance
@@ -140,7 +140,7 @@ public:
    * @return the dataset the instance has accesss to
    */
   //@ ensures \result == mDataset;
-  Instances* getDataset();
+  Instances* getDataset() const;
   
   /**
    * Returns an instance's class value in internal format. (ie. as a
@@ -153,13 +153,13 @@ public:
    * have access to a dataset 
    */
   //@ requires classIndex() >= 0;	
-    double classValue();
+    double classValue() const;
   /**
    * Returns the instance's weight.
    *
    * @return the instance's weight as a double
    */
-   double weight();
+   double weight() const;
   /**
    * Returns an instance's attribute value in internal format.
    *
@@ -168,14 +168,14 @@ public:
    * attribute is nominal (or a string) then it returns the value's index as a 
    * double).
    */
-   double value(int attIndex);
+   double value(const int attIndex) const;
 
   /**
    * Returns the values of each attribute as an array of doubles.
    *
    * @return an array containing all the instance attribute values
    */
-   double_array toDoubleArray();
+   double_array toDoubleArray() const;
    
   /**
    * Returns class attribute.
@@ -185,7 +185,7 @@ public:
    * instance doesn't have access to a dataset
    */
   //@ requires mDataset != null;
-  Attribute *classAttribute();
+  Attribute *classAttribute() const;
   
   /**
    * Returns the number of class labels.
@@ -196,27 +196,27 @@ public:
    * dataset
    */
   //@ requires mDataset != null;
-  int numClasses();
+  int numClasses() const;
   /**
    * Tests if a specific value is "missing".
    *
    * @param attIndex the attribute's index
    * @return true if the value is "missing"
    */
-   bool isMissing(int attIndex);
+   bool isMissing(const int attIndex) const;
   /**
    * Sets the weight of an instance.
    *
    * @param weight the weight
    */
-   void setWeight(double weight);
+   void setWeight(const double weight);
 
   /**
    * Returns the double that codes "missing".
    *
    * @return the double that codes "missing"
    */
-   double missingValue();
+   double missingValue() const;
    /**
    * Tests if an instance's class is missing.
    *
@@ -225,7 +225,7 @@ public:
    * have access to a dataset
    */
   //@ requires classIndex() >= 0;
-    bool classIsMissing();
+    bool classIsMissing() const;
   
   /**
    * Produces a shallow copy of this instance. The copy has

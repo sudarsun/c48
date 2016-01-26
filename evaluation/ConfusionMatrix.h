@@ -19,7 +19,7 @@ class TwoClassStats;
 class ConfusionMatrix : public Matrix {
 
 protected:
-    /** Stores the names of the classes */
+    /* Stores the names of the classes */
     string_array mClassNames;
 
 public:
@@ -47,7 +47,7 @@ public:
     *
     * @return the number of classes
     */
-    virtual int size();
+    virtual int size() const;
 
     /**
      * Gets the name of one of the classes.
@@ -55,7 +55,7 @@ public:
      * @param index the index of the class.
      * @return the class name.
      */
-    virtual string className(int index);
+    virtual string className(const int index) const;
 
     /**
     * Includes a prediction in the confusion matrix.
@@ -81,7 +81,7 @@ public:
       * @param classIndex the index of the class of interest.
       * @return the generated TwoClassStats object.
       */
-    virtual TwoClassStats *getTwoClassStats(int classIndex);
+    virtual TwoClassStats *getTwoClassStats(const int classIndex);
 
     /**
      * Gets the number of correct classifications (that is, for which a correct
@@ -90,7 +90,7 @@ public:
      *
      * @return the number of correct classifications
      */
-    virtual double correct();
+    virtual double correct() const;
 
     /**
      * Gets the number of incorrect classifications (that is, for which an
@@ -99,7 +99,7 @@ public:
      *
      * @return the number of incorrect classifications
      */
-    virtual double incorrect();
+    virtual double incorrect() const;
 
     /**
      * Gets the number of predictions that were made (actually the sum of the
@@ -107,21 +107,21 @@ public:
      *
      * @return the number of predictions with known class
      */
-    virtual double total();
+    virtual double total() const;
 
     /**
      * Returns the estimated error rate.
      *
      * @return the estimated error rate (between 0 and 1).
      */
-    virtual double errorRate();
+    virtual double errorRate() const;
 
     /**
      * Calls toString() with a default title.
      *
      * @return the confusion matrix as a string
      */
-    virtual string toString();
+    virtual string toString() const;
 
     /**
      * Outputs the performance statistics as a classification confusion matrix.
@@ -130,7 +130,7 @@ public:
      * @param title the title for the confusion matrix
      * @return the confusion matrix as a String
      */
-    virtual string toString(const string &title);
+    virtual string toString(const string &title) const;
 
     /**
     * Get a single element.
@@ -140,7 +140,7 @@ public:
     * @return A(i,j)
     * @throws ArrayIndexOutOfBoundsException
     */
-    virtual double get(int i, int j);
+    virtual double get(const int i, const int j) const;
 
     /**
     * Set a single element.
@@ -149,14 +149,14 @@ public:
     * @param s    A(i,j).
     * @throws  ArrayIndexOutOfBoundsException
     */
-    virtual void set(int i, int j, double s);
+    virtual void set(const int i, const int j, const double s);
 
     /**
      * Access the internal two-dimensional array.
      *
      * @return Pointer to the two-dimensional array of matrix elements.
      */
-    virtual double_2D_array getArray();
+    virtual double_2D_array getArray() const;
 
     /**
      * Get row dimension.
@@ -164,13 +164,13 @@ public:
      * @return m, the number of rows.
      *
      */
-    virtual int getRowDimension();
+    virtual int getRowDimension() const;
     /**
      * Get column dimension.
      *
      * @return n, the number of columns.
      */
-    virtual int getColumnDimension();
+    virtual int getColumnDimension() const;
 
 private:
 
@@ -182,7 +182,7 @@ private:
      * @param IDWidth the width of the entry
      * @return the formatted integer as a string
      */
-    static string num2ShortID(int num, char_array &IDChars, int IDWidth);
+    static string num2ShortID(int num, const char_array &IDChars, const int IDWidth);
 
 };
 

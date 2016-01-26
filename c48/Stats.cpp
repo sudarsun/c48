@@ -120,33 +120,6 @@ double Stats::normalInverse(double y0) {
     return (x);
 }
 
-/// <summary>
-/// Evaluates the given polynomial of degree <tt>N</tt> at <tt>x</tt>.
-/// Evaluates polynomial when coefficient of N is 1.0. Otherwise same as
-/// <tt>polevl()</tt>.
-///
-/// <pre>
-///                     2          N
-/// y  =  C  + C x + C x  +...+ C x
-///        0    1     2          N
-///
-/// Coefficients are stored in reverse order:
-///
-/// coef[0] = C  , ..., coef[N] = C  .
-///            N                   0
-/// </pre>
-///
-/// The function <tt>p1evl()</tt> assumes that <tt>coef[N] = 1.0</tt> and is
-/// omitted from the array. Its calling arguments are otherwise the same as
-/// <tt>polevl()</tt>.
-/// <para>
-/// In the interest of speed, there are no checks for out of bounds arithmetic.
-///
-/// </para>
-/// </summary>
-/// <param name="x"> argument to the polynomial. </param>
-/// <param name="coef"> the coefficients of the polynomial. </param>
-/// <param name="N"> the degree of the polynomial. </param>
 double Stats::p1evl(double x, const double_array &coef, int N) {
 
     double ans;
@@ -159,25 +132,6 @@ double Stats::p1evl(double x, const double_array &coef, int N) {
     return ans;
 }
 
-/// <summary>
-/// Evaluates the given polynomial of degree <tt>N</tt> at <tt>x</tt>.
-///
-/// <pre>
-///                     2          N
-/// y  =  C  + C x + C x  +...+ C x
-///        0    1     2          N
-///
-/// Coefficients are stored in reverse order:
-///
-/// coef[0] = C  , ..., coef[N] = C  .
-///            N                   0
-/// </pre>
-///
-/// In the interest of speed, there are no checks for out of bounds arithmetic.
-/// </summary>
-/// <param name="x"> argument to the polynomial. </param>
-/// <param name="coef"> the coefficients of the polynomial. </param>
-/// <param name="N"> the degree of the polynomial. </param>
 double Stats::polevl(double x, const double_array &coef, int N) {
 
     double ans;

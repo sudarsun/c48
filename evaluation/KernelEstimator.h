@@ -47,7 +47,7 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
    * @param the data value to locate
    * @return the index of the nearest data value
    */
-  int findNearestValue( double key );
+  int findNearestValue( const double key ) const;
 
   /**
    * Round a data value using the defined precision for this estimator
@@ -55,7 +55,7 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
    * @param data the value to round
    * @return the rounded data value
    */
-  double round( double data );
+  double round( const double data ) const;
 
   // ===============
   // Public methods.
@@ -77,7 +77,7 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
    * @param data the new data value 
    * @param weight the weight assigned to the data value 
    */
-  virtual void addValue( double data, double weight );
+  void addValue(double data, const double weight ) override;
 
    /**
    * Get a probability estimate for a value.
@@ -85,45 +85,45 @@ class KernelEstimator : public Estimator, public IncrementalEstimator {
    * @param data the value to estimate the probability of
    * @return the estimated probability of the supplied value
    */
-  virtual double getProbability( double data );
+  virtual double getProbability( const double data ) const;
 
   /** Display a representation of this estimator */
-  virtual string toString();
+  virtual string toString() const;
 
   /**
    * Return the number of kernels in this kernel estimator
    *
    * @return the number of kernels
    */
-  virtual int getNumKernels();
+  virtual int getNumKernels() const;
 
   /**
    * Return the means of the kernels.
    *
    * @return the means of the kernels
    */
-  virtual double_array getMeans();
+  virtual double_array getMeans() const;
 
    /**
    * Return the weights of the kernels.
    *
    * @return the weights of the kernels
    */
-  virtual double_array getWeights();
+  virtual double_array getWeights() const;
 
   /**
    * Return the precision of this kernel estimator.
    *
    * @return the precision
    */
-  virtual double getPrecision();
+  virtual double getPrecision() const;
 
   /**
    * Return the standard deviation of this kernel estimator.
    *
    * @return the standard deviation
    */
-  virtual double getStdDev();
+  virtual double getStdDev() const;
 
 };
 

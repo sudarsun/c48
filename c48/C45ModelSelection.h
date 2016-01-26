@@ -21,16 +21,16 @@ class C45ModelSelection : public ModelSelection {
 
 protected:
     /** Minimum number of objects in interval. */
-    const int mminNoObj;
+    const int mMinNoObj;
 
     /** Use MDL correction? */
-    const bool museMDLcorrection;
+    const bool mUseMDLcorrection;
 
     /** All the training data */
-    Instances *mallData;
+    Instances *mAllData;
 
     /** Do not relocate split point to actual data value */
-    const bool mdoNotMakeSplitPointActualValue;
+    const bool mDoNotMakeSplitPointActualValue;
 
 public:
     /**
@@ -50,17 +50,17 @@ public:
     /**
      * Sets reference to training data to null.
      */
-    virtual void cleanup();
+    virtual void cleanup() const;
 
     /**
      * Selects C4.5-type split for the given dataset.
      */
-    ClassifierSplitModel *selectModel(Instances *data);
+    ClassifierSplitModel *selectModel(Instances *data) const;
 
     /**
      * Selects C4.5-type split for the given dataset.
      */
-    ClassifierSplitModel *selectModel(Instances *train, Instances *test);
+    virtual ClassifierSplitModel *selectModel(Instances *train, Instances *test) const override;
 
 };
 

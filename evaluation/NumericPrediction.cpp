@@ -9,26 +9,26 @@ NumericPrediction::NumericPrediction(double actual, double predicted, double wei
     mWeight = weight;
 }
 
-double NumericPrediction::actual() {
+double NumericPrediction::actual() const {
     return mActual;
 }
 
-double NumericPrediction::predicted() {
+double NumericPrediction::predicted() const {
     return mPredicted;
 }
 
-double NumericPrediction::weight() {
+double NumericPrediction::weight() const {
     return mWeight;
 }
 
-double NumericPrediction::error() {
+double NumericPrediction::error() const {
     if ((mActual == MISSING_VALUE) || (mPredicted == MISSING_VALUE)) {
         return MISSING_VALUE;
     }
     return mPredicted - mActual;
 }
 
-string NumericPrediction::toString() {
+string NumericPrediction::toString() const {
     string desc = "";
     desc.append("NUM: ").append(std::to_string(actual())).append(" ").append(std::to_string(predicted()));
     desc.append(" ").append(std::to_string(weight()));

@@ -31,17 +31,17 @@ public:
     /**
      * Returns the Attribute Index for the corrsponding key argument.
      */
-    int getAttributeIndex(const string key);
+    int getAttributeIndex(const string key) const;
 
     /**
      * Returns the number of attribute's values.
      */
-    size_t getSize(void);
+    size_t getSize(void) const;
 
     /**
      * Returns the size of Hashtable.
      */
-    size_t getHashTableSize(void);
+    size_t getHashTableSize(void) const;
 
     /**
      * Sets the Hashtable.
@@ -51,12 +51,12 @@ public:
     /**
      * Returns the Hashtable.
      */
-    string_hashtable getHashTable();
+    string_hashtable getHashTable() const;
 
     /**
      * Returns the attribute Value.
      */
-    string getAttributeValue(const int key);
+    string getAttributeValue(const int key) const;
 
     /**
      * Sets the attribute Value.

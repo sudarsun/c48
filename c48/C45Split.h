@@ -72,43 +72,43 @@ public:
     /**
      * Returns index of attribute for which split was generated.
      */
-    int attIndex();
+    int attIndex() const;
 
     /**
      * Returns the split point (numeric attribute only).
      *
      * @return the split point used for a test on a numeric attribute
      */
-    virtual double splitPoint();
+    double splitPoint() const;
 
     /**
      * Gets class probability for instance.
      *
      * @exception Exception if something goes wrong
      */
-    double classProb(int classIndex, Instance *instance, int theSubset);
+    double classProb(const int classIndex, Instance *instance, const int theSubset) const;
 
     /**
      * Returns coding cost for split (used in rule learner).
      */
-    double codingCost();
+    double codingCost() const;
 
     /**
      * Returns (C4.5-type) gain ratio for the generated split.
      */
-    double gainRatio();
+    double gainRatio() const;
 
     /**
      * Returns (C4.5-type) information gain for the generated split.
      */
-    double infoGain();
+    double infoGain() const;
 
     /**
      * Prints left side of condition..
      *
      * @param data training set.
      */
-    string leftSide(Instances *data);
+    string leftSide(Instances *data) const override;
 
     /**
      * Prints the condition satisfied by instances in a subset.
@@ -116,7 +116,7 @@ public:
      * @param index of subset
      * @param data training set.
      */
-    string rightSide(int index, Instances *data);
+    string rightSide(const int index, Instances *data) const override;
 
     /**
      * Sets split point to greatest value in given data smaller or equal to old
@@ -133,7 +133,7 @@ public:
      * @param minsAndMaxs min and max in 2D array.
      * @param index index.
      */
-    double_2D_array minsAndMaxs(Instances *data, double_2D_array &minsAndMaxs, int index);
+    double_2D_array minsAndMaxs(Instances *data, const double_2D_array &minsAndMaxs, int index) const;
 
     /**
      * Sets distribution associated with model.
@@ -144,7 +144,7 @@ public:
      * Returns weights if instance is assigned to more than one subset. Returns
      * null if instance is only assigned to one subset.
      */
-    double_array weights(Instance *instance);
+    double_array weights(Instance *instance) const;
 
     /**
      * Returns index of subset instance is assigned to. Returns -1 if instance is
@@ -152,7 +152,7 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    int whichSubset(Instance *instance);
+    const int whichSubset(Instance *instance) const;
 
 private:
     /**

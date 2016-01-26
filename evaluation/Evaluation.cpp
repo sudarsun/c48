@@ -71,7 +71,6 @@ void Evaluation::setPriors(Instances train)
                 addNumericTrainClass(currentInst->classValue(), currentInst->weight());
             }
         }
-
     }
     else {
         for (int i = 0; i < mNumClasses; i++) {
@@ -971,7 +970,7 @@ double Evaluation::weightedAreaUnderROC()
 
     return aucTotal / classCountSum;
 }
-string Evaluation::num2ShortID(int num, char_array &IDChars, int IDWidth) {
+string Evaluation::num2ShortID(int num, const char_array &IDChars, int IDWidth) {
 
     char_array ID(IDWidth);
     int i;

@@ -11,39 +11,39 @@ TwoClassStats::TwoClassStats(double tp, double fp, double tn, double fn) {
     setFalseNegative(fn);
 }
 
-void TwoClassStats::setTruePositive(double tp) {
+void TwoClassStats::setTruePositive(const double tp) {
     mTruePos = tp;
 }
 
-void TwoClassStats::setFalsePositive(double fp) {
+void TwoClassStats::setFalsePositive(const double fp) {
     mFalsePos = fp;
 }
 
-void TwoClassStats::setTrueNegative(double tn) {
+void TwoClassStats::setTrueNegative(const double tn) {
     mTrueNeg = tn;
 }
 
-void TwoClassStats::setFalseNegative(double fn) {
+void TwoClassStats::setFalseNegative(const double fn) {
     mFalseNeg = fn;
 }
 
-double TwoClassStats::getTruePositive() {
+double TwoClassStats::getTruePositive() const {
     return mTruePos;
 }
 
-double TwoClassStats::getFalsePositive() {
+double TwoClassStats::getFalsePositive() const {
     return mFalsePos;
 }
 
-double TwoClassStats::getTrueNegative() {
+double TwoClassStats::getTrueNegative() const {
     return mTrueNeg;
 }
 
-double TwoClassStats::getFalseNegative() {
+double TwoClassStats::getFalseNegative() const {
     return mFalseNeg;
 }
 
-double TwoClassStats::getTruePositiveRate() {
+double TwoClassStats::getTruePositiveRate() const {
     if (0 == (mTruePos + mFalseNeg)) {
         return 0;
     }
@@ -52,7 +52,7 @@ double TwoClassStats::getTruePositiveRate() {
     }
 }
 
-double TwoClassStats::getFalsePositiveRate() {
+double TwoClassStats::getFalsePositiveRate() const {
     if (0 == (mFalsePos + mTrueNeg)) {
         return 0;
     }
@@ -61,7 +61,7 @@ double TwoClassStats::getFalsePositiveRate() {
     }
 }
 
-double TwoClassStats::getPrecision() {
+double TwoClassStats::getPrecision() const {
     if (0 == (mTruePos + mFalsePos)) {
         return 0;
     }
@@ -70,11 +70,11 @@ double TwoClassStats::getPrecision() {
     }
 }
 
-double TwoClassStats::getRecall() {
+double TwoClassStats::getRecall() const {
     return getTruePositiveRate();
 }
 
-double TwoClassStats::getFMeasure() {
+double TwoClassStats::getFMeasure() const {
 
     double precision = getPrecision();
     double recall = getRecall();
@@ -84,7 +84,7 @@ double TwoClassStats::getFMeasure() {
     return 2 * precision * recall / (precision + recall);
 }
 
-double TwoClassStats::getFallout() {
+double TwoClassStats::getFallout() const {
     if (0 == (mTruePos + mFalsePos)) {
         return 0;
     }
@@ -103,7 +103,7 @@ ConfusionMatrix *TwoClassStats::getConfusionMatrix() {
     return cm;
 }
 
-string TwoClassStats::toString() {
+string TwoClassStats::toString() const {
 
     string res = "";
     res.append(std::to_string(getTruePositive())).append(" ");

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <exception>      // std::out_of_range
 
-
 NominalAttributeInfo::NominalAttributeInfo(string_array &attributeValues, const string &attributeName)
 {
 
@@ -13,13 +12,9 @@ NominalAttributeInfo::NominalAttributeInfo(string_array &attributeValues, const 
     }
     else
     {
-        //mValues = string_array(attributeValues.size());
-        //mHashtable = std::unordered_map<string, int>(attributeValues.size());
         for (int i = 0; i < (int)attributeValues.size(); i++)
         {
-            //std::cout << "before" << attributeValues[i] << std::endl;
             auto store = attributeValues[i];
-            //std::cout << "after" << store << std::endl;
             if (mHashtable.find(store) != mHashtable.end())
             {
                 throw std::invalid_argument(string("A nominal attribute (") + attributeName + string(") cannot") +
@@ -31,14 +26,10 @@ NominalAttributeInfo::NominalAttributeInfo(string_array &attributeValues, const 
     }
 }
 
-int NominalAttributeInfo::getAttributeIndex(const string key)
+int NominalAttributeInfo::getAttributeIndex(const string key) const
 {
     try
     {
-        /*for(auto &par : mHashtable)
-         {
-         std::cout << par.first << ": " << " -> " << par.second << std::endl;
-         }*/
         return mHashtable.at(key);
     }
     catch (std::exception& ex)
@@ -47,12 +38,12 @@ int NominalAttributeInfo::getAttributeIndex(const string key)
     }
 }
 
-size_t NominalAttributeInfo::getSize(void)
+size_t NominalAttributeInfo::getSize(void) const
 {
     return mValues.size();
 }
 
-size_t NominalAttributeInfo::getHashTableSize(void)
+size_t NominalAttributeInfo::getHashTableSize(void) const
 {
     return mHashtable.size();
 }
@@ -62,7 +53,7 @@ void NominalAttributeInfo::setAttributeValue(int key, string value)
     mValues.assign(key, value);
 }
 
-string NominalAttributeInfo::getAttributeValue(const int key)
+string NominalAttributeInfo::getAttributeValue(const int key) const
 {
     return mValues[key];
 }
@@ -92,7 +83,7 @@ void NominalAttributeInfo::removeIndex(const int index)
     mValues.erase(mValues.begin() + index);
 }
 
-string_hashtable NominalAttributeInfo::getHashTable()
+string_hashtable NominalAttributeInfo::getHashTable() const
 {
     return mHashtable;
 }

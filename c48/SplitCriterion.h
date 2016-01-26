@@ -18,7 +18,7 @@ public:
      *
      * @return value of splitting criterion. 0 by default
      */
-    virtual double splitCritValue(Distribution *bags);
+    virtual double splitCritValue(Distribution *bags) const;
 
     /**
      * Computes result of splitting criterion for given training and
@@ -26,7 +26,7 @@ public:
      *
      * @return value of splitting criterion. 0 by default
      */
-    virtual double splitCritValue(Distribution *train, Distribution *test);
+    virtual double splitCritValue(Distribution *train, Distribution *test) const;
 
     /**
      * Computes result of splitting criterion for given training and
@@ -34,7 +34,7 @@ public:
      *
      * @return value of splitting criterion. 0 by default
      */
-    virtual double splitCritValue(Distribution *train, Distribution *test, int noClassesDefault);
+    virtual double splitCritValue(Distribution *train, Distribution *test, int noClassesDefault) const;
 
     /**
      * Computes result of splitting criterion for given training and
@@ -42,7 +42,7 @@ public:
      *
      * @return value of splitting criterion. 0 by default
      */
-    virtual double splitCritValue(Distribution *train, Distribution *test, Distribution *defC);
+    virtual double splitCritValue(Distribution *train, Distribution *test, Distribution *defC) const;
 };
 
 

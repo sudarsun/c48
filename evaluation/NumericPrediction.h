@@ -47,7 +47,7 @@ public:
      * @return the actual class value, or MISSING_VALUE if no
      * prediction was made.
      */
-    virtual double actual();
+    virtual double actual() const;
 
     /**
     * Gets the predicted class value.
@@ -55,7 +55,7 @@ public:
     * @return the predicted class value, or MISSING_VALUE if no
     * prediction was made.
     */
-    virtual double predicted();
+    virtual double predicted() const;
 
     /**
      * Gets the weight assigned to this prediction. This is typically the weight
@@ -63,7 +63,7 @@ public:
      *
      * @return the weight assigned to this prediction.
      */
-    virtual double weight();
+    virtual double weight() const;
 
     /**
      * Calculates the prediction error. This is defined as the predicted
@@ -73,14 +73,14 @@ public:
      * MISSING_VALUE if either the actual or predicted value
      * is missing.
      */
-    virtual double error();
+    virtual double error() const;
 
     /**
      * Gets a human readable representation of this prediction.
      *
      * @return a human readable representation of this prediction.
      */
-    virtual string toString();
+    virtual string toString() const;
 
 };
 

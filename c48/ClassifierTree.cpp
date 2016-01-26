@@ -23,7 +23,15 @@ ClassifierTree::ClassifierTree(ModelSelection *toSelectLocModel) {
     mToSelectModel = toSelectLocModel;
 }
 
-void ClassifierTree::buildClassifier(Instances *data) {
+ClassifierTree::~ClassifierTree()
+{
+    if (mToSelectModel != nullptr)
+        delete mToSelectModel;
+    if (mLocalModel != nullptr)
+        delete mLocalModel;
+}
+
+void ClassifierTree::buildClassifier(Instances *data){
 
     // remove instances with missing class
     data = new Instances(data);
@@ -95,7 +103,7 @@ void ClassifierTree::buildTree(Instances *train, Instances *test, bool keepData)
     }
 }
 
-double ClassifierTree::classifyInstance(Instance *instance) {
+double ClassifierTree::classifyInstance(Instance *instance) const{
 
     double maxProb = -1;
     double currentProb;
@@ -152,7 +160,7 @@ int ClassifierTree::assignIDs(int lastID) {
     return currLastID;
 }
 
-int ClassifierTree::numLeaves() {
+int ClassifierTree::numLeaves() const{
 
     int num = 0;
     int i;
@@ -169,7 +177,7 @@ int ClassifierTree::numLeaves() {
     return num;
 }
 
-int ClassifierTree::numNodes() {
+int ClassifierTree::numNodes() const {
 
     int no = 1;
     int i;
@@ -183,7 +191,7 @@ int ClassifierTree::numNodes() {
     return no;
 }
 
-string ClassifierTree::toString(bool isDumpTree) {
+string ClassifierTree::toString(bool isDumpTree) const {
 
     try {
         string text = "";
@@ -207,7 +215,7 @@ string ClassifierTree::toString(bool isDumpTree) {
     }
 }
 
-ClassifierTree *ClassifierTree::getNewTree(Instances *data) {
+ClassifierTree *ClassifierTree::getNewTree(Instances *data) const{
 
     ClassifierTree *newTree = new ClassifierTree(mToSelectModel);
     newTree->buildTree(data, false);
@@ -215,7 +223,7 @@ ClassifierTree *ClassifierTree::getNewTree(Instances *data) {
     return newTree;
 }
 
-ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) {
+ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) const{
 
     ClassifierTree *newTree = new ClassifierTree(mToSelectModel);
     newTree->buildTree(train, test, false);
@@ -223,7 +231,7 @@ ClassifierTree *ClassifierTree::getNewTree(Instances *train, Instances *test) {
     return newTree;
 }
 
-void ClassifierTree::dumpTree(int depth, string &text) {
+void ClassifierTree::dumpTree(int depth, string &text) const {
 
     int i, j;
 
@@ -245,7 +253,7 @@ void ClassifierTree::dumpTree(int depth, string &text) {
     }
 }
 
-double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, double weight) {
+double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, double weight) const{
 
     double prob = 0;
 
@@ -257,24 +265,24 @@ double ClassifierTree::getProbsLaplace(int classIndex, Instance *instance, doubl
         if (treeIndex == -1) {
             double_array weights = localModel()->weights(instance);
             for (int i = 0; i < mSons.size(); i++) {
-                if (!son(i)->mIsEmpty) {
-                    prob += son(i)->getProbsLaplace(classIndex, instance, weights[i] * weight);
+                if (!mSons[i]->mIsEmpty) {
+                    prob += mSons[i]->getProbsLaplace(classIndex, instance, weights[i] * weight);
                 }
             }
             return prob;
         }
         else {
-            if (son(treeIndex)->mIsEmpty) {
+            if (mSons[treeIndex]->mIsEmpty) {
                 return weight * localModel()->classProbLaplace(classIndex, instance, treeIndex);
             }
             else {
-                return son(treeIndex)->getProbsLaplace(classIndex, instance, weight);
+                return mSons[treeIndex]->getProbsLaplace(classIndex, instance, weight);
             }
         }
     }
 }
 
-double ClassifierTree::getProbs(int classIndex, Instance *instance, double weight) {
+double ClassifierTree::getProbs(int classIndex, Instance *instance, double weight) const{
 
     double prob = 0;
 
@@ -286,24 +294,24 @@ double ClassifierTree::getProbs(int classIndex, Instance *instance, double weigh
         if (treeIndex == -1) {
             double_array weights = localModel()->weights(instance);
             for (int i = 0; i < mSons.size(); i++) {
-                if (!son(i)->mIsEmpty) {
-                    prob += son(i)->getProbs(classIndex, instance, weights[i] * weight);
+                if (!mSons[i]->mIsEmpty) {
+                    prob += mSons[i]->getProbs(classIndex, instance, weights[i] * weight);
                 }
             }
             return prob;
         }
         else {
-            if (son(treeIndex)->mIsEmpty) {
+            if (mSons[treeIndex]->mIsEmpty) {
                 return weight * localModel()->classProb(classIndex, instance, treeIndex);
             }
             else {
-                return son(treeIndex)->getProbs(classIndex, instance, weight);
+                return mSons[treeIndex]->getProbs(classIndex, instance, weight);
             }
         }
     }
 }
 
-ClassifierSplitModel *ClassifierTree::localModel() {
+ClassifierSplitModel *ClassifierTree::localModel() const{
 
     return mLocalModel;
 }
@@ -352,7 +360,7 @@ double_array ClassifierTree::getMembershipValues(Instance *instance) {
             weights[treeIndex] = 1.0;
         }
         for (int i = 0; i < node->mSons.size(); i++) {
-            queueOfNodes.push_back(node->son(i));
+            queueOfNodes.push_back(node->mSons[i]);
             queueOfWeights.push_back(a[index - 1] * weights[i]);
         }
     }

@@ -43,7 +43,7 @@ public:
      * @exception Exception if an error occurred during the prediction
      */
 public:
-    virtual double classifyInstance(Instance *instance);
+    virtual double classifyInstance(Instance *instance) const;
 
 
     /**
@@ -58,7 +58,7 @@ public:
      *         test instance in each class or the numeric prediction
      * @exception Exception if distribution could not be computed successfully
      */
-    virtual double_array distributionForInstance(Instance *instance);
+    virtual double_array distributionForInstance(Instance *instance) const;
 
 
     /**
@@ -66,7 +66,7 @@ public:
      *
      * @return true if debugging output is on
      */
-    virtual bool getDebug();
+    virtual bool getDebug() const;
 
 
     /**
@@ -80,7 +80,7 @@ public:
     /**
      * Get the number of decimal places.
      */
-    virtual int getNumDecimalPlaces();
+    virtual int getNumDecimalPlaces() const;
 
 
     /**
@@ -102,7 +102,7 @@ public:
      *
      * @return the preferred batch size
      */
-    virtual string getBatchSize();
+    virtual string getBatchSize() const;
 
 
     /**
@@ -113,7 +113,7 @@ public:
      * @return true if this classifier can generate batch predictions in an
      *         efficient manner.
      */
-    virtual bool implementsMoreEfficientBatchPrediction();
+    virtual bool implementsMoreEfficientBatchPrediction() const;
 
 
     /**
@@ -128,7 +128,7 @@ public:
      *         batch
      * @throws Exception if a problem occurs.
      */
-    virtual double_2D_array distributionsForInstances(Instances *batch);
+    virtual double_2D_array distributionsForInstances(Instances *batch) const;
 };
 
 

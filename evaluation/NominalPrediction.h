@@ -58,13 +58,13 @@ public:
      *
      * @return the predicted probabilities
      */
-    virtual double_array distribution();
+    virtual double_array distribution() const;
 
     /** Gets the actual class value.
     ///  */
     /// <returns> the actual class value, or MISSING_VALUE if no
     /// prediction was made.    */
-    virtual double actual();
+    virtual double actual() const;
 
     /**
      * Gets the predicted class value.
@@ -72,7 +72,7 @@ public:
      * @return the predicted class value, or MISSING_VALUE if no
      * prediction was made.
      */
-    virtual double predicted();
+    virtual double predicted() const;
 
     /**
      * Gets the weight assigned to this prediction. This is typically the weight
@@ -80,7 +80,7 @@ public:
      *
      * @return the weight assigned to this prediction.
      */
-    virtual double weight();
+    virtual double weight() const;
 
     /**
     * Calculates the prediction margin. This is defined as the difference
@@ -91,7 +91,7 @@ public:
     * MISSING_VALUE if either the actual or predicted value
     * is missing.
     */
-    virtual double margin();
+    virtual double margin() const;
 
     /**
     * Convert a single prediction into a probability distribution
@@ -105,7 +105,7 @@ public:
     * prediction.
     * @return the probability distribution.
     */
-    static double_array makeDistribution(double predictedClass, int numClasses);
+    static double_array makeDistribution(const double predictedClass, const int numClasses);
 
     /**
      * Creates a uniform probability distribution -- where each of the
@@ -115,14 +115,14 @@ public:
      * prediction.
      * @return the probability distribution.
      */
-    static double_array makeUniformDistribution(int numClasses);
+    static double_array makeUniformDistribution(const int numClasses);
 
     /**
      * Gets a human readable representation of this prediction.
      *
      * @return a human readable representation of this prediction.
      */
-    virtual string toString();
+    virtual string toString() const;
 
 };
 

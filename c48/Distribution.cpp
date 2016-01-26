@@ -6,7 +6,6 @@
 #include <iterator>
 
 Distribution::Distribution(int numBags, int numClasses) :
-    //mperClassPerBag(double_2D_array(1)),
     mperBag(double_array(numBags)),
     mperClass(double_array(numClasses))
 {
@@ -37,7 +36,6 @@ Distribution::Distribution(double_2D_array &table) :
 }
 
 Distribution::Distribution(Instances *source) :
-    //mperClassPerBag(double_2D_array(1)),
     mperBag(double_array(1)),
     mperClass(double_array(source->numClasses()))
 {
@@ -54,7 +52,6 @@ Distribution::Distribution(Instances *source) :
 }
 
 Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) :
-    //mperClassPerBag(double_2D_array(1)),
     mperBag(double_array(modelToUse->numSubsets())),
     mperClass(double_array(source->numClasses())) {
 
@@ -82,10 +79,7 @@ Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) 
     }
 }
 
-Distribution::Distribution(Distribution *toMerge) // :
-    //mperClassPerBag(double_2D_array(1)),
-    //mperBag(double_array(1)),
-    //mperClass(double_array(toMerge->numClasses()))
+Distribution::Distribution(Distribution *toMerge) 
 {
     mperClassPerBag.clear();
     mperBag.clear();
@@ -118,7 +112,7 @@ Distribution::Distribution(Distribution *toMerge, int index) :
     mperBag[1] = totaL - mperBag[0];
 }
 
-int Distribution::actualNumBags()
+int Distribution::actualNumBags() const
 {
 
     int returnValue = 0;
@@ -135,7 +129,7 @@ int Distribution::actualNumBags()
     return returnValue;
 }
 
-int Distribution::actualNumClasses()
+int Distribution::actualNumClasses() const
 {
 
     int returnValue = 0;
@@ -152,7 +146,7 @@ int Distribution::actualNumClasses()
     return returnValue;
 }
 
-int Distribution::actualNumClasses(int bagIndex)
+int Distribution::actualNumClasses(int bagIndex) const
 {
 
     int returnValue = 0;
@@ -292,7 +286,7 @@ void Distribution::addWeights(Instance *instance, double_array &weights)
     }
 }
 
-bool Distribution::check(double minNoObj)
+bool Distribution::check(double minNoObj) const
 {
 
     int counter = 0;
@@ -372,7 +366,7 @@ void Distribution::delRange(int bagIndex, Instances *source, int startIndex, int
     totaL -= sumOfWeights;
 }
 
-string Distribution::dumpDistribution()
+string Distribution::dumpDistribution() const
 {
 
     string text;
@@ -417,7 +411,7 @@ double_2D_array Distribution::matrix()
     return mperClassPerBag;
 }
 
-int Distribution::maxBag()
+int Distribution::maxBag()  const
 {
 
     double max;
@@ -437,7 +431,7 @@ int Distribution::maxBag()
     return maxIndex;
 }
 
-int Distribution::maxClass()
+int Distribution::maxClass() const
 {
 
     double maxCount = 0;
@@ -456,7 +450,7 @@ int Distribution::maxClass()
     return maxIndex;
 }
 
-int Distribution::maxClass(int index)
+int Distribution::maxClass(int index) const
 {
 
     double maxCount = 0;
@@ -481,67 +475,67 @@ int Distribution::maxClass(int index)
     }
 }
 
-int Distribution::numBags()
+int Distribution::numBags() const
 {
 
     return (int)mperBag.size();
 }
 
-int Distribution::numClasses()
+int Distribution::numClasses() const
 {
 
     return (int)mperClass.size();
 }
 
-double Distribution::numCorrect()
+double Distribution::numCorrect() const
 {
 
     return mperClass[maxClass()];
 }
 
-double Distribution::numCorrect(int index)
+double Distribution::numCorrect(int index) const
 {
 
     return mperClassPerBag[index][maxClass(index)];
 }
 
-double Distribution::numIncorrect()
+double Distribution::numIncorrect() const
 {
 
     return totaL - numCorrect();
 }
 
-double Distribution::numIncorrect(int index)
+double Distribution::numIncorrect(int index) const
 {
 
     return mperBag[index] - numCorrect(index);
 }
 
-double Distribution::perClassPerBag(int bagIndex, int classIndex)
+double Distribution::perClassPerBag(int bagIndex, int classIndex) const
 {
 
     return mperClassPerBag[bagIndex][classIndex];
 }
 
-double Distribution::perBag(int bagIndex)
+double Distribution::perBag(int bagIndex) const
 {
 
     return mperBag[bagIndex];
 }
 
-double Distribution::perClass(int classIndex)
+double Distribution::perClass(int classIndex) const
 {
 
     return mperClass[classIndex];
 }
 
-double Distribution::laplaceProb(int classIndex)
+double Distribution::laplaceProb(int classIndex) const
 {
 
     return (mperClass[classIndex] + 1) / (totaL + mperClass.size());
 }
 
-double Distribution::laplaceProb(int classIndex, int intIndex)
+double Distribution::laplaceProb(int classIndex, int intIndex) const
 {
 
     if (Utils::gr(mperBag[intIndex], 0))
@@ -555,7 +549,7 @@ double Distribution::laplaceProb(int classIndex, int intIndex)
 
 }
 
-double Distribution::prob(int classIndex)
+double Distribution::prob(int classIndex) const
 {
 
     if (!Utils::eq(totaL, 0))
@@ -568,7 +562,7 @@ double Distribution::prob(int classIndex)
     }
 }
 
-double Distribution::prob(int classIndex, int intIndex)
+double Distribution::prob(int classIndex, int intIndex) const
 {
 
     if (Utils::gr(mperBag[intIndex], 0))
@@ -581,7 +575,7 @@ double Distribution::prob(int classIndex, int intIndex)
     }
 }
 
-Distribution *Distribution::subtract(Distribution *toSubstract)
+Distribution *Distribution::subtract(Distribution *toSubstract)  const
 {
 
     Distribution *newDist = new Distribution(1, (int)mperClass.size());
@@ -596,9 +590,8 @@ Distribution *Distribution::subtract(Distribution *toSubstract)
     return newDist;
 }
 
-double Distribution::total()
+double Distribution::total() const
 {
-
     return totaL;
 }
 

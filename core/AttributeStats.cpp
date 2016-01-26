@@ -6,22 +6,22 @@ void AttributeStats::addDistinct(double value, int count, double weight) {
 
     if (count > 0) {
         if (count == 1) {
-            uniqueCount++;
+            mUniqueCount++;
         }
         if (Utils::eq(value, static_cast<double>(static_cast<int>(value)))) {
-            intCount += count;
+            mIntCount += count;
         }
         else {
-            realCount += count;
+            mRealCount += count;
         }
-        if (nominalCounts.size() > 0) {
-            nominalCounts[static_cast<int>(value)] = count;
-            nominalWeights[static_cast<int>(value)] = weight;
+        if (mNominalCounts.size() > 0) {
+            mNominalCounts[static_cast<int>(value)] = count;
+            mNominalWeights[static_cast<int>(value)] = weight;
         }
-        if (numericStats != nullptr) {
-            numericStats->add(value, weight);
-            numericStats->calculateDerived();
+        if (mNumericStats != nullptr) {
+            mNumericStats->add(value, weight);
+            mNumericStats->calculateDerived();
         }
     }
-    distinctCount++;
+    mDistinctCount++;
 }

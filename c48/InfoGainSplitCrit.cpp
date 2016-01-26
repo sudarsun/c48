@@ -2,7 +2,7 @@
 #include "Distribution.h"
 #include "core/Utils.h"
 
-double InfoGainSplitCrit::splitCritValue(Distribution *bags) {
+double InfoGainSplitCrit::splitCritValue(Distribution *bags) const {
 
     double numerator;
 
@@ -18,11 +18,9 @@ double InfoGainSplitCrit::splitCritValue(Distribution *bags) {
     return bags->total() / numerator;
 }
 
-double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst) {
+double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst) const {
 
-    double numerator;
-    double noUnknown;
-    double unknownRate;
+    double numerator, noUnknown, unknownRate;
     noUnknown = totalNoInst - bags->total();
     unknownRate = noUnknown / totalNoInst;
     numerator = (oldEnt(bags) - newEnt(bags));
@@ -36,11 +34,9 @@ double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst)
     return numerator / bags->total();
 }
 
-double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst, double oldEnt) {
+double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst, double oldEnt) const {
 
-    double numerator;
-    double noUnknown;
-    double unknownRate;
+    double numerator, noUnknown, unknownRate;
     noUnknown = totalNoInst - bags->total();
     unknownRate = noUnknown / totalNoInst;
     numerator = (oldEnt - newEnt(bags));

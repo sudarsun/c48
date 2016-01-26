@@ -11,7 +11,7 @@ Attribute::Attribute(const string &attributeName, string_array &attributeValues)
 {
 
     mAttributeInfo = new NominalAttributeInfo(attributeValues, attributeName);
-    //std::cout << (static_cast<NominalAttributeInfo*>(mAttributeInfo))->getSize() << std::endl;
+
     if (attributeValues.empty())
     {
         mType = ATTRIBUTE::STRING;
@@ -22,13 +22,22 @@ Attribute::Attribute(const string &attributeName, string_array &attributeValues)
     }
 }
 
-int Attribute::index()
+Attribute::Attribute(const string &attributeName, int index) : Attribute(attributeName)
 {
+    mIndex = index;
+}
 
+Attribute::Attribute(const string &attributeName, string_array &attributeValues, int index) : Attribute(attributeName, attributeValues)
+{
+    mIndex = index;
+}
+
+int Attribute::index() const
+{
     return mIndex;
 }
 
-int Attribute::indexOfValue(const string &value)
+int Attribute::indexOfValue(const string &value) const
 {
     if (!isNominal() && !isString())
     {
@@ -44,37 +53,37 @@ int Attribute::indexOfValue(const string &value)
     }
 }
 
-bool Attribute::isNominal()
+bool Attribute::isNominal() const
 {
     return (mType == ATTRIBUTE::NOMINAL);
 }
 
-bool Attribute::isNumeric()
+bool Attribute::isNumeric() const
 {
     return ((mType == ATTRIBUTE::NUMERIC) || (mType == ATTRIBUTE::DATE));
 }
 
-bool Attribute::isRelationValued()
+bool Attribute::isRelationValued() const
 {
     return (mType == ATTRIBUTE::RELATIONAL);
 }
 
-bool Attribute::isString()
+bool Attribute::isString() const
 {
     return (mType == ATTRIBUTE::STRING);
 }
 
-bool Attribute::isDate()
+bool Attribute::isDate() const
 {
     return (mType == ATTRIBUTE::DATE);
 }
 
-string Attribute::name()
+string Attribute::name() const
 {
     return mName;
 }
 
-int Attribute::numValues()
+int Attribute::numValues() const
 {
 
     if (!isNominal() && !isString() && !isRelationValued())
@@ -87,12 +96,12 @@ int Attribute::numValues()
     }
 }
 
-int Attribute::type()
+int Attribute::type() const
 {
     return mType;
 }
 
-string Attribute::value(int valIndex)
+string Attribute::value(int valIndex) const
 {
 
     if (!isNominal() && !isString())
@@ -103,18 +112,6 @@ string Attribute::value(int valIndex)
     {
         return (static_cast<NominalAttributeInfo*>(mAttributeInfo))->getAttributeValue(valIndex);
     }
-}
-
-Attribute::Attribute(const string &attributeName, int index) : Attribute(attributeName)
-{
-
-    mIndex = index;
-}
-
-Attribute::Attribute(const string &attributeName, string_array &attributeValues, int index) : Attribute(attributeName, attributeValues)
-{
-
-    mIndex = index;
 }
 
 int Attribute::addStringValue(const string &value)
@@ -151,7 +148,7 @@ int Attribute::addStringValue(const string &value)
 //    }
 //}
 
-int Attribute::addStringValue(Attribute *src, int index)
+int Attribute::addStringValue(Attribute *src, int index) const
 {
     if (!isString())
     {
@@ -176,7 +173,7 @@ void Attribute::addValue(const string &value)
     forceAddValue(value);
 }
 
-Attribute *Attribute::copy(const string &newName)
+Attribute *Attribute::copy(const string &newName) const
 {
 
     Attribute *copy = new Attribute(newName);
@@ -184,7 +181,6 @@ Attribute *Attribute::copy(const string &newName)
     copy->mIndex = mIndex;
     copy->mType = mType;
     copy->mAttributeInfo = mAttributeInfo;
-    //copy->mAttributeMetaInfo = mAttributeMetaInfo;
 
     return copy;
 }
@@ -250,7 +246,7 @@ void Attribute::setValue(int index, const string &stringName)
     }
 }
 
-double Attribute::weight()
+double Attribute::weight() const
 {
     return mWeight;
 }
@@ -259,5 +255,3 @@ void Attribute::setWeight(double value)
 {
     mWeight = value;
 }
-
-

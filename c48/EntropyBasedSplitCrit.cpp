@@ -3,7 +3,7 @@
 //#include "core/ContingencyTables.h"
 #include <cmath>
 
-double EntropyBasedSplitCrit::lnFunc(double num) {
+double EntropyBasedSplitCrit::lnFunc(double num) const {
 
     // Constant hard coded for efficiency reasons
     if (num < 1e-6) {
@@ -15,7 +15,7 @@ double EntropyBasedSplitCrit::lnFunc(double num) {
     }
 }
 
-double EntropyBasedSplitCrit::oldEnt(Distribution *bags) {
+double EntropyBasedSplitCrit::oldEnt(Distribution *bags) const {
 
     double returnValue = 0;
     int j;
@@ -26,7 +26,7 @@ double EntropyBasedSplitCrit::oldEnt(Distribution *bags) {
     return lnFunc(bags->total()) - returnValue;
 }
 
-double EntropyBasedSplitCrit::newEnt(Distribution *bags) {
+double EntropyBasedSplitCrit::newEnt(Distribution *bags) const {
 
     double returnValue = 0;
     int i, j;
@@ -40,7 +40,7 @@ double EntropyBasedSplitCrit::newEnt(Distribution *bags) {
     return -returnValue;
 }
 
-double EntropyBasedSplitCrit::splitEnt(Distribution *bags) {
+double EntropyBasedSplitCrit::splitEnt(Distribution *bags) const {
 
     double returnValue = 0;
     int i;

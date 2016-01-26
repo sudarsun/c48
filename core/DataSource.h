@@ -62,7 +62,7 @@ private:
      * @return an Instance or null if there are no more instances to read
      * @exception IOException if an error occurs
      */
-    Instances *getInstance(std::fstream& inStream);
+    Instances *getInstance(std::fstream& inStream) const;
 
     /**
      * Reads an instance from the given line.
@@ -71,7 +71,7 @@ private:
      * @return an Instance or null if there are no more instances to read
      * @exception IOException if an error occurs
      */
-    Instance *getInstance(string inLine);
+    Instance *getInstance(string inLine) const;
 
     /**
      * removes the trailing period
@@ -79,7 +79,7 @@ private:
      * @param val the string to work on
      * @return the processed string
      */
-    string removeTrailingPeriod(string &val);
+    string removeTrailingPeriod(string &val) const;
 
     /**
      * Reads header (from the names file) using the file stream.

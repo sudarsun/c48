@@ -31,10 +31,10 @@ protected:
     std::vector<ClassifierTree*> mSons;
 
     /** True if node is leaf. */
-    bool mIsLeaf = false;
+    bool mIsLeaf;
 
     /** True if node is empty. */
-    bool mIsEmpty = false;
+    bool mIsEmpty;
 
     /** The training instances. */
     Instances *mTrain;
@@ -65,7 +65,7 @@ protected:
      * @return the generated tree
      * @throws Exception if something goes wrong
      */
-    virtual ClassifierTree *getNewTree(Instances *data);
+    virtual ClassifierTree *getNewTree(Instances *data) const;
 
     /**
      * Returns a newly created tree.
@@ -75,15 +75,19 @@ protected:
      * @return the generated tree
      * @throws Exception if something goes wrong
      */
-    virtual ClassifierTree *getNewTree(Instances *train, Instances *test);
+    virtual ClassifierTree *getNewTree(Instances *train, Instances *test) const;
 
 public:
 
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-
+    /**
+     * Constructor.
+     */
     ClassifierTree(ModelSelection *toSelectLocModel);
+
+    /**
+    * Destructor.
+    */
+    ~ClassifierTree();
 
     /**
      * Method for building a classifier tree.
@@ -119,7 +123,7 @@ public:
      * @return the classification
      * @throws Exception if something goes wrong
      */
-    virtual double classifyInstance(Instance *instance);
+    virtual double classifyInstance(Instance *instance) const;
 
     /**
      * Cleanup in order to save memory.
@@ -151,14 +155,14 @@ public:
      *
      * @return the number of leaves
      */
-    virtual int numLeaves();
+    virtual int numLeaves() const;
 
     /**
      * Returns number of nodes in tree structure.
      *
      * @return the number of nodes
      */
-    virtual int numNodes();
+    virtual int numNodes() const;
 
     /**
      * Prints tree structure.
@@ -166,7 +170,7 @@ public:
      * @param isDumpTree Value to display the tree structure.
      * @return the tree structure
      */
-    virtual string toString(bool isDumpTree = false);
+    virtual string toString(bool isDumpTree = false) const;
     /**
      * Computes a list that indicates node membership
      */
@@ -186,7 +190,7 @@ private:
      * @param text for outputting the structure
      * @throws Exception if something goes wrong
      */
-    void dumpTree(int depth, string &text);
+    void dumpTree(int depth, string &text) const;
 
     /**
      * Help method for computing class probabilities of a given instance.
@@ -197,7 +201,7 @@ private:
      * @return the laplace probs
      * @throws Exception if something goes wrong
      */
-    double getProbsLaplace(int classIndex, Instance *instance, double weight);
+    double getProbsLaplace(int classIndex, Instance *instance, double weight) const;
 
     /**
      * Help method for computing class probabilities of a given instance.
@@ -208,12 +212,12 @@ private:
      * @return the probs
      * @throws Exception if something goes wrong
      */
-    double getProbs(int classIndex, Instance *instance, double weight);
+    double getProbs(int classIndex, Instance *instance, double weight) const;
 
     /**
      * Method to the current model.
      */
-    ClassifierSplitModel *localModel();
+    ClassifierSplitModel *localModel() const;
 
     /**
      * Method to the current son of the index in classifier tree

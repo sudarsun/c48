@@ -29,7 +29,7 @@ void Estimator::addValues(Instances *data, int attrIndex) {
     addValues(data, attrIndex, min, max, 1.0);
 }
 
-void Estimator::addValues(Instances *data, int attrIndex, double min, double max, double factor) {
+void Estimator::addValues(Instances *data, const int attrIndex, const double min, const double max, const double factor) {
     // no handling of factor, would have to be overridden
 
     // no handling of min and max, would have to be overridden
@@ -40,7 +40,7 @@ void Estimator::addValues(Instances *data, int attrIndex, double min, double max
     }
 }
 
-void Estimator::addValues(Instances *data, int attrIndex, int classIndex, int classValue) {
+void Estimator::addValues(Instances *data, const int attrIndex, const int classIndex, const int classValue) {
     // can estimator handle the data?
     mNoClass = false;
 
@@ -52,7 +52,7 @@ void Estimator::addValues(Instances *data, int attrIndex, int classIndex, int cl
     }
     catch (std::exception &ex) {
 
-        std::wcout << ex.what() << std::endl;
+        std::cout << ex.what() << std::endl;
     }
 
     double min = minMax[0];
@@ -70,7 +70,7 @@ void Estimator::addValues(Instances *data, int attrIndex, int classIndex, int cl
     addValues(data, attrIndex, min, max, factor);
 }
 
-void Estimator::addValues(Instances *data, int attrIndex, int classIndex, int classValue, double min, double max) {
+void Estimator::addValues(Instances *data, const int attrIndex, const int classIndex, const int classValue, const double min, const double max) {
 
     // extract the instances with the given class value
     Instances *workData = new Instances(data, 0);
@@ -84,7 +84,7 @@ void Estimator::addValues(Instances *data, int attrIndex, int classIndex, int cl
     addValues(data, attrIndex, min, max, factor);
 }
 
-double Estimator::getInstancesFromClass(Instances *data, int attrIndex, int classIndex, double classValue, Instances *workData) {
+double Estimator::getInstancesFromClass(Instances *data, const int attrIndex, const int classIndex, const double classValue, Instances *workData) {
 
     int num = 0;
     int numClassValue = 0;
@@ -102,12 +102,12 @@ double Estimator::getInstancesFromClass(Instances *data, int attrIndex, int clas
     return alphaFactor;
 }
 
-void Estimator::setDebug(bool debug) {
+void Estimator::setDebug(const bool debug) {
 
     mDebug = debug;
 }
 
-bool Estimator::getDebug() {
+bool Estimator::getDebug() const {
 
     return mDebug;
 }

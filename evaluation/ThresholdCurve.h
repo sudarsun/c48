@@ -114,7 +114,7 @@ public:
      * @param n the number of points to average over.
      * @return the n-point precision.
      */
-    static double getNPointPrecision(Instances *tcurve, int n);
+    static double getNPointPrecision(Instances *tcurve, const int n);
 
     /**
      * Calculates the area under the ROC curve as the Wilcoxon-Mann-Whitney
@@ -136,7 +136,7 @@ public:
     *         or -1 if this could not be found (i.e. no data, or bad threshold
     *         target)
     */
-    static int getThresholdInstance(Instances *tcurve, double threshold);
+    static int getThresholdInstance(Instances *tcurve, const double threshold);
 
 private:
     /**
@@ -147,15 +147,15 @@ private:
     * @param target the target to look for
     * @return the index of the target
     */
-    static int binarySearch(int_array &index, double_array &vals, double target);
+    static int binarySearch(const int_array &index, const double_array &vals, const double target);
 
     /**
-     *
+     * Get probabilities on the prediction
      * @param predictions the predictions to use
      * @param classIndex the class index
      * @return the probabilities
      */
-    double_array getProbabilities(std::vector<Prediction*> predictions, int classIndex);
+    double_array getProbabilities(std::vector<Prediction*> predictions, const int classIndex) const;
 
     /**
      * generates the header
@@ -171,7 +171,7 @@ private:
     * @param prob the probability
     * @return the generated instance
     */
-    Instance *makeInstance(TwoClassStats *tc, double prob);
+    Instance *makeInstance(TwoClassStats *tc, const double prob);
 
 };
 

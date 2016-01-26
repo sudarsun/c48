@@ -48,11 +48,38 @@ public:
     Attribute(const string &attributeName, string_array &attributeValues);
 
     /**
+    * Constructor for a numeric attribute with a particular index.
+    *
+    * @param attributeName the name for the attribute
+    * @param index the attribute's index
+    */
+    // @ requires attributeName != null;
+    // @ requires index >= 0;
+    // @ ensures mName == attributeName;
+    // @ ensures mIndex == index;
+    Attribute(const string &attributeName, int index);
+
+    /**
+    * Constructor for date attributes with a particular index.
+    *
+    * @param attributeName the name for the attribute
+    * @param dateFormat a string suitable for use with
+    * SimpleDateFormatter for parsing dates.  Null for a default format
+    * string.
+    * @param index the attribute's index
+    */
+    //@ requires attributeName != null;
+    //@ requires index >= 0;
+    //@ ensures  m_Name == attributeName;
+    //@ ensures  m_Index == index;
+    Attribute(const string &attributeName, string_array &attributeValues, int index);
+
+    /**
      * Returns the index of this attribute.
      *
      * @return the index of this attribute
      */
-    int index();
+    int index() const;
 
     /**
      * Returns the index of a given attribute value. (The index of
@@ -63,49 +90,49 @@ public:
      * is nominal or a string, -1 if it is not or the value
      * can't be found
      */
-    int indexOfValue(const string &value);
+    int indexOfValue(const string &value) const;
 
     /**
      * Test if the attribute is nominal.
      *
      * @return true if the attribute is nominal
      */
-    bool isNominal();
+    bool isNominal() const;
 
     /**
      * Tests if the attribute is numeric.
      *
      * @return true if the attribute is numeric
      */
-    bool isNumeric();
+    bool isNumeric() const;
 
     /**
      * Tests if the attribute is relation valued.
      *
      * @return true if the attribute is relation valued
      */
-    bool isRelationValued();
+    bool isRelationValued() const;
 
     /**
      * Tests if the attribute is a string.
      *
      * @return true if the attribute is a string
      */
-    bool isString();
+    bool isString() const;
 
     /**
      * Tests if the attribute is a date type.
      *
      * @return true if the attribute is a date type
      */
-    bool isDate();
+    bool isDate() const;
 
     /**
      * Returns the attribute's name.
      *
      * @return the attribute's name as a string
      */
-    string name();
+    string name() const;
 
     /**
      * Returns the number of attribute values. Returns 0 for
@@ -114,14 +141,14 @@ public:
      *
      * @return the number of attribute values
      */
-    int numValues();
+    int numValues() const;
 
     /**
      * Returns the attribute's type as an integer.
      *
      * @return the attribute's type.
      */
-    int type();
+    int type() const;
 
     /**
      * Returns a value of a nominal or string attribute.  Returns an
@@ -131,34 +158,7 @@ public:
      * @param valIndex the value's index
      * @return the attribute's value as a string
      */
-    string value(int valIndex);
-
-    /**
-     * Constructor for a numeric attribute with a particular index.
-     *
-     * @param attributeName the name for the attribute
-     * @param index the attribute's index
-     */
-     // @ requires attributeName != null;
-     // @ requires index >= 0;
-     // @ ensures mName == attributeName;
-     // @ ensures mIndex == index;
-    Attribute(const string &attributeName, int index);
-
-    /**
-     * Constructor for date attributes with a particular index.
-     *
-     * @param attributeName the name for the attribute
-     * @param dateFormat a string suitable for use with
-     * SimpleDateFormatter for parsing dates.  Null for a default format
-     * string.
-     * @param index the attribute's index
-     */
-     //@ requires attributeName != null;
-     //@ requires index >= 0;
-     //@ ensures  m_Name == attributeName;
-     //@ ensures  m_Index == index;
-    Attribute(const string &attributeName, string_array &attributeValues, int index);
+    string value(int valIndex) const;
 
     /**
      * Adds a string value to the list of valid strings for attributes
@@ -172,7 +172,7 @@ public:
          ensures  isString() && 0 <= \result && \result < m_Values.size() ||
                 ! isString() && \result == -1;
      */
-    virtual int addStringValue(const string &value);
+    int addStringValue(const string &value);
 
     /**
       * Adds a string value to the list of valid strings for attributes
@@ -189,7 +189,7 @@ public:
           ensures  isString() && 0 <= \result && \result < m_Values.size() ||
                  ! isString() && \result == -1;
       */
-    virtual int addStringValue(Attribute *src, int index);
+    virtual int addStringValue(Attribute *src, int index) const;
 
     /**
      * Adds an attribute value. Creates a fresh list of attribute
@@ -209,7 +209,7 @@ public:
       //@ ensures \result.m_Name  == newName;
       //@ ensures \result.m_Index == m_Index;
       //@ ensures \result.m_Type  == m_Type;
-    Attribute *copy(const string &newName);
+    Attribute *copy(const string &newName) const;
 
     /**
       * Removes a value of a nominal, string, or relation-valued
@@ -262,14 +262,14 @@ public:
       *
       * @return the attribute's weight as a double
       */
-    double weight();
+    double weight() const;
 
     /**
      * Sets the new attribute's weight
      *
      * @param value    the new weight
      */
-    virtual void setWeight(double value);
+    void setWeight(double value);
 
 };
 

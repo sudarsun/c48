@@ -8,7 +8,7 @@ Instance::Instance(Instance *instance)
     mWeight = instance->mWeight;
     mDataset = instance->mDataset;
 }
-Instance::Instance(double weight, double_array attValues)
+Instance::Instance(const double weight, double_array attValues)
 {
     mAttValues = attValues;
     mWeight = weight;
@@ -21,21 +21,21 @@ Instance* Instance::copy()
     result->mDataset = mDataset;
     return result;
 }
-Attribute *Instance::attribute(int index)
+Attribute *Instance::attribute(const int index) const
 {
     return mDataset->attribute(index);
 }
 
-int Instance::numAttributes()
+int Instance::numAttributes() const
 {
     return (int)mAttValues.size();
 }
-int Instance::classIndex()
+int Instance::classIndex() const
 {
     return mDataset->classIndex();
 }
 
-void Instance::setValue(int attIndex, double value)
+void Instance::setValue(const int attIndex, const double value)
 {
     freshAttributeVector();
     mAttValues[attIndex] = value;
@@ -45,7 +45,7 @@ void Instance::freshAttributeVector()
 {
     mAttValues = toDoubleArray();
 }
-double_array Instance::toDoubleArray()
+double_array Instance::toDoubleArray() const
 {
     double_array newValues(mAttValues.size());
     std::copy(std::begin(mAttValues), std::end(mAttValues), std::begin(newValues));
@@ -54,7 +54,6 @@ double_array Instance::toDoubleArray()
 
 void Instance::setClassMissing()
 {
-
     int classIndexValue = classIndex();
     if (classIndexValue < 0)
     {
@@ -63,12 +62,12 @@ void Instance::setClassMissing()
     setMissing(classIndexValue);
 }
 
-void Instance::setMissing(int attIndex)
+void Instance::setMissing(const int attIndex)
 {
     setValue(attIndex, Utils::missingValue());
 }
 
-void Instance::setValue(int attIndex, const string &value)
+void Instance::setValue(const int attIndex, const string &value)
 {
     int valIndex;
 
@@ -92,12 +91,12 @@ void Instance::setValue(int attIndex, const string &value)
     setValue(attIndex, valIndex);
 }
 
-double Instance::value(int attIndex)
+double Instance::value(const int attIndex) const
 {
     return mAttValues[attIndex];
 }
 
-double Instance::classValue()
+double Instance::classValue() const
 {
     int classIndexValue = classIndex();
     if (classIndexValue < 0)
@@ -107,14 +106,13 @@ double Instance::classValue()
     return value(classIndexValue);
 }
 
-double Instance::weight()
+double Instance::weight() const
 {
     return mWeight;
 }
 
-bool Instance::isMissing(int attIndex)
+bool Instance::isMissing(const int attIndex) const
 {
-
     if (Utils::isMissingValue(value(attIndex)))
     {
         return true;
@@ -122,18 +120,17 @@ bool Instance::isMissing(int attIndex)
     return false;
 }
 
-Attribute *Instance::classAttribute()
+Attribute *Instance::classAttribute() const
 {
-
     return mDataset->classAttribute();
 }
 
-int Instance::numClasses()
+int Instance::numClasses() const
 {
     return mDataset->numClasses();
 }
 
-void Instance::setWeight(double weight)
+void Instance::setWeight(const double weight)
 {
     mWeight = weight;
 }
@@ -143,17 +140,17 @@ void Instance::setDataset(Instances *instances)
     mDataset = instances;
 }
 
-Instances* Instance::getDataset()
+Instances* Instance::getDataset() const
 {
     return mDataset;
 }
 
-double Instance::missingValue()
+double Instance::missingValue() const
 {
     return std::numeric_limits<double>::quiet_NaN();;
 }
 
-bool Instance::classIsMissing()
+bool Instance::classIsMissing() const
 {
     int classIndexValue = classIndex();
     if (classIndexValue < 0)

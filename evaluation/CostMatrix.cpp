@@ -24,7 +24,6 @@ CostMatrix::CostMatrix(CostMatrix *toCopy) {
 
 void CostMatrix::initialize() {
 
-    //ORIGINAL LINE: mMatrix = new Object[mSize][mSize];
     mMatrix.resize(mSize, std::vector<void*>(mSize, 0));
 
     for (int i = 0; i < mSize; i++) {
@@ -35,27 +34,23 @@ void CostMatrix::initialize() {
     }
 }
 
-int CostMatrix::size() {
+int CostMatrix::size() const {
     return mSize;
 }
 
-int CostMatrix::numColumns() {
+int CostMatrix::numColumns() const {
     return size();
 }
 
-int CostMatrix::numRows() {
+int CostMatrix::numRows() const {
     return size();
 }
 
-bool CostMatrix::replaceStrings(Instances *dataset) {
+bool CostMatrix::replaceStrings(Instances *dataset) const {
     bool nonDouble = false;
 
     for (int i = 0; i < mSize; i++) {
         for (int j = 0; j < mSize; j++) {
-            //if( dynamic_cast<string>( getCell( i, j ) ) != nullptr ) {
-           //      setCell(i, j, new InstanceExpression(static_cast<string>(getCell(i, j)), dataset));
-            //  nonDouble = true;
-            //} else
             double *p = static_cast<double*>(getCell(i, j));
             if (p != nullptr) {
                 nonDouble = true;
@@ -167,7 +162,7 @@ Instances *CostMatrix::applyCostMatrix( Instances *data, Random *random ) {
   }
 }*/
 
-double_array CostMatrix::expectedCosts(double_array &classProbs) {
+double_array CostMatrix::expectedCosts(const double_array &classProbs) const {
 
     if (classProbs.size() != mSize) {
         throw "Length of probability estimates don't match cost matrix";
@@ -216,7 +211,7 @@ double_array CostMatrix::expectedCosts(double_array &classProbs) {
   return costs;
 }*/
 
-double CostMatrix::getMaxCost(int classVal) {
+double CostMatrix::getMaxCost(const int classVal) const {
 
     double maxCost = -std::numeric_limits<double>::infinity();
 
@@ -234,7 +229,7 @@ double CostMatrix::getMaxCost(int classVal) {
     return maxCost;
 }
 
-double CostMatrix::getMaxCost(int classVal, Instance *inst) {
+double CostMatrix::getMaxCost(const int classVal, Instance *inst) const {
 
     if (!replaceStrings(inst->getDataset())) {
         return getMaxCost(classVal);
@@ -270,15 +265,15 @@ void CostMatrix::normalize() {
     }
 }
 
-void CostMatrix::setCell(int rowIndex, int columnIndex, void *value) {
+void CostMatrix::setCell(const int rowIndex, const int columnIndex, void *value) {
     mMatrix[rowIndex][columnIndex] = value;
 }
 
-void *CostMatrix::getCell(int rowIndex, int columnIndex) {
+void *CostMatrix::getCell(const int rowIndex, const int columnIndex) const {
     return mMatrix[rowIndex][columnIndex];
 }
 
-double CostMatrix::getElement(int rowIndex, int columnIndex) {
+double CostMatrix::getElement(const int rowIndex, const int columnIndex) const {
     auto cell = mMatrix[rowIndex][columnIndex];
     if (!(static_cast<double*>(cell) != nullptr)) {
         throw "Cost matrix contains non-fixed costs!";
@@ -286,7 +281,7 @@ double CostMatrix::getElement(int rowIndex, int columnIndex) {
     return *(static_cast<double*>(cell));
 }
 
-double CostMatrix::getElement(int rowIndex, int columnIndex, Instance *inst) {
+double CostMatrix::getElement(const int rowIndex, const int columnIndex, Instance *inst) const {
 
     auto cell = mMatrix[rowIndex][columnIndex];
     if (static_cast<double*>(cell) != nullptr) {
@@ -300,6 +295,6 @@ double CostMatrix::getElement(int rowIndex, int columnIndex, Instance *inst) {
     return 0.0;
 }
 
-void CostMatrix::setElement(int rowIndex, int columnIndex, double value) {
+void CostMatrix::setElement(const int rowIndex, const int columnIndex, double value) {
     mMatrix[rowIndex][columnIndex] = static_cast<void *>(&value);
 }

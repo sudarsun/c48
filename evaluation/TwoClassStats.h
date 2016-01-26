@@ -44,28 +44,28 @@ public:
     TwoClassStats(double tp, double fp, double tn, double fn);
 
     /** Sets the number of positive instances predicted as positive */
-    virtual void setTruePositive(double tp);
+    virtual void setTruePositive(const double tp);
 
     /** Sets the number of negative instances predicted as positive */
-    virtual void setFalsePositive(double fp);
+    virtual void setFalsePositive(const double fp);
 
     /** Sets the number of negative instances predicted as negative */
-    virtual void setTrueNegative(double tn);
+    virtual void setTrueNegative(const double tn);
 
     /** Sets the number of positive instances predicted as negative */
-    virtual void setFalseNegative(double fn);
+    virtual void setFalseNegative(const double fn);
 
     /** Gets the number of positive instances predicted as positive  */
-    virtual double getTruePositive();
+    virtual double getTruePositive() const;
 
     /** Gets the number of negative instances predicted as positive  */
-    virtual double getFalsePositive();
+    virtual double getFalsePositive() const;
 
     /** Gets the number of negative instances predicted as negative  */
-    virtual double getTrueNegative();
+    virtual double getTrueNegative() const;
 
     /** Gets the number of positive instances predicted as negative  */
-    virtual double getFalseNegative();
+    virtual double getFalseNegative() const;
 
     /**
      * Calculate the true positive rate. This is defined as
@@ -77,7 +77,7 @@ public:
      *
      * @return the true positive rate
      */
-    virtual double getTruePositiveRate();
+    virtual double getTruePositiveRate() const;
 
     /**
     * Calculate the false positive rate. This is defined as
@@ -88,7 +88,7 @@ public:
     *
     * @return the false positive rate
     */
-    virtual double getFalsePositiveRate();
+    virtual double getFalsePositiveRate() const;
 
     /**
      * Calculate the precision. This is defined as
@@ -99,7 +99,7 @@ public:
      *
      * @return the precision
      */
-    virtual double getPrecision();
+    virtual double getPrecision() const;
 
     /**
      * Calculate the recall. This is defined as
@@ -113,7 +113,7 @@ public:
      *
      * @return the recall
      */
-    virtual double getRecall();
+    virtual double getRecall() const;
 
     /**
      * Calculate the F-Measure. This is defined as
@@ -125,7 +125,7 @@ public:
      *
      * @return the F-Measure
      */
-    virtual double getFMeasure();
+    virtual double getFMeasure() const;
 
     /**
      * Calculate the fallout. This is defined as
@@ -136,7 +136,7 @@ public:
      *
      * @return the fallout
      */
-    virtual double getFallout();
+    virtual double getFallout() const;
 
     /**
      * Generates a <code>ConfusionMatrix</code> representing the current two-class
@@ -150,7 +150,7 @@ public:
      * Returns a string containing the various performance measures for the
      * current object
      */
-    virtual string toString();
+    virtual string toString() const;
 };
 
 

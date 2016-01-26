@@ -16,31 +16,31 @@ class AttributeStats {
 public:
 
     /** The number of int-like values */
-    int intCount = 0;
+    int mIntCount = 0;
 
     /** The number of real-like values (i.e. have a fractional part) */
-    int realCount = 0;
+    int mRealCount = 0;
 
     /** The number of missing values */
-    int missingCount = 0;
+    int mMissingCount = 0;
 
     /** The number of distinct values */
-    int distinctCount = 0;
+    int mDistinctCount = 0;
 
     /** The number of values that only appear once */
-    int uniqueCount = 0;
+    int mUniqueCount = 0;
 
     /** The total number of values (i.e. number of instances) */
-    int totalCount = 0;
+    int mTotalCount = 0;
 
     /** Stats on numeric value distributions */
-    Statistics *numericStats;
+    Statistics *mNumericStats;
 
     /** Counts of each nominal value */
-    int_array nominalCounts;
+    int_array mNominalCounts;
 
     /** Weight mass for each nominal value */
-    double_array nominalWeights;
+    double_array mNominalWeights;
 
     /**
      * Updates the counters for one more observed distinct value.

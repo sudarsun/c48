@@ -5,7 +5,7 @@
 
 double KernelEstimator::MAX_ERROR = 0.01;
 
-int KernelEstimator::findNearestValue(double key) {
+int KernelEstimator::findNearestValue(const double key) const {
 
     int low = 0;
     int high = mNumValues;
@@ -26,7 +26,7 @@ int KernelEstimator::findNearestValue(double key) {
     return low;
 }
 
-double KernelEstimator::round(double data) {
+double KernelEstimator::round(const double data) const {
 
     return std::rint(data / mPrecision) * mPrecision;
 }
@@ -47,7 +47,7 @@ KernelEstimator::KernelEstimator(double precision) {
     mStandardDev = mPrecision / (2 * 3);
 }
 
-void KernelEstimator::addValue(double data, double weight) {
+void KernelEstimator::addValue(double data, const double weight) {
 
     if (weight == 0) {
         return;
@@ -102,7 +102,7 @@ void KernelEstimator::addValue(double data, double weight) {
     }
 }
 
-double KernelEstimator::getProbability(double data) {
+double KernelEstimator::getProbability(const double data) const {
 
     double delta = 0, sum = 0, currentProb = 0;
     double zLower = 0, zUpper = 0;
@@ -119,12 +119,6 @@ double KernelEstimator::getProbability(double data) {
         zUpper = (delta + (mPrecision / 2)) / mStandardDev;
         currentProb = (Stats::normalProbability(zUpper) - Stats::normalProbability(zLower));
         sum += currentProb * mWeights[i];
-        /*
-        System.out.print("zL" + (i + 1) + ": " + zLower + " ");
-        System.out.print("zU" + (i + 1) + ": " + zUpper + " ");
-        System.out.print("P" + (i + 1) + ": " + currentProb + " ");
-        System.out.println("total: " + (currentProb * mWeights[i]) + " ");
-        */
         weightSum += mWeights[i];
         if (currentProb * (mSumOfWeights - weightSum) < sum * MAX_ERROR) {
             break;
@@ -144,7 +138,7 @@ double KernelEstimator::getProbability(double data) {
     return sum / mSumOfWeights;
 }
 
-string KernelEstimator::toString() {
+string KernelEstimator::toString() const {
 
     string result = std::to_string(mNumValues) + string(" Normal Kernels. \nStandardDev = ") + Utils::doubleToString(mStandardDev, 6, 4) + string(" Precision = ") + std::to_string(mPrecision);
     if (mNumValues == 0) {
@@ -165,22 +159,22 @@ string KernelEstimator::toString() {
     return result + string("\n");
 }
 
-int KernelEstimator::getNumKernels() {
+int KernelEstimator::getNumKernels() const {
     return mNumValues;
 }
 
-double_array KernelEstimator::getMeans() {
+double_array KernelEstimator::getMeans() const {
     return mValues;
 }
 
-double_array KernelEstimator::getWeights() {
+double_array KernelEstimator::getWeights() const {
     return mWeights;
 }
 
-double KernelEstimator::getPrecision() {
+double KernelEstimator::getPrecision() const {
     return mPrecision;
 }
 
-double KernelEstimator::getStdDev() {
+double KernelEstimator::getStdDev() const {
     return mStandardDev;
 }

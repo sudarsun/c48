@@ -44,18 +44,17 @@ void C45Split::buildClassifier(Instances trainInstances)
     }
 }
 
-int C45Split::attIndex()
+int C45Split::attIndex() const
 {
-
     return mAttIndex;
 }
 
-double C45Split::splitPoint()
+double C45Split::splitPoint() const
 {
     return mSplitPoint;
 }
 
-double C45Split::classProb(int classIndex, Instance *instance, int theSubset)
+double C45Split::classProb(const int classIndex, Instance *instance, const int theSubset) const 
 {
 
     if (theSubset <= -1)
@@ -88,13 +87,12 @@ double C45Split::classProb(int classIndex, Instance *instance, int theSubset)
     }
 }
 
-double C45Split::codingCost()
+double C45Split::codingCost() const
 {
-
     return Utils::getLog2(mIndex);
 }
 
-double C45Split::gainRatio()
+double C45Split::gainRatio() const 
 {
     return mGainRatio;
 }
@@ -167,7 +165,7 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
     }
     else
     {
-        if (Utils::gr(minSplit, 25))    
+        if (Utils::gr(minSplit, 25))
             minSplit = 25;
     }
 
@@ -243,19 +241,17 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
     mGainRatio = gainRatioCrit->splitCritValue(mDistribution, mSumOfWeights, mInfoGain);
 }
 
-double C45Split::infoGain()
+double C45Split::infoGain() const
 {
-
     return mInfoGain;
 }
 
-string C45Split::leftSide(Instances *data)
+string C45Split::leftSide(Instances *data) const
 {
-
     return data->attribute(mAttIndex)->name();
 }
 
-string C45Split::rightSide(int index, Instances *data)
+string C45Split::rightSide(const int index, Instances *data) const 
 {
 
     string text;
@@ -303,7 +299,7 @@ void C45Split::setSplitPoint(Instances *allInstances)
     }
 }
 
-double_2D_array C45Split::minsAndMaxs(Instances *data, double_2D_array &minsAndMaxs, int index)
+double_2D_array C45Split::minsAndMaxs(Instances *data, const double_2D_array &minsAndMaxs, int index) const
 {
 
     double_2D_array newMinsAndMaxs(data->numAttributes(), double_array(2, 0));
@@ -344,7 +340,7 @@ void C45Split::resetDistribution(Instances *data)
     mDistribution = newD;
 }
 
-double_array C45Split::weights(Instance *instance)
+double_array C45Split::weights(Instance *instance) const
 {
 
     double_array weights;
@@ -361,11 +357,11 @@ double_array C45Split::weights(Instance *instance)
     }
     else
     {
-        return{ 0 } ;
+        return { 0 } ;
     }
 }
 
-int C45Split::whichSubset(Instance *instance)
+const int C45Split::whichSubset(Instance *instance) const
 {
 
     if (instance->isMissing(mAttIndex))

@@ -19,14 +19,14 @@ public:
      *
      * @exception Exception if model can't be selected
      */
-    virtual ClassifierSplitModel *selectModel(Instances *data) = 0;
+    virtual ClassifierSplitModel *selectModel(Instances *data) const = 0;
 
     /**
      * Selects a model for the given train data using the given test data
      *
      * @exception Exception if model can't be selected
      */
-    virtual ClassifierSplitModel *selectModel(Instances *train, Instances *test);
+    virtual ClassifierSplitModel *selectModel(Instances *train, Instances *test) const;
 };
 
 #endif    //#ifndef _MODELSELECTION_

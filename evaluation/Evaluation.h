@@ -48,7 +48,12 @@ public:
      */
     ~Evaluation();
 
+    /**
+     * Set the instance for evaluation
+     * @param instance the train instance to be classified
+     */
     void setPriors(Instances train);
+
     /**
      * Evaluates the classifier on a single instance and records the prediction
      * (if the class is nominal).
@@ -60,6 +65,7 @@ public:
      *           contains string attributes
      */
     double evaluateModelOnceAndRecordPrediction(Classifier * classifier, Instance * instance);
+
     /**
      * Evaluates the supplied distribution on a single instance.
      *
@@ -149,6 +155,7 @@ public:
      * @return the total cost
      */
     const double totalCost();
+
     /**
      * Gets the average cost, that is, total cost of misclassifications (incorrect
      * plus unclassified) over the total number of instances.
@@ -156,12 +163,14 @@ public:
      * @return the average cost.
      */
     const double avgCost();
+
     /**
      * Returns value of kappa statistic if class is nominal.
      *
      * @return the value of the kappa statistic
      */
     const double kappa();
+
     /**
      * Gets the number of instances incorrectly classified (that is, for which an
      * incorrect prediction was made). (Actually the sum of the weights of these
@@ -170,6 +179,7 @@ public:
      * @return the number of incorrectly classified instances
      */
     const double inCorrect();
+
     /**
      * Gets the percentage of instances incorrectly classified (that is, for which
      * an incorrect prediction was made).
@@ -177,6 +187,7 @@ public:
      * @return the percent of incorrectly classified instances (between 0 and 100)
      */
     const double pctCorrect();
+
     /**
      * Gets the percentage of instances incorrectly classified (that is, for which
      * an incorrect prediction was made).
@@ -184,6 +195,7 @@ public:
      * @return the percent of incorrectly classified instances (between 0 and 100)
      */
     const double pctIncorrect();
+
     /**
      * Return the Kononenko & Bratko Relative Information score
      *
@@ -191,6 +203,7 @@ public:
      * @throws Exception if the class is not nominal
      */
     const double KBRelativeInformation();
+
     /**
      * Return the total Kononenko & Bratko Information score in bits
      *
@@ -198,6 +211,7 @@ public:
      * @throws Exception if the class is not nominal
      */
     const double KBInformation();
+
     /**
      * Return the Kononenko & Bratko Information score in bits per instance.
      *
@@ -205,6 +219,7 @@ public:
      * @throws Exception if the class is not nominal
      */
     const double KBMeanInformation();
+
     /**
      * Returns the correlation coefficient if the class is numeric.
      *
@@ -212,18 +227,21 @@ public:
      * @throws Exception if class is not numeric
      */
     const double correlationCoefficient();
+
     /**
      * Returns the total entropy for the null model
      *
      * @return the total null model entropy
      */
     const double SFPriorEntropy();
+
     /**
      * Returns the entropy per instance for the null model
      *
      * @return the null model entropy per instance
      */
     const double SFMeanPriorEntropy();
+
     /**
      * Returns the total entropy for the scheme
      *
@@ -237,6 +255,7 @@ public:
      * @return the scheme entropy per instance
      */
     const double SFMeanSchemeEntropy();
+
     /**
      * Returns the total SF, which is the null model entropy minus the scheme
      * entropy.
@@ -261,12 +280,14 @@ public:
      * @return the mean absolute error
      */
     const double meanAbsoluteError();
+
     /**
      * Returns the root mean squared error.
      *
      * @return the root mean squared error
      */
     const double rootMeanSquaredError();
+
     /**
      * Returns the relative absolute error.
      *
@@ -274,12 +295,14 @@ public:
      * @throws Exception if it can't be computed
      */
     const double relativeAbsoluteError();
+
     /**
      * Returns the root relative squared error if the class is numeric.
      *
      * @return the root relative squared error
      */
     const double rootRelativeSquaredError();
+
     /**
      * Gets the number of instances not classified (that is, for which no
      * prediction was made by the classifier). (Actually the sum of the weights of
@@ -288,6 +311,7 @@ public:
      * @return the number of unclassified instances
      */
     const double unclassified();
+
     /**
      * Gets the percentage of instances not classified (that is, for which no
      * prediction was made by the classifier).
@@ -295,12 +319,14 @@ public:
      * @return the percent of unclassified instances (between 0 and 100)
      */
     const double pctUnclassified();
+
     /**
     * Returns the mean absolute error of the prior.
     *
     * @return the mean absolute error
     */
     const double meanPriorAbsoluteError();
+
     /**
      * Calculate the entropy of the prior distribution
      *
@@ -308,12 +334,14 @@ public:
      * @throws Exception if the class is not nominal
      */
     const double priorEntropy();
+
     /**
      * Returns the root mean prior squared error.
      *
      * @return the root mean prior squared error
      */
     const double rootMeanPriorSquaredError();
+
     /**
      * Calculate the true positive rate with respect to a particular class. This
      * is defined as
@@ -326,6 +354,7 @@ public:
      * @return the true positive rate
      */
     double truePositiveRate(int classIndex);
+
     /**
      * Calculate the false positive rate with respect to a particular class. This
      * is defined as
@@ -341,6 +370,7 @@ public:
      * @return the false positive rate
      */
     double falsePositiveRate(int classIndex);
+
     /**
      * Calculate the precision with respect to a particular class. This is defined
      * as
@@ -353,6 +383,7 @@ public:
      * @return the precision
      */
     double precision(int classIndex);
+
     /**
      * Calculate the recall with respect to a particular class. This is defined as
      *
@@ -366,6 +397,7 @@ public:
      * @return the recall
      */
     double recall(int classIndex);
+
     /**
      * Calculate the F-Measure with respect to a particular class. This is defined
      * as
@@ -402,12 +434,19 @@ public:
      */
     double weightedFalsePositiveRate();
     /**
-     * Calculates the weighted (by class size) false precision.
+     * Calculates the weighted (by class size) precision.
      *
      * @return the weighted precision.
      */
     double weightedPrecision();
+
+    /**
+    * Calculates the weighted (by class size) recall.
+    *
+    * @return the weighted recall.
+    */
     double weightedRecall();
+
     /**
      * Calculates the weighted (by class size) F-Measure.
      *
@@ -416,12 +455,11 @@ public:
     double weightedFMeasure();
 
     /**
-     * Calculates the weighted (by class size) recall.
+     * Calculates the weighted AreaUnderROC.
      *
-     * @return the weighted recall.
+     * @return the weighted AreaUnderROC.
      */
     double weightedAreaUnderROC();
-
 
 protected:
     /** The number of classes.  */
@@ -641,7 +679,7 @@ protected:
      * @param IDWidth the width of the entry
      * @return the formatted integer as a string
      */
-    string num2ShortID(int num, char_array &IDChars, int IDWidth);
+    string num2ShortID(int num, const char_array &IDChars, int IDWidth);
 
 };
 

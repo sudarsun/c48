@@ -10,22 +10,20 @@
 
 
 C45ModelSelection::C45ModelSelection(int minNoObj, Instances *allData, bool useMDLcorrection, bool doNotMakeSplitPointActualValue) :
-    mminNoObj(minNoObj),
-    museMDLcorrection(useMDLcorrection),
-    mdoNotMakeSplitPointActualValue(doNotMakeSplitPointActualValue)
+  mMinNoObj(minNoObj),
+    mUseMDLcorrection(useMDLcorrection),
+    mDoNotMakeSplitPointActualValue(doNotMakeSplitPointActualValue)
 {
-    mallData = allData;
+    mAllData = allData;
 }
 
-void C45ModelSelection::cleanup()
+void C45ModelSelection::cleanup() const
 {
-
-    delete mallData;
+    delete mAllData;
 }
 
-ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data)
+ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data ) const
 {
-
     double minResult;
     std::vector<C45Split*> currentModel;
     C45Split *bestModel = nullptr;
@@ -45,20 +43,20 @@ ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data)
         // enough Instances to split.
         checkDistribution = new Distribution(data);
         noSplitModel = new NoSplit(checkDistribution);
-        if (Utils::sm(checkDistribution->total(), 2 * mminNoObj) || Utils::eq(checkDistribution->total(), checkDistribution->perClass(checkDistribution->maxClass())))
+        if (Utils::sm(checkDistribution->total(), 2 *mMinNoObj) || Utils::eq(checkDistribution->total(), checkDistribution->perClass(checkDistribution->maxClass())))
         {
             return noSplitModel;
         }
 
         // Check if all attributes are nominal and have a
         // lot of values.
-        if (mallData != nullptr)
+        if (mAllData != nullptr)
         {
             int totalattribute = data->numAttributes();
             for (int i = 0; i < totalattribute; i++)
             {
                 attribute = data->attribute(i);
-                if ((attribute->isNumeric()) || (Utils::sm(attribute->numValues(), (0.3 * mallData->numInstances()))))
+                if ((attribute->isNumeric()) || (Utils::sm(attribute->numValues(), (0.3 * mAllData->numInstances()))))
                 {
                     multiVal = false;
                     break;
@@ -78,7 +76,7 @@ ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data)
             {
 
                 // Get models for current attribute.
-                currentModel[i] = new C45Split(i, mminNoObj, sumOfWeights, museMDLcorrection);
+                currentModel[i] = new C45Split(i,mMinNoObj, sumOfWeights, mUseMDLcorrection);
                 // Check for Dataset assignment
                 currentModel[i]->buildClassifier(*data);
 
@@ -87,9 +85,9 @@ ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data)
                 // a lot of values.
                 if (currentModel[i]->checkModel())
                 {
-                    if (mallData != nullptr)
+                    if (mAllData != nullptr)
                     {
-                        if ((data->attribute(i)->isNumeric()) || (multiVal || Utils::sm(data->attribute(i)->numValues(), (0.3 * mallData->numInstances()))))
+                        if ((data->attribute(i)->isNumeric()) || (multiVal || Utils::sm(data->attribute(i)->numValues(), (0.3 * mAllData->numInstances()))))
                         {
                             averageInfoGain = averageInfoGain + currentModel[i]->infoGain();
                             validModels++;
@@ -140,12 +138,12 @@ ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data)
         // Add all Instances with unknown values for the corresponding
         // attribute to the distribution for the model, so that
         // the complete distribution is stored with the model.
-        bestModel->distribution()->addInstWithUnknown(data, bestModel->attIndex());
+        bestModel->getDistribution()->addInstWithUnknown(data, bestModel->attIndex());
 
         // Set the split point analogue to C45 if attribute numeric.
-        if ((mallData != nullptr) && (!mdoNotMakeSplitPointActualValue))
+        if ((mAllData != nullptr) && (!mDoNotMakeSplitPointActualValue))
         {
-            bestModel->setSplitPoint(mallData);
+            bestModel->setSplitPoint(mAllData);
         }
         return bestModel;
     }
@@ -156,9 +154,8 @@ ClassifierSplitModel *C45ModelSelection::selectModel(Instances *data)
     return nullptr;
 }
 
-ClassifierSplitModel *C45ModelSelection::selectModel(Instances *train, Instances *test)
+ClassifierSplitModel *C45ModelSelection::selectModel(Instances *train, Instances *test) const
 {
-
     return selectModel(train);
 }
 

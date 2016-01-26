@@ -58,7 +58,7 @@ public:
      * @param attInfo the attribute information
      * @param capacity the capacity of the set
      */
-    Instances(const string &name, std::vector<Attribute*> &attInfo, int capacity);
+    Instances(const string &name, std::vector<Attribute*> &attInfo, const int capacity);
 
     /**
      * Constructor copying all instances and references to the header information
@@ -77,7 +77,7 @@ public:
      *          taken
      * @param capacity the capacity of the new dataset
      */
-    Instances(Instances *dataset, int capacity);
+    Instances(Instances *dataset, const int capacity);
 
     /**
      * Returns an attribute.
@@ -89,7 +89,7 @@ public:
      * @ requires index < mAttributes.size();
      * @ ensures \result != null;
      */
-    Attribute *attribute(int index);
+    Attribute *attribute(const int index) const;
 
     /**
      * Returns an attribute given its name. If there is more than one attribute
@@ -109,7 +109,7 @@ public:
      *
      * @ ensures \result == mAttributes.size();
      */
-    int numAttributes();
+    int numAttributes() const;
 
     /**
      * Returns the class attribute's index. Returns negative number if it's
@@ -119,7 +119,7 @@ public:
      *
      * ensures \result == mClassIndex;
      */
-    int classIndex();
+    int classIndex() const;
 
     /**
      * Adds one instance to the end of the set. Shallow copies instance before it
@@ -137,7 +137,7 @@ public:
      * @param index the index
      * @param instance the instance to be added
      */
-    void add(int index, Instance *instance);
+    void add(const int index, Instance *instance);
 
     /**
      * Sets the class index of the set. If the class index is negative there is
@@ -146,7 +146,7 @@ public:
      * @param classIndex the new class index (index starts with 0)
      * @throws IllegalArgumentException if the class index is too big or < 0
      */
-    void setClassIndex(int classIndex);
+    void setClassIndex(const int classIndex);
 
     /**
      * Returns the number of instances in the dataset.
@@ -155,7 +155,7 @@ public:
      *
      * @ensures result == mInstances.size();
      */
-    int numInstances();
+    int numInstances() const;
 
     /**
      * Copies instances from one set to the end of another one.
@@ -167,7 +167,7 @@ public:
      * @ requires 0 <= from && from <= numInstances() - num;
      * @ requires 0 <= num;
      */
-    void copyInstances(int from, Instances *dest, int num);
+    void copyInstances(const int from, Instances *dest, const int num);
 
     /**
      * Returns the instance at the given position.
@@ -178,7 +178,7 @@ public:
      * @ requires 0 <= index;
      * @ requires index < numInstances();
      */
-    Instance *instance(int index);
+    Instance *instance(const int index) const;
 
     /**
      * Returns the class attribute.
@@ -188,7 +188,7 @@ public:
      *
      * @ requires classIndex() >= 0;
      */
-    Attribute *classAttribute();
+    Attribute *classAttribute() const;
 
     /**
      * Returns the number of class labels.
@@ -199,7 +199,7 @@ public:
      *
      * @ requires classIndex() >= 0;
      */
-    int numClasses();
+    int numClasses() const;
 
     /**
      * Returns the last instance in the set.
@@ -208,14 +208,14 @@ public:
      *
      * @ requires numInstances() > 0;
      */
-    Instance *lastInstance();
+    Instance *lastInstance() const;
 
     /**
      * Computes the sum of all the instances' weights.
      *
      * @return the sum of all the instances' weights as a double
      */
-    double sumOfWeights();
+    double sumOfWeights() const;
 
     /**
      * Sorts the instances based on an attribute. For numeric attributes,
@@ -226,7 +226,7 @@ public:
      *
      * @param attIndex the attribute's index (index starts with 0)
      */
-    void Sort(int attIndex);
+    void Sort(const int attIndex);
 
     /**
      * Sorts the instances based on an attribute. For numeric attributes,
@@ -245,7 +245,7 @@ public:
      *
      * @param attIndex the attribute's index (index starts with 0)
      */
-    void sortBasedOnNominalAttribute(int attIndex);
+    void sortBasedOnNominalAttribute(const int attIndex);
 
     /**
      * Removes all instances with a missing class value from the dataset.
@@ -270,7 +270,7 @@ public:
      *
      * @ requires 0 <= attIndex && attIndex < numAttributes();
      */
-    void deleteWithMissing(int attIndex);
+    void deleteWithMissing(const int attIndex);
 
     /**
      * Creates the training set for one fold of a cross-validation on the dataset.
@@ -285,7 +285,7 @@ public:
      * @ requires 2 <= numFolds && numFolds < numInstances();
      * @ requires 0 <= numFold && numFold < numFolds;
      */
-    Instances *trainCV(int numFolds, int numFold);
+    Instances *trainCV(const int numFolds, const int numFold);
 
     /**
      * Creates the test set for one fold of a cross-validation on the dataset.
@@ -300,7 +300,7 @@ public:
      * @ requires 2 <= numFolds && numFolds < numInstances();
      * @ requires 0 <= numFold && numFold < numFolds;
      */
-    Instances *testCV(int numFolds, int numFold);
+    Instances *testCV(const int numFolds, const int numFold);
 
     /**
      * Returns the relation's name.
@@ -309,7 +309,7 @@ public:
      *
      * @ ensures \result == mRelationName;
      */
-    string getRelationName();
+    string getRelationName() const;
 
     /**
      * Sets the relation's name.
@@ -329,7 +329,7 @@ public:
      *
      * @ requires 0 <= index && index < numAttributes();
      */
-    double_array attributeToDoubleArray(int index);
+    double_array attributeToDoubleArray(const int index) const;
 
 };
 

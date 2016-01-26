@@ -16,23 +16,23 @@ public:
     /**
      * Help method for computing entropy.
      */
-    double lnFunc(double num);
+    double lnFunc(double num) const;
 
     /**
      * Computes entropy of distribution before splitting.
      */
-    double oldEnt(Distribution *bags);
+    double oldEnt(Distribution *bags) const;
 
     /**
      * Computes entropy of distribution after splitting.
      */
-    double newEnt(Distribution *bags);
+    double newEnt(Distribution *bags) const;
 
     /**
      * Computes entropy after splitting without considering the
      * class values.
      */
-    double splitEnt(Distribution *bags);
+    double splitEnt(Distribution *bags) const;
 };
 
 

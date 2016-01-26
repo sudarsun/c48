@@ -27,7 +27,7 @@ public:
     *
     * @return the weight assigned to this prediction.
     */
-    virtual double weight() = 0;
+    virtual double weight() const = 0;
 
     /**
      * Gets the actual class value.
@@ -35,7 +35,7 @@ public:
      * @return the actual class value, or MISSING_VALUE if no
      * prediction was made.
      */
-    virtual double actual() = 0;
+    virtual double actual() const = 0;
 
     /**
      * Gets the predicted class value.
@@ -43,7 +43,7 @@ public:
      * @return the predicted class value, or MISSING_VALUE if no
      * prediction was made.
      */
-    virtual double predicted() = 0;
+    virtual double predicted() const = 0;
 
 };
 

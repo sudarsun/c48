@@ -11,7 +11,7 @@ ContingencyTables::ContingencyTables() {
     }
 }
 
-double ContingencyTables::lnFunc(double num) {
+double ContingencyTables::lnFunc(const double num) {
 
     if (num <= 0) {
         return 0;

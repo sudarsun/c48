@@ -20,10 +20,10 @@ class C45PruneableClassifierTree : public ClassifierTree
 {
 protected:
     /** True if the tree is to be pruned. */
-    bool mPruneTheTree = false;
+    bool mPruneTheTree;
 
     /** True if the tree is to be collapsed. */
-    bool mCollapseTheTree = false;
+    bool mCollapseTheTree;
 
     /** The confidence factor for pruning. */
     float mCF = 0.25f;
@@ -41,7 +41,7 @@ protected:
        * @return the new tree
        * @throws Exception if something goes wrong
        */
-    virtual ClassifierTree *getNewTree(Instances *data);
+    virtual ClassifierTree *getNewTree(Instances *data) const override;
 
 public:
     /**
@@ -63,7 +63,7 @@ public:
      * @param data the data for building the tree
      * @throws Exception if something goes wrong
      */
-    virtual void buildClassifier(Instances *data);
+    virtual void buildClassifier(Instances *data) override;
 
     /**
      * Collapses a tree to a node if training error doesn't increase.
@@ -83,7 +83,7 @@ private:
      *
      * @return the estimated errors
      */
-    double getEstimatedErrors();
+    double getEstimatedErrors() const;
 
     /**
      * Computes estimated errors for one branch.
@@ -92,7 +92,7 @@ private:
      * @return the estimated errors
      * @throws Exception if something goes wrong
      */
-    double getEstimatedErrorsForBranch(Instances *data);
+    double getEstimatedErrorsForBranch(Instances *data) const;
 
     /**
      * Computes estimated errors for leaf.
@@ -100,21 +100,21 @@ private:
      * @param theDistribution the distribution to use
      * @return the estimated errors
      */
-    double getEstimatedErrorsForDistribution(Distribution *theDistribution);
+    double getEstimatedErrorsForDistribution(Distribution *theDistribution) const;
 
     /**
      * Computes errors of tree on training data.
      *
      * @return the training errors
      */
-    double getTrainingErrors();
+    double getTrainingErrors() const;
 
     /**
      * Method just exists to make program easier to read.
      *
      * @return the local split model
      */
-    ClassifierSplitModel *localModel();
+    ClassifierSplitModel *localModel() const;
 
     /**
      * Computes new distributions of instances for nodes
@@ -128,7 +128,7 @@ private:
     /**
      * Method just exists to make program easier to read.
      */
-    C45PruneableClassifierTree *son(int index);
+    C45PruneableClassifierTree *son(int index) const;
 
 };
 

@@ -23,12 +23,12 @@ ConfusionMatrix *ConfusionMatrix::makeWeighted(CostMatrix *costs) {
     return weighted;
 }
 
-int ConfusionMatrix::size() {
+int ConfusionMatrix::size() const {
 
     return (int)mClassNames.size();
 }
 
-string ConfusionMatrix::className(int index) {
+string ConfusionMatrix::className(const int index) const {
 
     return mClassNames[index];
 }
@@ -52,7 +52,7 @@ void ConfusionMatrix::addPredictions(std::vector<Prediction*> &predictions) {
     }
 }
 
-TwoClassStats *ConfusionMatrix::getTwoClassStats(int classIndex) {
+TwoClassStats *ConfusionMatrix::getTwoClassStats(const int classIndex) {
 
     double fp = 0, tp = 0, fn = 0, tn = 0;
     for (int row = 0; row < size(); row++) {
@@ -78,7 +78,7 @@ TwoClassStats *ConfusionMatrix::getTwoClassStats(int classIndex) {
     return new TwoClassStats(tp, fp, tn, fn);
 }
 
-double ConfusionMatrix::correct() {
+double ConfusionMatrix::correct() const {
 
     double correct = 0;
     for (int i = 0; i < size(); i++) {
@@ -87,7 +87,7 @@ double ConfusionMatrix::correct() {
     return correct;
 }
 
-double ConfusionMatrix::incorrect() {
+double ConfusionMatrix::incorrect() const {
 
     double incorrect = 0;
     for (int row = 0; row < size(); row++) {
@@ -100,7 +100,7 @@ double ConfusionMatrix::incorrect() {
     return incorrect;
 }
 
-double ConfusionMatrix::total() {
+double ConfusionMatrix::total() const {
 
     double total = 0;
     for (int row = 0; row < size(); row++) {
@@ -111,17 +111,17 @@ double ConfusionMatrix::total() {
     return total;
 }
 
-double ConfusionMatrix::errorRate() {
+double ConfusionMatrix::errorRate() const {
 
     return incorrect() / total();
 }
 
-string ConfusionMatrix::toString() {
+string ConfusionMatrix::toString() const {
 
     return toString("=== Confusion Matrix ===\n");
 }
 
-string ConfusionMatrix::toString(const string &title) {
+string ConfusionMatrix::toString(const string &title) const {
 
     string text = "";
     char_array IDChars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
@@ -169,7 +169,7 @@ string ConfusionMatrix::toString(const string &title) {
     return text;
 }
 
-string ConfusionMatrix::num2ShortID(int num, char_array &IDChars, int IDWidth) {
+string ConfusionMatrix::num2ShortID(int num, const char_array &IDChars, const int IDWidth) {
 
     char_array ID(IDWidth);
     int i;
@@ -189,22 +189,22 @@ string ConfusionMatrix::num2ShortID(int num, char_array &IDChars, int IDWidth) {
 }
 
 
-void ConfusionMatrix::set(int i, int j, double s)
+void ConfusionMatrix::set(const int i, const int j, const double s)
 {
     set(i, j, s);
 }
-int ConfusionMatrix::getRowDimension() {
+
+int ConfusionMatrix::getRowDimension() const {
     return getRowDimension();
 }
 
-int ConfusionMatrix::getColumnDimension() {
+int ConfusionMatrix::getColumnDimension() const {
     return getColumnDimension();
 }
-double_2D_array ConfusionMatrix::getArray() {
+double_2D_array ConfusionMatrix::getArray() const {
     return getArray();
 }
 
-
-double ConfusionMatrix::get(int i, int j) {
+double ConfusionMatrix::get(const int i, const int j) const {
     return get(i, j);
 }

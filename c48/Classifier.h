@@ -37,7 +37,7 @@ public:
      * Utils::missingValue() if no prediction is made
      * @exception Exception if an error occurred during the prediction
      */
-    virtual double classifyInstance(Instance *instance) = 0;
+    virtual double classifyInstance(Instance *instance) const= 0;
 
     /**
      * Predicts the class memberships for a given instance. If
@@ -54,7 +54,7 @@ public:
      * @exception Exception if distribution could not be
      * computed successfully
      */
-    virtual double_array distributionForInstance(Instance *instance) = 0;
+    virtual double_array distributionForInstance(Instance *instance) const= 0;
 
 };
 

@@ -30,7 +30,7 @@ public:
      * @param data the new data value
      * @param weight the weight assigned to the data value
      */
-    virtual void addValue(double data, double weight);
+    virtual void addValue( double data, const double weight);
 
     /**
      * Initialize the estimator with a new dataset.
@@ -40,7 +40,7 @@ public:
      * @param attrIndex attribute the estimator is for
      * @exception Exception if building of estimator goes wrong
      */
-    virtual void addValues(Instances *data, int attrIndex);
+    virtual void addValues(Instances *data, const int attrIndex);
 
     /**
      * Initialize the estimator with all values of one attribute of a dataset.
@@ -53,7 +53,7 @@ public:
      * @param factor number of instances has been reduced to that factor
      * @exception Exception if building of estimator goes wrong
      */
-    virtual void addValues(Instances *data, int attrIndex, double min, double max, double factor);
+    virtual void addValues(Instances *data, const int attrIndex, const double min, const double max, const double factor);
 
     /**
     * Initialize the estimator using only the instance of one class.
@@ -65,7 +65,7 @@ public:
     * @param classValue the class value
     * @exception Exception if building of estimator goes wrong
     */
-    virtual void addValues(Instances *data, int attrIndex, int classIndex, int classValue);
+    virtual void addValues(Instances *data, const int attrIndex, const int classIndex, const int classValue);
 
     /**
      * Initialize the estimator using only the instance of one class.
@@ -79,7 +79,7 @@ public:
      * @param max maximal value of this attribute
      * @exception Exception if building of estimator goes wrong
      */
-    virtual void addValues(Instances *data, int attrIndex, int classIndex, int classValue, double min, double max);
+    virtual void addValues(Instances *data, const int attrIndex, const int classIndex, const int classValue, const double min, const double max);
 
     /**
      * Get a probability estimate for a value.
@@ -87,21 +87,21 @@ public:
      * @param data the value to estimate the probability of
      * @return the estimated probability of the supplied value
      */
-    virtual double getProbability(double data) = 0;
+    virtual double getProbability(const double data) const = 0;
 
     /**
       * Set debugging mode.
       *
       * @param debug true if debug output should be printed
       */
-    virtual void setDebug(bool debug);
+    virtual void setDebug(const bool debug);
 
     /**
      * Get whether debugging is turned on.
      *
      * @return true if debugging output is on
      */
-    virtual bool getDebug();
+    virtual bool getDebug() const;
 
 private:
 
@@ -117,7 +117,7 @@ private:
      * @param classValue the relevant class value
      * @return a dataset with only
      */
-    double getInstancesFromClass(Instances *data, int attrIndex, int classIndex, double classValue, Instances *workData);
+    double getInstancesFromClass(Instances *data, const int attrIndex, const int classIndex, const double classValue, Instances *workData);
 
     /**
      * Class to support a building process of an estimator.

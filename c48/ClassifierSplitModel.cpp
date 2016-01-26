@@ -11,7 +11,7 @@
 return new ClassifierSplitModel();
 }*/
 
-bool ClassifierSplitModel::checkModel()
+bool ClassifierSplitModel::checkModel() const
 {
 
     if (mNumSubsets > 0)
@@ -24,9 +24,8 @@ bool ClassifierSplitModel::checkModel()
     }
 }
 
-double ClassifierSplitModel::classifyInstance(Instance *instance)
+double ClassifierSplitModel::classifyInstance(Instance *instance) const
 {
-
     int theSubset;
 
     theSubset = whichSubset(instance);
@@ -40,7 +39,7 @@ double ClassifierSplitModel::classifyInstance(Instance *instance)
     }
 }
 
-double ClassifierSplitModel::classProb(int classIndex, Instance *instance, int theSubset)
+double ClassifierSplitModel::classProb(const int classIndex, Instance *instance, const int theSubset) const
 {
 
     if (theSubset > -1)
@@ -66,7 +65,7 @@ double ClassifierSplitModel::classProb(int classIndex, Instance *instance, int t
     }
 }
 
-double ClassifierSplitModel::classProbLaplace(int classIndex, Instance *instance, int theSubset)
+double ClassifierSplitModel::classProbLaplace(const int classIndex, Instance *instance, const int theSubset) const
 {
 
     if (theSubset > -1)
@@ -92,21 +91,13 @@ double ClassifierSplitModel::classProbLaplace(int classIndex, Instance *instance
     }
 }
 
-double ClassifierSplitModel::codingCost()
+double ClassifierSplitModel::codingCost() const
 {
-
     return 0;
 }
 
-Distribution *ClassifierSplitModel::distribution()
+string ClassifierSplitModel::dumpLabel(const int index, Instances *data) const
 {
-
-    return mDistribution;
-}
-
-string ClassifierSplitModel::dumpLabel(int index, Instances *data)
-{
-
     string text;
 
     text = "";
@@ -121,9 +112,8 @@ string ClassifierSplitModel::dumpLabel(int index, Instances *data)
     return text;
 }
 
-string ClassifierSplitModel::dumpModel(Instances *data)
+string ClassifierSplitModel::dumpModel(Instances *data) const
 {
-
     string text;
     int i;
 
@@ -136,21 +126,18 @@ string ClassifierSplitModel::dumpModel(Instances *data)
     return text;
 }
 
-int ClassifierSplitModel::numSubsets()
+int ClassifierSplitModel::numSubsets() const
 {
-
     return mNumSubsets;
 }
 
 void ClassifierSplitModel::resetDistribution(Instances *data)
 {
-
     mDistribution = new Distribution(data, this);
 }
 
-std::vector<Instances*> ClassifierSplitModel::split(Instances *data)
+std::vector<Instances*> ClassifierSplitModel::split(Instances *data) const
 {
-
     // Create subsets
     std::vector<Instances*> instances(mNumSubsets);
     for (int j = 0; j < mNumSubsets; j++)
@@ -182,7 +169,7 @@ std::vector<Instances*> ClassifierSplitModel::split(Instances *data)
     return instances;
 }
 
-Distribution* ClassifierSplitModel::getDistribution()
+Distribution* ClassifierSplitModel::getDistribution() const
 {
     return mDistribution;
 }

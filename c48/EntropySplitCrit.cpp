@@ -3,12 +3,12 @@
 #include "core/ContingencyTables.h"
 #include "core/Utils.h"
 
-double EntropySplitCrit::splitCritValue(Distribution *bags) {
+double EntropySplitCrit::splitCritValue(Distribution *bags) const {
 
     return newEnt(bags);
 }
 
-double EntropySplitCrit::splitCritValue(Distribution *train, Distribution *test) {
+double EntropySplitCrit::splitCritValue(Distribution *train, Distribution *test) const {
 
     double result = 0;
     int numClasses = 0;

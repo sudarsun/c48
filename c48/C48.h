@@ -67,6 +67,11 @@ public:
     C48();
 
     /**
+    * Destructor
+    */
+    ~C48();
+
+    /**
      * Generates the classifier.
      *
      * @param instances the data to train the classifier with
@@ -81,7 +86,7 @@ public:
      * @return the classification for the instance
      * @throws Exception if instance can't be classified successfully
      */
-    virtual double classifyInstance(Instance *instance);
+    virtual double classifyInstance(Instance *instance) const;
 
     /**
      * Returns class probabilities for an instance.
@@ -90,14 +95,14 @@ public:
      * @return the class probabilities
      * @throws Exception if distribution can't be computed successfully
      */
-    double_array distributionForInstance(Instance *instance);
+    double_array distributionForInstance(Instance *instance) const;
 
     /**
      * Get the value of useLaplace.
      *
      * @return Value of useLaplace.
      */
-    virtual bool getUseLaplace();
+    virtual bool getUseLaplace() const;
 
     /**
      * Set the value of useLaplace.
@@ -111,7 +116,7 @@ public:
      *
      * @return Value of useMDLcorrection.
      */
-    virtual bool getUseMDLcorrection();
+    virtual bool getUseMDLcorrection() const;
 
     /**
      * Set the value of useMDLcorrection.
@@ -126,42 +131,42 @@ public:
      * @param isDumpTree Value to display the tree structure.
      * @return a description of the classifier
      */
-    virtual string toString(bool isDumpTree = false);
+    virtual string toString(bool isDumpTree = false) const;
 
     /**
      * Returns a superconcise version of the model
      *
      * @return a summary of the model
      */
-    virtual string toSummaryString();
+    virtual string toSummaryString() const;
 
     /**
      * Returns the size of the tree
      *
      * @return the size of the tree
      */
-    virtual double measureTreeSize();
+    virtual double measureTreeSize() const;
 
     /**
      * Returns the number of leaves
      *
      * @return the number of leaves
      */
-    virtual double measureNumLeaves();
+    virtual double measureNumLeaves() const;
 
     /**
      * Returns the number of rules (same as number of leaves)
      *
      * @return the number of rules
      */
-    virtual double measureNumRules();
+    virtual double measureNumRules() const;
 
     /**
      * Get the value of unpruned.
      *
      * @return Value of unpruned.
      */
-    virtual bool getUnpruned();
+    virtual bool getUnpruned() const;
 
     /**
      * Set the value of unpruned. Turns reduced-error pruning off if set.
@@ -175,7 +180,7 @@ public:
       *
       * @return Value of collapseTree.
       */
-    virtual bool getCollapseTree();
+    virtual bool getCollapseTree() const;
 
     /**
      * Set the value of collapseTree.
@@ -189,7 +194,7 @@ public:
      *
      * @return Value of CF.
      */
-    virtual float getConfidenceFactor();
+    virtual float getConfidenceFactor() const;
 
     /**
      * Set the value of CF.
@@ -203,7 +208,7 @@ public:
      *
      * @return Value of minNumObj.
      */
-    virtual int getMinNumObj();
+    virtual int getMinNumObj() const;
 
     /**
      * Set the value of minNumObj.
@@ -217,7 +222,7 @@ public:
      *
      * @return Value of reducedErrorPruning.
      */
-    virtual bool getReducedErrorPruning();
+    virtual bool getReducedErrorPruning() const;
 
     /**
      * Set the value of reducedErrorPruning. Turns unpruned trees off if set.
@@ -231,7 +236,7 @@ public:
      *
      * @return Value of numFolds.
      */
-    virtual int getNumFolds();
+    virtual int getNumFolds() const;
 
     /**
      * Set the value of numFolds.
@@ -245,7 +250,7 @@ public:
      *
      * @return Value of subtreeRaising.
      */
-    virtual bool getSubtreeRaising();
+    virtual bool getSubtreeRaising() const;
 
     /**
      * Set the value of subtreeRaising.
@@ -259,7 +264,7 @@ public:
      *
      * @return true if instance data is saved
      */
-    virtual bool getSaveInstanceData();
+    virtual bool getSaveInstanceData() const;
 
     /**
      * Set whether instance data is to be saved.
@@ -273,7 +278,7 @@ public:
      *
      * @return the value
      */
-    virtual bool getDoNotMakeSplitPointActualValue();
+    virtual bool getDoNotMakeSplitPointActualValue() const;
 
     /**
      * Sets the value of doNotMakeSplitPointActualValue.
@@ -290,12 +295,12 @@ public:
     /**
      * Computes an array that indicates node membership.
      */
-    virtual double_array getMembershipValues(Instance *inst);
+    virtual double_array getMembershipValues(Instance *inst) const;
 
     /**
      * Returns the number of elements in the partition.
      */
-    virtual int numElements();
+    virtual int numElements() const;
 };
 
 #endif    //#ifndef _J48_

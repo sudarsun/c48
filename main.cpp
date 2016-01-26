@@ -10,8 +10,6 @@
 #include <string.h>
 
 void classify(char *trainFile, char *testFile, bool isDumpTree = false);
-void processClassifierPrediction(Instance *toPredict,
-    Classifier *classifier, Evaluation &eval);
 
 int main( int argc, char *argv[]  )
 {
@@ -90,6 +88,7 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
     Evaluation *eval = nullptr;
     CostMatrix *costMatrix = nullptr;
     eval = new Evaluation(*instTrain, costMatrix);
+
     if (testFile != nullptr)
     {
         string testFilePath(testFile);
@@ -101,7 +100,7 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
         for (int i = 0; i < totalInst; i++)
         {
             Instance *instance = instTest->instance(i);
-            processClassifierPrediction(instance, classifier, *eval);
+            eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
         }
     }
     else
@@ -110,7 +109,7 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
         for (int i = 0; i < totalInst; i++)
         {
             Instance *instance = instTrain->instance(i);
-            processClassifierPrediction(instance, classifier, *eval);
+            eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
         }
     }
 
@@ -119,17 +118,4 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
     std::cout << eval->toSummaryString(true);
     std::cout << eval->toClassDetailsString() << std::endl;
     std::cout << eval->toMatrixString() << std::endl;
-}
-
-void processClassifierPrediction(Instance *toPredict,
-    Classifier *classifier, Evaluation &eval)
-{
-    try
-    {
-        double pred = eval.evaluateModelOnceAndRecordPrediction(classifier,    toPredict);
-    }
-    catch (std::exception ex)
-    {
-        std::cout << ex.what();
-    }
 }

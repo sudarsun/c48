@@ -67,21 +67,21 @@ public:
      * The number of rows (and columns)
      *
      */
-    int size();
+    int size() const;
 
     /**
      * Same as size
      *
      * @return the number of columns
      */
-    int numColumns();
+    int numColumns() const;
 
     /**
     * Same as size
     *
     * @return the number of rows
     */
-    int numRows();
+    int numRows() const;
 
     /**
      * Calculates the expected misclassification cost for each possible class
@@ -92,7 +92,7 @@ public:
      * @exception Exception if the wrong number of class probabilities is
      *              supplied.
      */
-    double_array expectedCosts(double_array &classProbs);
+    double_array expectedCosts(const double_array &classProbs) const;
 
     /**
      * Gets the maximum cost for a particular class value.
@@ -101,7 +101,7 @@ public:
      * @return the maximum cost.
      * @exception Exception if cost matrix contains non-fixed costs
      */
-    double getMaxCost(int classVal);
+    double getMaxCost(const int classVal) const;
 
     /**
      * Gets the maximum cost for a particular class value.
@@ -110,7 +110,7 @@ public:
      * @return the maximum cost.
      * @exception Exception if cost matrix contains non-fixed costs
      */
-    double getMaxCost(int classVal, Instance *inst);
+    double getMaxCost(const int classVal, Instance *inst) const;
 
     /**
      * Normalizes the matrix so that the diagonal contains zeros.
@@ -125,7 +125,7 @@ public:
     * @param columnIndex the column
     * @param value the value to set
     */
-    void setCell(int rowIndex, int columnIndex, void *value);
+    void setCell(const int rowIndex, const int columnIndex, void *value);
 
     /**
     * Return the contents of a particular cell. Note: this method returns the
@@ -135,7 +135,7 @@ public:
     * @param columnIndex the column
     * @return the value at the cell
     */
-    void *getCell(int rowIndex, int columnIndex);
+    void *getCell(const int rowIndex, const int columnIndex) const;
 
     /**
      * Return the value of a cell as a double (for legacy code)
@@ -145,7 +145,7 @@ public:
      * @return the value at a particular cell as a double
      * @exception Exception if the value is not a double
      */
-    double getElement(int rowIndex, int columnIndex);
+    double getElement(const int rowIndex, const int columnIndex) const;
 
     /**
      * Return the value of a cell as a double. Computes the value for non-fixed
@@ -156,7 +156,7 @@ public:
      * @return the value from a particular cell
      * @exception Exception if something goes wrong
      */
-    double getElement(int rowIndex, int columnIndex, Instance *inst);
+    double getElement(const int rowIndex, const int columnIndex, Instance *inst) const;
 
     /**
     * Set the value of a cell as a double
@@ -165,11 +165,11 @@ public:
     * @param columnIndex the column
     * @param value the value (double) to set
     */
-    void setElement(int rowIndex, int columnIndex, double value);
+    void setElement(const int rowIndex, const int columnIndex, double value);
 
 private:
     int mSize = 0;
-    bool replaceStrings(Instances *dataset);
+    bool replaceStrings(Instances *dataset) const;
 };
 
 

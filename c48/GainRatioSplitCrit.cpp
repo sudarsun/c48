@@ -3,7 +3,7 @@
 //#include "core/ContingencyTables.h"
 #include "core/Utils.h"
 
-double GainRatioSplitCrit::splitCritValue(Distribution *bags) {
+double GainRatioSplitCrit::splitCritValue(Distribution *bags) const {
 
     double numerator;
     double denumerator;
@@ -27,7 +27,7 @@ double GainRatioSplitCrit::splitCritValue(Distribution *bags) {
     return denumerator / numerator;
 }
 
-double GainRatioSplitCrit::splitCritValue(Distribution *bags, double totalnoInst, double numerator) {
+double GainRatioSplitCrit::splitCritValue(Distribution *bags, double totalnoInst, double numerator) const {
 
     double denumerator;
     // Compute split info.
@@ -42,7 +42,7 @@ double GainRatioSplitCrit::splitCritValue(Distribution *bags, double totalnoInst
     return numerator / denumerator;
 }
 
-double GainRatioSplitCrit::splitEnt(Distribution *bags, double totalnoInst) {
+double GainRatioSplitCrit::splitEnt(Distribution *bags, double totalnoInst) const {
 
     double returnValue = 0;
     double noUnknown;

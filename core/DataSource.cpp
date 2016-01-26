@@ -94,7 +94,7 @@ void DataSource::readHeader(std::fstream &inNameStream)
 
     if (inNameStream.good() && inNameStream.eof())
     {
-        throw  "premature end of file";
+        throw "premature end of file";
     }
 
     mNumAttribs = 1;
@@ -225,14 +225,14 @@ void DataSource::readHeader(std::fstream &inNameStream)
         mIgnore[ignores[i]] = true;
     }
 }
-string DataSource::removeTrailingPeriod(string &val)
+string DataSource::removeTrailingPeriod(string &val) const
 {
     val.erase(val.find_last_not_of(TRIMCHARS) + 1);
     val.erase(0, val.find_first_not_of(TRIMCHARS));
     return val;
 }
 
-Instance *DataSource::getInstance(string inData)
+Instance *DataSource::getInstance(string inData) const
 {
     double_array instance = double_array(mStructure->numAttributes());
 
@@ -296,7 +296,7 @@ Instances *DataSource::getDataSet()
     return result;
 }
 
-Instances *DataSource::getInstance(std::fstream& inDataStream)
+Instances *DataSource::getInstance(std::fstream& inDataStream) const
 {
     if (inDataStream.good() && inDataStream.eof())
     {
