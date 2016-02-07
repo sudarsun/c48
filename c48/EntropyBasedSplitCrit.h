@@ -21,18 +21,18 @@ public:
     /**
      * Computes entropy of distribution before splitting.
      */
-    double oldEnt(Distribution *bags) const;
+    double oldEnt(Distribution &bags) const;
 
     /**
      * Computes entropy of distribution after splitting.
      */
-    double newEnt(Distribution *bags) const;
+    double newEnt(Distribution &bags) const;
 
     /**
      * Computes entropy after splitting without considering the
      * class values.
      */
-    double splitEnt(Distribution *bags) const;
+    double splitEnt(Distribution &bags) const;
 };
 
 

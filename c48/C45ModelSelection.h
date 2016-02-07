@@ -45,7 +45,7 @@ public:
      * @param doNotMakeSplitPointActualValue if true, split point is not relocated
      *          by scanning the entire dataset for the closest data value
      */
-    C45ModelSelection(int minNoObj, Instances *allData, bool useMDLcorrection, bool doNotMakeSplitPointActualValue);
+    C45ModelSelection(int minNoObj, Instances &allData, bool useMDLcorrection, bool doNotMakeSplitPointActualValue);
 
     /**
      * Sets reference to training data to null.
@@ -55,12 +55,12 @@ public:
     /**
      * Selects C4.5-type split for the given dataset.
      */
-    ClassifierSplitModel *selectModel(Instances *data) const;
+    ClassifierSplitModel *selectModel(Instances &data) const;
 
     /**
      * Selects C4.5-type split for the given dataset.
      */
-    virtual ClassifierSplitModel *selectModel(Instances *train, Instances *test) const override;
+    virtual ClassifierSplitModel *selectModel(Instances &train, Instances &test) const override;
 
 };
 

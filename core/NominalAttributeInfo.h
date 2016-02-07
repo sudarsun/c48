@@ -31,7 +31,7 @@ public:
     /**
      * Returns the Attribute Index for the corrsponding key argument.
      */
-    int getAttributeIndex(const string key) const;
+    int getAttributeIndex(const string &key) const;
 
     /**
      * Returns the number of attribute's values.
@@ -61,12 +61,12 @@ public:
     /**
      * Sets the attribute Value.
      */
-    void setAttributeValue(const int key, string value);
+    void setAttributeValue(const int key, const string &value);
 
     /**
      * Adds the attribute with index.
      */
-    void addAttribute(const string key, int index, bool overwriteIndex = false);
+    void addAttribute(const string &key, int index, bool overwriteIndex = false);
 
     /**
      * Clear the attributes.
@@ -76,7 +76,7 @@ public:
     /**
      * Deletes the record from Hashtable using key.
      */
-    void removeHashTable(string key);
+    void removeHashTable(const string &key);
 
     /**
      * Deletes the record from Hashtable using index.

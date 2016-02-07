@@ -77,7 +77,7 @@ public:
      * @param instances the data to train the classifier with
      * @throws Exception if classifier can't be built successfully
      */
-    virtual void buildClassifier(Instances *instances);
+    virtual void buildClassifier(Instances &instances);
 
     /**
      * Classifies an instance.
@@ -86,7 +86,7 @@ public:
      * @return the classification for the instance
      * @throws Exception if instance can't be classified successfully
      */
-    virtual double classifyInstance(Instance *instance) const;
+    virtual double classifyInstance(Instance &instance) const;
 
     /**
      * Returns class probabilities for an instance.
@@ -95,7 +95,7 @@ public:
      * @return the class probabilities
      * @throws Exception if distribution can't be computed successfully
      */
-    double_array distributionForInstance(Instance *instance) const;
+    double_array distributionForInstance(Instance &instance) const;
 
     /**
      * Get the value of useLaplace.
@@ -290,12 +290,12 @@ public:
     /**
      * Builds the classifier to generate a partition.
      */
-    virtual void generatePartition(Instances *data);
+    virtual void generatePartition(Instances &data);
 
     /**
      * Computes an array that indicates node membership.
      */
-    virtual double_array getMembershipValues(Instance *inst) const;
+    virtual double_array getMembershipValues(Instance &inst) const;
 
     /**
      * Returns the number of elements in the partition.

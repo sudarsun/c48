@@ -33,28 +33,28 @@ Instances::Instances(const string &name, std::vector<Attribute*> &attInfo, const
     mNamesToAttributeIndices = std::unordered_map<string, int>(static_cast<int>(numAttributes() / 0.75));
     for (int i = 0; i < numAttributes(); i++)
     {
-        (attribute(i))->setIndex(i);
-        mNamesToAttributeIndices[(attribute(i))->name()] = i;
+        attribute(i).setIndex(i);
+        mNamesToAttributeIndices[(attribute(i)).name()] = i;
     }
     mInstances = std::vector<Instance*>(capacity);
 }
 
 Instances::Instances(Instances *dataset) :Instances(dataset, 0)
 {
-    this->copyInstances(0, dataset, dataset->numInstances());
+    this->copyInstances(0, *dataset, dataset->numInstances());
 }
 
 Instances::Instances(Instances *dataset, const int capacity)
 {
-    initialize(dataset, capacity);
+    initialize(*dataset, capacity);
 }
 
-Attribute *Instances::attribute(const int index) const
+Attribute &Instances::attribute(const int index) const
 {
-    return mAttributes[index];
+    return *mAttributes[index];
 }
 
-Attribute *Instances::attribute(const string &name)
+Attribute &Instances::attribute(const string &name)
 {
 
     int index = mNamesToAttributeIndices[name];
@@ -63,7 +63,7 @@ Attribute *Instances::attribute(const string &name)
         return attribute(index);
     }
 
-    return nullptr;
+    return *(new Attribute(nullptr));
 }
 
 int Instances::numAttributes() const
@@ -85,19 +85,19 @@ void Instances::setClassIndex(const int classIndex)
     mClassIndex = classIndex;
 }
 
-bool Instances::add(Instance *instance)
+bool Instances::add(Instance &instance)
 {
-    Instance *newInstance = static_cast<Instance*>(instance);
+    Instance *newInstance = static_cast<Instance*>(&instance);
     newInstance->setDataset(const_cast<Instances*>(this));
-    mInstances.push_back(instance);
+    mInstances.push_back(&instance);
     return true;
 }
 
-void Instances::add(const int index, Instance *instance)
+void Instances::add(const int index, Instance &instance)
 {
-    Instance *newInstance = static_cast<Instance*>(instance);
+    Instance *newInstance = static_cast<Instance*>(&instance);
     newInstance->setDataset(this);
-    mInstances[index] = instance;
+    mInstances[index] = &instance;
 }
 
 int Instances::numInstances() const
@@ -105,22 +105,22 @@ int Instances::numInstances() const
     return (int)mInstances.size();
 }
 
-void Instances::copyInstances(const int from, Instances *dest, const int num)
+void Instances::copyInstances(const int from, const Instances &dest, const int num)
 {
     for (int i = 0; i < num; i++)
     {
-        Instance *newInstance = new Instance(dest->instance(i)->weight(), dest->instance(i)->toDoubleArray());
+        Instance *newInstance = new Instance(dest.instance(i).weight(), dest.instance(i).toDoubleArray());
         newInstance->setDataset(const_cast<Instances*>(this));
         mInstances.push_back(newInstance);
     }
 }
 
-Instance *Instances::instance(const int index) const
+Instance &Instances::instance(const int index) const
 {
-    return mInstances[index];
+    return *mInstances[index];
 }
 
-void Instances::initialize(Instances *dataset, int capacity)
+void Instances::initialize(const Instances &dataset, int capacity)
 {
     if (capacity < 0)
     {
@@ -129,14 +129,14 @@ void Instances::initialize(Instances *dataset, int capacity)
 
     // Strings only have to be "shallow" copied because
     // they can't be modified.
-    mClassIndex = dataset->mClassIndex;
-    mRelationName = dataset->mRelationName;
-    mAttributes = dataset->mAttributes;
-    mNamesToAttributeIndices = dataset->mNamesToAttributeIndices;
+    mClassIndex = dataset.mClassIndex;
+    mRelationName = dataset.mRelationName;
+    mAttributes = dataset.mAttributes;
+    mNamesToAttributeIndices = dataset.mNamesToAttributeIndices;
     mInstances = std::vector<Instance*>(capacity);
 }
 
-Attribute *Instances::classAttribute() const
+Attribute &Instances::classAttribute() const
 {
     if (mClassIndex < 0)
     {
@@ -150,19 +150,19 @@ int Instances::numClasses() const
     {
         throw "Class index is negative (not set)!";
     }
-    if (!classAttribute()->isNominal())
+    if (!classAttribute().isNominal())
     {
         return 1;
     }
     else
     {
-        return classAttribute()->numValues();
+        return classAttribute().numValues();
     }
 }
 
-Instance *Instances::lastInstance() const
+Instance &Instances::lastInstance() const
 {
-    return mInstances[mInstances.size() - 1];
+    return *mInstances[mInstances.size() - 1];
 }
 
 void Instances::deleteWithMissing(const int attIndex)
@@ -171,17 +171,17 @@ void Instances::deleteWithMissing(const int attIndex)
     int totalInst = numInstances();
     for (int i = 0; i < totalInst; i++)
     {
-        if (!instance(i)->isMissing(attIndex))
+        if (!instance(i).isMissing(attIndex))
         {
-            newInstances.push_back(instance(i));
+            newInstances.push_back(&instance(i));
         }
     }
     mInstances = newInstances;
 }
 
-void Instances::deleteWithMissing(Attribute *att)
+void Instances::deleteWithMissing(const Attribute &att)
 {
-    deleteWithMissing(att->index());
+    deleteWithMissing(att.index());
 }
 
 void Instances::deleteWithMissingClass()
@@ -199,7 +199,7 @@ double Instances::sumOfWeights() const
 
     for (int i = 0; i < numInstances(); i++)
     {
-        sum += instance(i)->weight();
+        sum += instance(i).weight();
     }
     return sum;
 }
@@ -266,16 +266,16 @@ Instances *Instances::testCV(const int numFolds, const int numFold)
 
 void Instances::Sort(const int attIndex)
 {
-    if (!attribute(attIndex)->isNominal())
+    if (!attribute(attIndex).isNominal())
     {
         // Use quicksort from Utils class for sorting
         double_array vals(numInstances());
         std::vector<Instance*> backup(vals.size());
         for (int i = 0; i < vals.size(); i++)
         {
-            Instance *inst = instance(i);
-            backup[i] = inst;
-            double val = inst->value(attIndex);
+            Instance &inst = instance(i);
+            backup[i] = &inst;
+            double val = inst.value(attIndex);
             if (Utils::isMissingValue(val))
             {
                 vals[i] = std::numeric_limits<double>::max();
@@ -298,16 +298,16 @@ void Instances::Sort(const int attIndex)
     }
 }
 
-void Instances::Sort(Attribute *att)
+void Instances::Sort(const Attribute &att)
 {
-    Sort(att->index());
+    Sort(att.index());
 }
 
 void Instances::sortBasedOnNominalAttribute(const int attIndex)
 {
     // Figure out number of instances for each attribute value
     // and store original list of instances away
-    int_array counts((attribute(attIndex))->numValues());
+    int_array counts((attribute(attIndex)).numValues());
     std::vector<Instance*> backup(numInstances());
     int j = 0;
     for (auto inst : mInstances)
@@ -346,7 +346,7 @@ string Instances::getRelationName() const
     return mRelationName;
 }
 
-void Instances::setRelationName(const string name)
+void Instances::setRelationName(const string &name)
 {
     mRelationName = name;
 }
@@ -356,7 +356,7 @@ double_array Instances::attributeToDoubleArray(const int index) const
     int totalInst = numInstances();
     double_array result;
     for (int i = 0; i < totalInst; i++) {
-        result.push_back(instance(i)->value(index));
+        result.push_back(instance(i).value(index));
     }
     return result;
 }

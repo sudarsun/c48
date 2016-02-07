@@ -51,7 +51,7 @@ public:
      * NominalPrediction.makeDistribution() if you only know the predicted value.
      * @param weight the weight assigned to the prediction.
      */
-    NominalPrediction(double actual, double_array &distribution, double weight);
+    NominalPrediction(double actual, const double_array &distribution, double weight);
 
     /**
      * Gets the predicted probabilities

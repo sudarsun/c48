@@ -20,7 +20,7 @@ public:
      * This method is a straightforward implementation of the gain
      * ratio criterion for the given distribution.
      */
-    double splitCritValue(Distribution *bags) const;
+    double splitCritValue(Distribution &bags) const;
 
     /**
      * This method computes the gain ratio in the same way C4.5 does.
@@ -29,13 +29,13 @@ public:
      * @param totalnoInst the weight of ALL instances
      * @param numerator the info gain
      */
-    double splitCritValue(Distribution *bags, double totalnoInst, double numerator) const;
+    double splitCritValue(Distribution &bags, double totalnoInst, double numerator) const;
 
 private:
     /**
      * Help method for computing the split entropy.
      */
-    double splitEnt(Distribution *bags, double totalnoInst) const;
+    double splitEnt(Distribution &bags, double totalnoInst) const;
 
 };
 

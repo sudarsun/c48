@@ -2,7 +2,7 @@
 #include "Distribution.h"
 #include "core/Utils.h"
 
-double InfoGainSplitCrit::splitCritValue(Distribution *bags) const {
+double InfoGainSplitCrit::splitCritValue(Distribution &bags) const {
 
     double numerator;
 
@@ -15,13 +15,13 @@ double InfoGainSplitCrit::splitCritValue(Distribution *bags) const {
 
     // We take the reciprocal value because we want to minimize the
     // splitting criterion's value.
-    return bags->total() / numerator;
+    return bags.total() / numerator;
 }
 
-double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst) const {
+double InfoGainSplitCrit::splitCritValue(Distribution &bags, double totalNoInst) const {
 
     double numerator, noUnknown, unknownRate;
-    noUnknown = totalNoInst - bags->total();
+    noUnknown = totalNoInst - bags.total();
     unknownRate = noUnknown / totalNoInst;
     numerator = (oldEnt(bags) - newEnt(bags));
     numerator = (1 - unknownRate) * numerator;
@@ -31,13 +31,13 @@ double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst)
         return 0;
     }
 
-    return numerator / bags->total();
+    return numerator / bags.total();
 }
 
-double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst, double oldEnt) const {
+double InfoGainSplitCrit::splitCritValue(Distribution &bags, double totalNoInst, double oldEnt) const {
 
     double numerator, noUnknown, unknownRate;
-    noUnknown = totalNoInst - bags->total();
+    noUnknown = totalNoInst - bags.total();
     unknownRate = noUnknown / totalNoInst;
     numerator = (oldEnt - newEnt(bags));
     numerator = (1 - unknownRate) * numerator;
@@ -47,6 +47,6 @@ double InfoGainSplitCrit::splitCritValue(Distribution *bags, double totalNoInst,
         return 0;
     }
 
-    return numerator / bags->total();
+    return numerator / bags.total();
 }
 

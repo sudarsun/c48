@@ -41,7 +41,7 @@ protected:
        * @return the new tree
        * @throws Exception if something goes wrong
        */
-    virtual ClassifierTree *getNewTree(Instances *data) const override;
+    virtual ClassifierTree *getNewTree(Instances &data) const override;
 
 public:
     /**
@@ -63,7 +63,7 @@ public:
      * @param data the data for building the tree
      * @throws Exception if something goes wrong
      */
-    virtual void buildClassifier(Instances *data) override;
+    virtual void buildClassifier(Instances &data) override;
 
     /**
      * Collapses a tree to a node if training error doesn't increase.
@@ -92,7 +92,7 @@ private:
      * @return the estimated errors
      * @throws Exception if something goes wrong
      */
-    double getEstimatedErrorsForBranch(Instances *data) const;
+    double getEstimatedErrorsForBranch(Instances &data) const;
 
     /**
      * Computes estimated errors for leaf.
@@ -123,7 +123,7 @@ private:
      * @param data the data to compute the distributions for
      * @throws Exception if something goes wrong
      */
-    void newDistribution(Instances *data);
+    void newDistribution(Instances &data);
 
     /**
      * Method just exists to make program easier to read.

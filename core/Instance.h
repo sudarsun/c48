@@ -41,7 +41,7 @@ public:
    * @param weight the instance's weight
    * @param attValues a vector of attribute values 
    */
-    Instance(const double weight, double_array attValues);
+    Instance(const double weight, const double_array &attValues);
 
   /**
    * Returns the attribute with the given index.
@@ -52,7 +52,7 @@ public:
    * dataset
    */ 
   //@ requires mDataset != null;
-    Attribute *attribute(const int index) const;
+    Attribute &attribute(const int index) const;
 	
   /**
    * Returns the class attribute's index.
@@ -185,7 +185,7 @@ public:
    * instance doesn't have access to a dataset
    */
   //@ requires mDataset != null;
-  Attribute *classAttribute() const;
+  Attribute &classAttribute() const;
   
   /**
    * Returns the number of class labels.

@@ -24,7 +24,7 @@ bool ClassifierSplitModel::checkModel() const
     }
 }
 
-double ClassifierSplitModel::classifyInstance(Instance *instance) const
+double ClassifierSplitModel::classifyInstance(Instance &instance) const
 {
     int theSubset;
 
@@ -39,7 +39,7 @@ double ClassifierSplitModel::classifyInstance(Instance *instance) const
     }
 }
 
-double ClassifierSplitModel::classProb(const int classIndex, Instance *instance, const int theSubset) const
+double ClassifierSplitModel::classProb(const int classIndex, Instance &instance, const int theSubset) const
 {
 
     if (theSubset > -1)
@@ -65,7 +65,7 @@ double ClassifierSplitModel::classProb(const int classIndex, Instance *instance,
     }
 }
 
-double ClassifierSplitModel::classProbLaplace(const int classIndex, Instance *instance, const int theSubset) const
+double ClassifierSplitModel::classProbLaplace(const int classIndex, Instance &instance, const int theSubset) const
 {
 
     if (theSubset > -1)
@@ -96,12 +96,12 @@ double ClassifierSplitModel::codingCost() const
     return 0;
 }
 
-string ClassifierSplitModel::dumpLabel(const int index, Instances *data) const
+string ClassifierSplitModel::dumpLabel(const int index, Instances &data) const
 {
     string text;
 
     text = "";
-    text.append((static_cast<Instances*>(data))->classAttribute()->value(mDistribution->maxClass(index)));
+    text.append((static_cast<Instances*>(&data))->classAttribute().value(mDistribution->maxClass(index)));
     text.append(string(" (") + std::to_string(Utils::roundDouble(mDistribution->perBag(index), 2)));
     if (Utils::gr(mDistribution->numIncorrect(index), 0))
     {
@@ -112,7 +112,7 @@ string ClassifierSplitModel::dumpLabel(const int index, Instances *data) const
     return text;
 }
 
-string ClassifierSplitModel::dumpModel(Instances *data) const
+string ClassifierSplitModel::dumpModel(Instances &data) const
 {
     string text;
     int i;
@@ -131,23 +131,23 @@ int ClassifierSplitModel::numSubsets() const
     return mNumSubsets;
 }
 
-void ClassifierSplitModel::resetDistribution(Instances *data)
+void ClassifierSplitModel::resetDistribution(Instances &data)
 {
-    mDistribution = new Distribution(data, this);
+    mDistribution = new Distribution(data, *this);
 }
 
-std::vector<Instances*> ClassifierSplitModel::split(Instances *data) const
+std::vector<Instances*> ClassifierSplitModel::split(Instances &data) const
 {
     // Create subsets
     std::vector<Instances*> instances(mNumSubsets);
     for (int j = 0; j < mNumSubsets; j++)
     {
-        instances[j] = new Instances(data, 0);
+        instances[j] = new Instances(&data, 0);
     }
-    auto totalInst = data->numInstances();
+    auto totalInst = data.numInstances();
     for (auto i = 0; i < totalInst; i++)
     {
-        Instance *instance = data->instance(i);
+        Instance &instance = data.instance(i);
         int subset = whichSubset(instance);
         if (subset > -1)
         {
@@ -161,7 +161,7 @@ std::vector<Instances*> ClassifierSplitModel::split(Instances *data) const
                 if (Utils::gr(_weights[j], 0))
                 {
                     instances[j]->add(instance);
-                    (instances[j]->lastInstance())->setWeight(_weights[j] * instance->weight());
+                    instances[j]->lastInstance().setWeight(_weights[j] * instance.weight());
                 }
             }
         }

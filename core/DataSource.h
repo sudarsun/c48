@@ -67,11 +67,11 @@ private:
     /**
      * Reads an instance from the given line.
      *
-     * @param inLine the file stream to use
+     * @param inDat the file stream to use
      * @return an Instance or null if there are no more instances to read
      * @exception IOException if an error occurs
      */
-    Instance *getInstance(string inLine) const;
+    Instance *getInstance(const string &inData) const;
 
     /**
      * removes the trailing period
@@ -105,7 +105,7 @@ public:
      * @return the structure of the data set as an empty set of Instances
      * @exception IOException if an error occurs
      */
-    Instances *getStructure(int classIndex);
+    Instances *getStructure(const int &classIndex);
 
     /**
      * Resets the Loader ready to read a new data set or the

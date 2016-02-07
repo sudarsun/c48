@@ -16,14 +16,14 @@ C45PruneableClassifierTree::C45PruneableClassifierTree(ModelSelection *toSelectL
 }
 
 
-void C45PruneableClassifierTree::buildClassifier(Instances *data)
+void C45PruneableClassifierTree::buildClassifier(Instances &data)
 {
 
     // remove instances with missing class
-    Instances dataMissed(data);
+    Instances dataMissed(&data);
     dataMissed.deleteWithMissingClass();
 
-    buildTree(&dataMissed, mSubtreeRaising || !mCleanup);
+    buildTree(dataMissed, mSubtreeRaising || !mCleanup);
     if (mCollapseTheTree)
     {
         collapse();
@@ -92,7 +92,7 @@ void C45PruneableClassifierTree::prune()
         indexOfLargestBranch = localModel()->getDistribution()->maxBag();
         if (mSubtreeRaising)
         {
-            errorsLargestBranch = son(indexOfLargestBranch)->getEstimatedErrorsForBranch(static_cast<Instances*>(mTrain));
+            errorsLargestBranch = son(indexOfLargestBranch)->getEstimatedErrorsForBranch(*mTrain);
         }
         else
         {
@@ -126,17 +126,17 @@ void C45PruneableClassifierTree::prune()
             mSons = largestBranch->mSons;
             mLocalModel = largestBranch->localModel();
             mIsLeaf = largestBranch->mIsLeaf;
-            newDistribution(mTrain);
+            newDistribution(*mTrain);
             prune();
         }
     }
 }
 
-ClassifierTree *C45PruneableClassifierTree::getNewTree(Instances *data) const
+ClassifierTree *C45PruneableClassifierTree::getNewTree(Instances &data) const
 {
 
     C45PruneableClassifierTree *newTree = new C45PruneableClassifierTree(mToSelectModel, mPruneTheTree, mCF, mSubtreeRaising, mCleanup, mCollapseTheTree);
-    newTree->buildTree(static_cast<Instances*>(data), mSubtreeRaising || !mCleanup);
+    newTree->buildTree(static_cast<Instances>(data), mSubtreeRaising || !mCleanup);
 
     return newTree;
 }
@@ -161,7 +161,7 @@ double C45PruneableClassifierTree::getEstimatedErrors() const
     }
 }
 
-double C45PruneableClassifierTree::getEstimatedErrorsForBranch(Instances *data) const
+double C45PruneableClassifierTree::getEstimatedErrorsForBranch(Instances &data) const
 {
 
     std::vector<Instances*> localInstances;
@@ -181,7 +181,7 @@ double C45PruneableClassifierTree::getEstimatedErrorsForBranch(Instances *data) 
         localModel()->setDistribution(savedDist);
         for (i = 0; i < (int)mSons.size(); i++)
         {
-            errors = errors + son(i)->getEstimatedErrorsForBranch(localInstances[i]);
+            errors = errors + son(i)->getEstimatedErrorsForBranch(*localInstances[i]);
         }
         return errors;
     }
@@ -226,26 +226,26 @@ ClassifierSplitModel *C45PruneableClassifierTree::localModel() const
     return static_cast<ClassifierSplitModel*>(mLocalModel);
 }
 
-void C45PruneableClassifierTree::newDistribution(Instances *data)
+void C45PruneableClassifierTree::newDistribution(Instances &data)
 {
 
     std::vector<Instances*> localInstances;
 
     localModel()->resetDistribution(data);
-    mTrain = data;
+    mTrain = &data;
     if (!mIsLeaf)
     {
         localInstances = static_cast<std::vector<Instances*>>(localModel()->split(data));
         for (int i = 0; i < (int)mSons.size(); i++)
         {
-            son(i)->newDistribution(localInstances[i]);
+            son(i)->newDistribution(*localInstances[i]);
         }
     }
     else
     {
 
         // Check whether there are some instances at the leaf now!
-        if (!Utils::eq(data->sumOfWeights(), 0))
+        if (!Utils::eq(data.sumOfWeights(), 0))
         {
             mIsEmpty = false;
         }

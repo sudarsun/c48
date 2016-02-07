@@ -2,7 +2,7 @@
 #include "statistics.h"
 #include "Utils.h"
 
-void AttributeStats::addDistinct(double value, int count, double weight) {
+void AttributeStats::addDistinct(const double value, const int count, const double weight) {
 
     if (count > 0) {
         if (count == 1) {

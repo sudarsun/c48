@@ -35,25 +35,25 @@ Distribution::Distribution(double_2D_array &table) :
     }
 }
 
-Distribution::Distribution(Instances *source) :
+Distribution::Distribution(Instances &source) :
     mperBag(double_array(1)),
-    mperClass(double_array(source->numClasses()))
+    mperClass(double_array(source.numClasses()))
 {
     // Clear 
     mperClassPerBag.clear();
 
     totaL = 0;
-    mperClassPerBag.push_back(double_array(source->numClasses()));
-    int totalnum = source->numInstances();
+    mperClassPerBag.push_back(double_array(source.numClasses()));
+    int totalnum = source.numInstances();
     for (int i = 0; i < totalnum; i++)
     {
-        add(0, source->instance(i));
+        add(0, source.instance(i));
     }
 }
 
-Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) :
-    mperBag(double_array(modelToUse->numSubsets())),
-    mperClass(double_array(source->numClasses())) {
+Distribution::Distribution(Instances &source, ClassifierSplitModel &modelToUse) :
+    mperBag(double_array(modelToUse.numSubsets())),
+    mperClass(double_array(source.numClasses())) {
 
     int index;
 
@@ -62,19 +62,19 @@ Distribution::Distribution(Instances *source, ClassifierSplitModel *modelToUse) 
     // Clear 
     mperClassPerBag.clear();
     totaL = 0;
-    for (int i = 0; i < modelToUse->numSubsets(); i++) {
-        mperClassPerBag.push_back(double_array(source->numClasses()));
+    for (int i = 0; i < modelToUse.numSubsets(); i++) {
+        mperClassPerBag.push_back(double_array(source.numClasses()));
     }
-    int totalnum = source->numInstances();
+    int totalnum = source.numInstances();
     for (int i = 0; i < totalnum; i++)
     {
-        index = modelToUse->whichSubset(source->instance(i));
+        index = modelToUse.whichSubset(source.instance(i));
         if (index != -1) {
-            add(index, source->instance(i));
+            add(index, source.instance(i));
         }
         else {
-            weights = modelToUse->weights(source->instance(i));
-            addWeights(source->instance(i), weights);
+            weights = modelToUse.weights(source.instance(i));
+            addWeights(source.instance(i), weights);
         }
     }
 }
@@ -163,28 +163,28 @@ int Distribution::actualNumClasses(int bagIndex) const
     return returnValue;
 }
 
-void Distribution::add(int bagIndex, Instance *instance)
+void Distribution::add(int bagIndex, Instance &instance)
 {
 
     int classIndex;
     double weight;
 
-    classIndex = static_cast<int>(instance->classValue());
-    weight = instance->weight();
+    classIndex = static_cast<int>(instance.classValue());
+    weight = instance.weight();
     mperClassPerBag[bagIndex][classIndex] = mperClassPerBag[bagIndex][classIndex] + weight;
     mperBag[bagIndex] = mperBag[bagIndex] + weight;
     mperClass[classIndex] = mperClass[classIndex] + weight;
     totaL = totaL + weight;
 }
 
-void Distribution::sub(int bagIndex, Instance *instance)
+void Distribution::sub(int bagIndex, Instance &instance)
 {
 
     int classIndex;
     double weight;
 
-    classIndex = static_cast<int>(instance->classValue());
-    weight = instance->weight();
+    classIndex = static_cast<int>(instance.classValue());
+    weight = instance.weight();
     mperClassPerBag[bagIndex][classIndex] = mperClassPerBag[bagIndex][classIndex] - weight;
     mperBag[bagIndex] = mperBag[bagIndex] - weight;
     mperClass[classIndex] = mperClass[classIndex] - weight;
@@ -208,7 +208,7 @@ void Distribution::add(int bagIndex, double_array &counts)
     totaL = totaL + sum;
 }
 
-void Distribution::addInstWithUnknown(Instances *source, int attIndex)
+void Distribution::addInstWithUnknown(Instances &source, int attIndex)
 {
 
     double_array probs;
@@ -228,14 +228,14 @@ void Distribution::addInstWithUnknown(Instances *source, int attIndex)
             probs[j] = mperBag[j] / totaL;
         }
     }
-    int totalnum = source->numInstances();
+    int totalnum = source.numInstances();
     for (int i = 0; i < totalnum; i++)
     {
 
-        if (source->instance(i)->isMissing(attIndex))
+        if (source.instance(i).isMissing(attIndex))
         {
-            classIndex = static_cast<int>(source->instance(i)->classValue());
-            weight = source->instance(i)->weight();
+            classIndex = static_cast<int>(source.instance(i).classValue());
+            weight = source.instance(i).weight();
             mperClass[classIndex] = mperClass[classIndex] + weight;
             totaL = totaL + weight;
             for (j = 0; j < (int)mperBag.size(); j++)
@@ -249,36 +249,35 @@ void Distribution::addInstWithUnknown(Instances *source, int attIndex)
 
 }
 
-void Distribution::addRange(int bagIndex, Instances *source, int startIndex, int lastPlusOne)
+void Distribution::addRange(int bagIndex, Instances &source, int startIndex, int lastPlusOne)
 {
 
     double sumOfWeights = 0;
     int classIndex;
-    Instance *instance;
     int i;
 
     for (i = startIndex; i < lastPlusOne; i++)
     {
-        instance = source->instance(i);
-        classIndex = static_cast<int>(instance->classValue());
-        sumOfWeights = sumOfWeights + instance->weight();
-        mperClassPerBag[bagIndex][classIndex] += instance->weight();
-        mperClass[classIndex] += instance->weight();
+        Instance &instance = source.instance(i);
+        classIndex = static_cast<int>(instance.classValue());
+        sumOfWeights = sumOfWeights + instance.weight();
+        mperClassPerBag[bagIndex][classIndex] += instance.weight();
+        mperClass[classIndex] += instance.weight();
     }
     mperBag[bagIndex] += sumOfWeights;
     totaL += sumOfWeights;
 }
 
-void Distribution::addWeights(Instance *instance, double_array &weights)
+void Distribution::addWeights(Instance &instance, double_array &weights)
 {
 
     int classIndex;
     int i;
 
-    classIndex = static_cast<int>(instance->classValue());
+    classIndex = static_cast<int>(instance.classValue());
     for (i = 0; i < (int)mperBag.size(); i++)
     {
-        double weight = instance->weight() * weights[i];
+        double weight = instance.weight() * weights[i];
         mperClassPerBag[i][classIndex] = mperClassPerBag[i][classIndex] + weight;
         mperBag[i] = mperBag[i] + weight;
         mperClass[classIndex] = mperClass[classIndex] + weight;
@@ -332,35 +331,33 @@ bool Distribution::check(double minNoObj) const
     return newDistribution;
 }*/
 
-void Distribution::del(int bagIndex, Instance *instance)
+void Distribution::del(int bagIndex, Instance &instance)
 {
 
     int classIndex;
     double weight;
 
-    classIndex = static_cast<int>(instance->classValue());
-    weight = instance->weight();
+    classIndex = static_cast<int>(instance.classValue());
+    weight = instance.weight();
     mperClassPerBag[bagIndex][classIndex] = mperClassPerBag[bagIndex][classIndex] - weight;
     mperBag[bagIndex] = mperBag[bagIndex] - weight;
     mperClass[classIndex] = mperClass[classIndex] - weight;
     totaL = totaL - weight;
 }
 
-void Distribution::delRange(int bagIndex, Instances *source, int startIndex, int lastPlusOne)
+void Distribution::delRange(int bagIndex, Instances &source, int startIndex, int lastPlusOne)
 {
-
     double sumOfWeights = 0;
     int classIndex;
-    Instance *instance;
     int i;
 
     for (i = startIndex; i < lastPlusOne; i++)
     {
-        instance = source->instance(i);
-        classIndex = static_cast<int>(instance->classValue());
-        sumOfWeights = sumOfWeights + instance->weight();
-        mperClassPerBag[bagIndex][classIndex] -= instance->weight();
-        mperClass[classIndex] -= instance->weight();
+        Instance &instance = source.instance(i);
+        classIndex = static_cast<int>(instance.classValue());
+        sumOfWeights = sumOfWeights + instance.weight();
+        mperClassPerBag[bagIndex][classIndex] -= instance.weight();
+        mperClass[classIndex] -= instance.weight();
     }
     mperBag[bagIndex] -= sumOfWeights;
     totaL -= sumOfWeights;
@@ -368,7 +365,6 @@ void Distribution::delRange(int bagIndex, Instances *source, int startIndex, int
 
 string Distribution::dumpDistribution() const
 {
-
     string text;
     int i, j;
 
@@ -519,19 +515,16 @@ double Distribution::perClassPerBag(int bagIndex, int classIndex) const
 
 double Distribution::perBag(int bagIndex) const
 {
-
     return mperBag[bagIndex];
 }
 
 double Distribution::perClass(int classIndex) const
 {
-
     return mperClass[classIndex];
 }
 
 double Distribution::laplaceProb(int classIndex) const
 {
-
     return (mperClass[classIndex] + 1) / (totaL + mperClass.size());
 }
 
@@ -595,33 +588,31 @@ double Distribution::total() const
     return totaL;
 }
 
-void Distribution::shift(int from, int to, Instance *instance)
+void Distribution::shift(int from, int to, Instance &instance)
 {
 
     int classIndex;
     double weight;
 
-    classIndex = static_cast<int>(instance->classValue());
-    weight = instance->weight();
+    classIndex = static_cast<int>(instance.classValue());
+    weight = instance.weight();
     mperClassPerBag[from][classIndex] -= weight;
     mperClassPerBag[to][classIndex] += weight;
     mperBag[from] -= weight;
     mperBag[to] += weight;
 }
 
-void Distribution::shiftRange(int from, int to, Instances *source, int startIndex, int lastPlusOne)
+void Distribution::shiftRange(int from, int to, Instances &source, int startIndex, int lastPlusOne)
 {
-
     int classIndex;
     double weight;
-    Instance *instance;
     int i;
 
     for (i = startIndex; i < lastPlusOne; i++)
     {
-        instance = source->instance(i);
-        classIndex = static_cast<int>(instance->classValue());
-        weight = instance->weight();
+        Instance &instance = source.instance(i);
+        classIndex = static_cast<int>(instance.classValue());
+        weight = instance.weight();
         mperClassPerBag[from][classIndex] -= weight;
         mperClassPerBag[to][classIndex] += weight;
         mperBag[from] -= weight;

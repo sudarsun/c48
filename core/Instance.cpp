@@ -8,7 +8,7 @@ Instance::Instance(Instance *instance)
     mWeight = instance->mWeight;
     mDataset = instance->mDataset;
 }
-Instance::Instance(const double weight, double_array attValues)
+Instance::Instance(const double weight,const double_array &attValues)
 {
     mAttValues = attValues;
     mWeight = weight;
@@ -21,7 +21,7 @@ Instance* Instance::copy()
     result->mDataset = mDataset;
     return result;
 }
-Attribute *Instance::attribute(const int index) const
+Attribute &Instance::attribute(const int index) const
 {
     return mDataset->attribute(index);
 }
@@ -71,21 +71,21 @@ void Instance::setValue(const int attIndex, const string &value)
 {
     int valIndex;
 
-    if (!attribute(attIndex)->isNominal() && !attribute(attIndex)->isString())
+    if (!attribute(attIndex).isNominal() && !attribute(attIndex).isString())
     {
         throw "Attribute neither nominal nor string!";
     }
-    valIndex = attribute(attIndex)->indexOfValue(value);
+    valIndex = attribute(attIndex).indexOfValue(value);
     if (valIndex == -1)
     {
-        if (attribute(attIndex)->isNominal())
+        if (attribute(attIndex).isNominal())
         {
             throw "Value not defined for given nominal attribute!";
         }
         else
         {
-            attribute(attIndex)->forceAddValue(value);
-            valIndex = attribute(attIndex)->indexOfValue(value);
+            attribute(attIndex).forceAddValue(value);
+            valIndex = attribute(attIndex).indexOfValue(value);
         }
     }
     setValue(attIndex, valIndex);
@@ -120,7 +120,7 @@ bool Instance::isMissing(const int attIndex) const
     return false;
 }
 
-Attribute *Instance::classAttribute() const
+Attribute &Instance::classAttribute() const
 {
     return mDataset->classAttribute();
 }

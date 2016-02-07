@@ -96,7 +96,7 @@ public:
      * @param doubles the array of doubles
      * @return the index of the maximum element
      */
-    static int maxIndex(double_array &doubles);
+    static int maxIndex(const double_array &doubles);
 
     /**
      * Returns index of maximum element in a given array of integers. First
@@ -139,7 +139,7 @@ public:
      * @param val the value to be tested
      * @return true if val codes "missing"
      */
-    static bool isMissingValue(double val);
+    static bool isMissingValue(const double val);
 
     /**
      * Returns the value used to code a missing value. Note that equality tests on

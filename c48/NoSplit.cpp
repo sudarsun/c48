@@ -12,31 +12,31 @@ NoSplit::NoSplit(Distribution *distribution)
 
 void NoSplit::buildClassifier(Instances instances)
 {
-    mDistribution = new Distribution(&instances);
+    mDistribution = new Distribution(instances);
     mNumSubsets = 1;
 }
 
-const int NoSplit::whichSubset(Instance *instance) const
+const int NoSplit::whichSubset(Instance &instance) const
 {
     return 0;
 }
 
-double_array NoSplit::weights(Instance *instance) const
+double_array NoSplit::weights(Instance &instance) const
 {
     return double_array(0);
 }
 
-string NoSplit::leftSide(Instances *instances) const
+string NoSplit::leftSide(Instances &instances) const
 {
     return "";
 }
 
-string NoSplit::rightSide(const int index, Instances *instances) const
+string NoSplit::rightSide(const int index, Instances &instances) const
 {
     return "";
 }
 
-string NoSplit::sourceExpression(const int index, Instances *data)
+string NoSplit::sourceExpression(const int index, Instances &data)
 {
     return "true"; // or should this be false??
 }

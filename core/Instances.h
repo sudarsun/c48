@@ -45,7 +45,7 @@ protected:
      * @param dataset the dataset to use as template
      * @param capacity the number of rows to reserve
      */
-    void initialize(Instances *dataset, int capacity);
+    void initialize(const Instances &dataset, int capacity);
 
 public:
     /**
@@ -89,7 +89,7 @@ public:
      * @ requires index < mAttributes.size();
      * @ ensures \result != null;
      */
-    Attribute *attribute(const int index) const;
+    Attribute &attribute(const int index) const;
 
     /**
      * Returns an attribute given its name. If there is more than one attribute
@@ -100,7 +100,7 @@ public:
      * @return the attribute with the given name, null if the attribute can't be
      *         found
      */
-    Attribute *attribute(const string &name);
+    Attribute &attribute(const string &name);
 
     /**
      * Returns the number of attributes.
@@ -129,7 +129,7 @@ public:
      *
      * @param instance the instance to be added
      */
-    bool add(Instance *instance);
+    bool add(Instance &instance);
 
     /**
      * Adds one instance to the given index.
@@ -137,7 +137,7 @@ public:
      * @param index the index
      * @param instance the instance to be added
      */
-    void add(const int index, Instance *instance);
+    void add(const int index, Instance &instance);
 
     /**
      * Sets the class index of the set. If the class index is negative there is
@@ -167,7 +167,7 @@ public:
      * @ requires 0 <= from && from <= numInstances() - num;
      * @ requires 0 <= num;
      */
-    void copyInstances(const int from, Instances *dest, const int num);
+    void copyInstances(const int from, const Instances &dest, const int num);
 
     /**
      * Returns the instance at the given position.
@@ -178,7 +178,7 @@ public:
      * @ requires 0 <= index;
      * @ requires index < numInstances();
      */
-    Instance *instance(const int index) const;
+    Instance &instance(const int index) const;
 
     /**
      * Returns the class attribute.
@@ -188,7 +188,7 @@ public:
      *
      * @ requires classIndex() >= 0;
      */
-    Attribute *classAttribute() const;
+    Attribute &classAttribute() const;
 
     /**
      * Returns the number of class labels.
@@ -208,7 +208,7 @@ public:
      *
      * @ requires numInstances() > 0;
      */
-    Instance *lastInstance() const;
+    Instance &lastInstance() const;
 
     /**
      * Computes the sum of all the instances' weights.
@@ -237,7 +237,7 @@ public:
      *
      * @param att the attribute
      */
-    void Sort(Attribute *att);
+    void Sort(const Attribute &att);
 
     /**
      * Sorts a nominal attribute (stable, linear-time sort). Instances
@@ -260,7 +260,7 @@ public:
      *
      * @param att the attribute
      */
-    void deleteWithMissing(Attribute *att);
+    void deleteWithMissing(const Attribute &att);
 
     /**
      * Removes all instances with missing values for a particular attribute from
@@ -316,7 +316,7 @@ public:
      *
      * @param newName the new relation name.
      */
-    void setRelationName(const string name);
+    void setRelationName(const string &name);
 
     /**
      * Gets the value of all instances in this dataset for a particular attribute.

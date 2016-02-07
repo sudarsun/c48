@@ -24,13 +24,13 @@ Evaluation::Evaluation(Instances data, CostMatrix costMatrix)
 {
     mNumClasses = data.numClasses();
     mNumFolds = 1;
-    mClassIsNominal = data.classAttribute()->isNominal();
+    mClassIsNominal = data.classAttribute().isNominal();
 
     if (mClassIsNominal) {
         mConfusionMatrix.resize(mNumClasses, double_array(mNumClasses, 0));
         mClassNames = string_array(mNumClasses);
         for (int i = 0; i < mNumClasses; i++) {
-            mClassNames[i] = data.classAttribute()->value(i);
+            mClassNames[i] = data.classAttribute().value(i);
         }
     }
     mCostMatrix = &costMatrix;
@@ -53,7 +53,7 @@ Evaluation::~Evaluation()
     //dtor
 }
 
-void Evaluation::setPriors(Instances train)
+void Evaluation::setPriors(Instances &train)
 {
     mNoPriors = false;
 
@@ -66,9 +66,9 @@ void Evaluation::setPriors(Instances train)
         mErrorEstimator = nullptr;
 
         for (int i = 0; i < train.numInstances(); i++) {
-            Instance *currentInst = train.instance(i);
-            if (!currentInst->classIsMissing()) {
-                addNumericTrainClass(currentInst->classValue(), currentInst->weight());
+            Instance &currentInst = train.instance(i);
+            if (!currentInst.classIsMissing()) {
+                addNumericTrainClass(currentInst.classValue(), currentInst.weight());
             }
         }
     }
@@ -78,25 +78,25 @@ void Evaluation::setPriors(Instances train)
         }
         mClassPriorsSum = mNumClasses;
         for (int i = 0; i < train.numInstances(); i++) {
-            if (!train.instance(i)->classIsMissing()) {
-                mClassPriors[(int)train.instance(i)->classValue()] +=
-                    train.instance(i)->weight();
-                mClassPriorsSum += train.instance(i)->weight();
+            if (!train.instance(i).classIsMissing()) {
+                mClassPriors[(int)train.instance(i).classValue()] +=
+                    train.instance(i).weight();
+                mClassPriorsSum += train.instance(i).weight();
             }
         }
     }
 }
 
-double Evaluation::evaluateModelOnceAndRecordPrediction(double_array dist, Instance *instance)
+double Evaluation::evaluateModelOnceAndRecordPrediction(const double_array dist, Instance &instance)
 {
     double pred = 0;
     if (mClassIsNominal) {
         pred = Utils::maxIndex(dist);
         if (dist[(int)pred] <= 0) {
-            pred = instance->missingValue();
+            pred = instance.missingValue();
         }
         updateStatsForClassifier(dist, instance);
-        mPredictions.push_back(new NominalPrediction(instance->classValue(), dist, instance->weight()));
+        mPredictions.push_back(new NominalPrediction(instance.classValue(), dist, instance.weight()));
     }
     else {
         pred = dist[0];
@@ -104,34 +104,34 @@ double Evaluation::evaluateModelOnceAndRecordPrediction(double_array dist, Insta
     }
     return pred;
 }
-double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier *classifier, Instance *instance)
+double Evaluation::evaluateModelOnceAndRecordPrediction(Classifier &classifier, Instance &instance)
 {
-    Instance *classMissing = instance->copy();
+    Instance *classMissing = instance.copy();
     double pred = 0;
-    classMissing->setDataset(instance->getDataset());
+    classMissing->setDataset(instance.getDataset());
     classMissing->setClassMissing();
     if (mClassIsNominal) {
-        double_array dist = classifier->distributionForInstance(classMissing);
+        double_array dist = classifier.distributionForInstance(*classMissing);
         pred = Utils::maxIndex(dist);
         if (dist[(int)pred] <= 0) {
-            pred = instance->missingValue();
+            pred = instance.missingValue();
         }
         updateStatsForClassifier(dist, instance);
-        mPredictions.push_back(new NominalPrediction(instance->classValue(), dist, instance->weight()));
+        mPredictions.push_back(new NominalPrediction(instance.classValue(), dist, instance.weight()));
     }
     else {
-        pred = classifier->classifyInstance(classMissing);
+        pred = classifier.classifyInstance(*classMissing);
         updateStatsForPredictor(pred, instance);
     }
     return pred;
 }
 
-void Evaluation::updateStatsForClassifier(double_array predictedDistribution, Instance *instance)
+void Evaluation::updateStatsForClassifier(const double_array predictedDistribution, Instance &instance)
 {
-    int actualClass = (int)instance->classValue();
+    int actualClass = (int)instance.classValue();
 
-    if (!instance->classIsMissing()) {
-        updateMargins(predictedDistribution, actualClass, instance->weight());
+    if (!instance.classIsMissing()) {
+        updateMargins(predictedDistribution, actualClass, instance.weight());
 
         // Determine the predicted class (doesn't detect multiple
         // classifications)
@@ -144,7 +144,7 @@ void Evaluation::updateStatsForClassifier(double_array predictedDistribution, In
             }
         }
 
-        mWithClass += instance->weight();
+        mWithClass += instance.weight();
 
         // Determine misclassification cost
         if (mCostMatrix->size() != 0) {
@@ -154,17 +154,17 @@ void Evaluation::updateStatsForClassifier(double_array predictedDistribution, In
                 // Perhaps we could take the negative of the cost of a correct
                 // prediction (-mCostMatrix.getElement(actualClass,actualClass)),
                 // although often this will be zero
-                mTotalCost += instance->weight() * mCostMatrix->getMaxCost(actualClass, instance);
+                mTotalCost += instance.weight() * mCostMatrix->getMaxCost(actualClass, instance);
             }
             else {
-                mTotalCost += instance->weight()
+                mTotalCost += instance.weight()
                     * mCostMatrix->getElement(actualClass, predictedClass, instance);
             }
         }
 
         // Update counts when no class was predicted
         if (predictedClass < 0) {
-            mUnclassified += instance->weight();
+            mUnclassified += instance.weight();
             return;
         }
 
@@ -175,74 +175,73 @@ void Evaluation::updateStatsForClassifier(double_array predictedDistribution, In
         if (predictedProb >= priorProb) {
             mSumKBInfo +=
                 (Utils::getLog2(predictedProb) - Utils::getLog2(priorProb))
-                * instance->weight();
+                * instance.weight();
         }
         else {
             mSumKBInfo -=
                 (Utils::getLog2(1.0 - predictedProb) - Utils::getLog2(1.0 - priorProb))
-                * instance->weight();
+                * instance.weight();
         }
 
-        mSumSchemeEntropy -= Utils::getLog2(predictedProb) * instance->weight();
-        mSumPriorEntropy -= Utils::getLog2(priorProb) * instance->weight();
+        mSumSchemeEntropy -= Utils::getLog2(predictedProb) * instance.weight();
+        mSumPriorEntropy -= Utils::getLog2(priorProb) * instance.weight();
 
-        updateNumericScores(predictedDistribution, makeDistribution(instance->classValue()), instance->weight());
+        updateNumericScores(predictedDistribution, makeDistribution(instance.classValue()), instance.weight());
 
         // Update other stats
-        mConfusionMatrix[actualClass][predictedClass] += instance->weight();
+        mConfusionMatrix[actualClass][predictedClass] += instance.weight();
         if (predictedClass != actualClass) {
-            mIncorrect += instance->weight();
+            mIncorrect += instance.weight();
         }
         else {
-            mCorrect += instance->weight();
+            mCorrect += instance.weight();
         }
     }
     else {
-        mMissingClass += instance->weight();
+        mMissingClass += instance.weight();
     }
 }
 
-void Evaluation::updateStatsForPredictor(double predictedValue, Instance *instance)
+void Evaluation::updateStatsForPredictor(const double predictedValue, Instance &instance)
 {
-    if (!instance->classIsMissing()) {
+    if (!instance.classIsMissing()) {
 
         // Update stats
-        mWithClass += instance->weight();
+        mWithClass += instance.weight();
         if (Utils::isMissingValue(predictedValue)) {
-            mUnclassified += instance->weight();
+            mUnclassified += instance.weight();
             return;
         }
-        mSumClass += instance->weight() * instance->classValue();
+        mSumClass += instance.weight() * instance.classValue();
         mSumSqrClass +=
-            instance->weight() * instance->classValue() * instance->classValue();
+            instance.weight() * instance.classValue() * instance.classValue();
         mSumClassPredicted +=
-            instance->weight() * instance->classValue() * predictedValue;
-        mSumPredicted += instance->weight() * predictedValue;
-        mSumSqrPredicted += instance->weight() * predictedValue * predictedValue;
+            instance.weight() * instance.classValue() * predictedValue;
+        mSumPredicted += instance.weight() * predictedValue;
+        mSumSqrPredicted += instance.weight() * predictedValue * predictedValue;
 
         if (mErrorEstimator == nullptr) {
             setNumericPriorsFromBuffer();
         }
         double predictedProb =
-            std::max(mErrorEstimator->getProbability(predictedValue - instance->classValue()), MIN_SF_PROB);
+            std::max(mErrorEstimator->getProbability(predictedValue - instance.classValue()), MIN_SF_PROB);
         double priorProb =
-            std::max(mPriorErrorEstimator->getProbability(instance->classValue()), MIN_SF_PROB);
+            std::max(mPriorErrorEstimator->getProbability(instance.classValue()), MIN_SF_PROB);
 
-        mSumSchemeEntropy -= Utils::getLog2(predictedProb) * instance->weight();
-        mSumPriorEntropy -= Utils::getLog2(priorProb) * instance->weight();
-        mErrorEstimator->addValue(predictedValue - instance->classValue(), instance->weight());
+        mSumSchemeEntropy -= Utils::getLog2(predictedProb) * instance.weight();
+        mSumPriorEntropy -= Utils::getLog2(priorProb) * instance.weight();
+        mErrorEstimator->addValue(predictedValue - instance.classValue(), instance.weight());
 
         updateNumericScores(makeDistribution(predictedValue),
-            makeDistribution(instance->classValue()), instance->weight());
+            makeDistribution(instance.classValue()), instance.weight());
 
     }
     else {
-        mMissingClass += instance->weight();
+        mMissingClass += instance.weight();
     }
 }
 
-void Evaluation::updateMargins(double_array predictedDistribution, int actualClass,
-    double weight) {
+void Evaluation::updateMargins(const double_array predictedDistribution, const int actualClass, const double weight) {
 
     double probActual = predictedDistribution[actualClass];
     double probNext = 0;
@@ -326,12 +325,12 @@ void Evaluation::setNumericPriorsFromBuffer() {
     }
 }
 
-string Evaluation::toSummaryString(bool printComplexityStatistics)
+string Evaluation::toSummaryString(const bool printComplexityStatistics) const
 {
     return toSummaryString("=== Summary ===\n", printComplexityStatistics);
 }
 
-string Evaluation::toSummaryString(string title, bool printComplexityStatistics)
+string Evaluation::toSummaryString(const string &title, bool printComplexityStatistics) const
 {
     string text = "";
 
@@ -420,7 +419,7 @@ string Evaluation::toSummaryString(string title, bool printComplexityStatistics)
     return text;
 }
 
-void Evaluation::addNumericTrainClass(double classValue, double weight)
+void Evaluation::addNumericTrainClass(const double classValue, const double weight)
 {
     if (mTrainClassVals.empty()) {
         mTrainClassVals = double_array(100);
@@ -439,22 +438,22 @@ void Evaluation::addNumericTrainClass(double classValue, double weight)
     mTrainClassWeights[mNumTrainClassVals] = weight;
     mNumTrainClassVals++;
 }
-const double Evaluation::correct()
+const double Evaluation::correct() const
 {
     return mCorrect;
 }
 
-const double Evaluation::totalCost()
+const double Evaluation::totalCost() const
 {
     return mTotalCost;
 }
 
-const double Evaluation::avgCost()
+const double Evaluation::avgCost() const
 {
     return mTotalCost / mWithClass;
 }
 
-const double Evaluation::kappa()
+const double Evaluation::kappa() const
 {
     double_array sumRows = double_array(mConfusionMatrix.size());
     double_array sumColumns = double_array(mConfusionMatrix.size());
@@ -482,21 +481,21 @@ const double Evaluation::kappa()
     }
 }
 
-const double Evaluation::inCorrect()
+const double Evaluation::inCorrect() const
 {
     return mIncorrect;
 }
 
-const double Evaluation::pctCorrect()
+const double Evaluation::pctCorrect() const
 {
     return 100 * mCorrect / mWithClass;
 }
-const double Evaluation::pctIncorrect()
+const double Evaluation::pctIncorrect() const
 {
     return 100 * mIncorrect / mWithClass;
 }
 
-const double Evaluation::KBRelativeInformation()
+const double Evaluation::KBRelativeInformation() const
 {
     if (!mClassIsNominal) {
         throw "Can't compute K&B Info score: class numeric!";
@@ -509,7 +508,7 @@ const double Evaluation::KBRelativeInformation()
     return 100.0 * KBInformation() / priorEntropy();
 }
 
-const double Evaluation::KBInformation()
+const double Evaluation::KBInformation() const
 {
     if (!mClassIsNominal) {
         throw "Can't compute K&B Info score: class numeric!";
@@ -521,7 +520,7 @@ const double Evaluation::KBInformation()
 
     return mSumKBInfo;
 }
-const double Evaluation::KBMeanInformation()
+const double Evaluation::KBMeanInformation() const
 {
     if (!mClassIsNominal) {
         throw "Can't compute K&B Info score: class numeric!";
@@ -534,7 +533,7 @@ const double Evaluation::KBMeanInformation()
     return mSumKBInfo / (mWithClass - mUnclassified);
 }
 
-const double Evaluation::correlationCoefficient()
+const double Evaluation::correlationCoefficient() const
 {
     if (mClassIsNominal) {
         throw "Can't compute correlation coefficient: class is nominal!";
@@ -560,7 +559,7 @@ const double Evaluation::correlationCoefficient()
     return correlation;
 }
 
-const double Evaluation::SFPriorEntropy()
+const double Evaluation::SFPriorEntropy() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -569,7 +568,7 @@ const double Evaluation::SFPriorEntropy()
     return mSumPriorEntropy;
 }
 
-const double Evaluation::SFMeanPriorEntropy()
+const double Evaluation::SFMeanPriorEntropy() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -577,7 +576,7 @@ const double Evaluation::SFMeanPriorEntropy()
 
     return mSumPriorEntropy / mWithClass;
 }
-const double Evaluation::SFSchemeEntropy()
+const double Evaluation::SFSchemeEntropy() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -586,7 +585,7 @@ const double Evaluation::SFSchemeEntropy()
     return mSumSchemeEntropy;
 }
 
-const double Evaluation::SFMeanSchemeEntropy()
+const double Evaluation::SFMeanSchemeEntropy() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -595,7 +594,7 @@ const double Evaluation::SFMeanSchemeEntropy()
     return mSumSchemeEntropy / (mWithClass - mUnclassified);
 }
 
-const double Evaluation::SFEntropyGain()
+const double Evaluation::SFEntropyGain() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -604,7 +603,7 @@ const double Evaluation::SFEntropyGain()
     return mSumPriorEntropy - mSumSchemeEntropy;
 }
 
-const double Evaluation::SFMeanEntropyGain()
+const double Evaluation::SFMeanEntropyGain() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -613,15 +612,15 @@ const double Evaluation::SFMeanEntropyGain()
     return (mSumPriorEntropy - mSumSchemeEntropy)
         / (mWithClass - mUnclassified);
 }
-const double Evaluation::meanAbsoluteError()
+const double Evaluation::meanAbsoluteError() const
 {
     return mSumAbsErr / (mWithClass - mUnclassified);
 }
-const double Evaluation::rootMeanSquaredError()
+const double Evaluation::rootMeanSquaredError() const
 {
     return std::sqrt(mSumSqrErr / (mWithClass - mUnclassified));
 }
-const double Evaluation::relativeAbsoluteError()
+const double Evaluation::relativeAbsoluteError() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -629,7 +628,7 @@ const double Evaluation::relativeAbsoluteError()
 
     return 100 * meanAbsoluteError() / meanPriorAbsoluteError();
 }
-const double Evaluation::rootRelativeSquaredError()
+const double Evaluation::rootRelativeSquaredError() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -637,15 +636,15 @@ const double Evaluation::rootRelativeSquaredError()
 
     return 100.0 * rootMeanSquaredError() / rootMeanPriorSquaredError();
 }
-const double Evaluation::unclassified()
+const double Evaluation::unclassified() const
 {
     return mUnclassified;
 }
-const double Evaluation::pctUnclassified()
+const double Evaluation::pctUnclassified() const
 {
     return 100 * mUnclassified / mWithClass;
 }
-const double Evaluation::meanPriorAbsoluteError()
+const double Evaluation::meanPriorAbsoluteError() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -653,7 +652,7 @@ const double Evaluation::meanPriorAbsoluteError()
 
     return mSumPriorAbsErr / mWithClass;
 }
-const double Evaluation::priorEntropy()
+const double Evaluation::priorEntropy() const
 {
     if (!mClassIsNominal) {
         throw "Can't compute entropy of class prior: class numeric!";
@@ -671,7 +670,7 @@ const double Evaluation::priorEntropy()
     }
     return entropy;
 }
-const double Evaluation::rootMeanPriorSquaredError()
+const double Evaluation::rootMeanPriorSquaredError() const
 {
     if (mNoPriors) {
         return std::numeric_limits<double>::quiet_NaN();
@@ -680,7 +679,7 @@ const double Evaluation::rootMeanPriorSquaredError()
     return std::sqrt(mSumPriorSqrErr / mWithClass);
 }
 
-string Evaluation::toClassDetailsString(string title)
+string Evaluation::toClassDetailsString(const string &title) const
 {
     if (!mClassIsNominal) {
         throw "Evaluation: No confusion matrix possible!";
@@ -721,16 +720,16 @@ string Evaluation::toClassDetailsString(string title)
     return text;
 }
 
-string Evaluation::toClassDetailsString()
+string Evaluation::toClassDetailsString() const
 {
     return toClassDetailsString("=== Detailed Accuracy By Class ===\n");
 }
 
-string Evaluation::toMatrixString()
+string Evaluation::toMatrixString() const
 {
     return toMatrixString("=== Confusion Matrix ===\n");
 }
-string Evaluation::toMatrixString(string title)
+string Evaluation::toMatrixString(const string &title) const
 {
     string text = "";
     char_array IDChars =
@@ -788,7 +787,7 @@ string Evaluation::toMatrixString(string title)
     return text;
 }
 
-double Evaluation::truePositiveRate(int classIndex)
+double Evaluation::truePositiveRate(const int classIndex) const
 {
     double correct = 0, total = 0;
     for (int j = 0; j < mNumClasses; j++) {
@@ -803,7 +802,7 @@ double Evaluation::truePositiveRate(int classIndex)
     return correct / total;
 }
 
-double Evaluation::falsePositiveRate(int classIndex)
+double Evaluation::falsePositiveRate(const int classIndex) const
 {
     double incorrect = 0, total = 0;
     for (int i = 0; i < mNumClasses; i++) {
@@ -821,7 +820,7 @@ double Evaluation::falsePositiveRate(int classIndex)
     }
     return incorrect / total;
 }
-double Evaluation::precision(int classIndex)
+double Evaluation::precision(const int classIndex) const
 {
     double correct = 0, total = 0;
     for (int i = 0; i < mNumClasses; i++) {
@@ -836,12 +835,12 @@ double Evaluation::precision(int classIndex)
     return correct / total;
 }
 
-double Evaluation::recall(int classIndex)
+double Evaluation::recall(const int classIndex) const
 {
     return truePositiveRate(classIndex);
 }
 
-double Evaluation::fMeasure(int classIndex)
+double Evaluation::fMeasure(const int classIndex) const
 {
     double precisionValue = precision(classIndex);
     double recallValue = recall(classIndex);
@@ -851,7 +850,7 @@ double Evaluation::fMeasure(int classIndex)
     return 2 * precisionValue * recallValue / (precisionValue + recallValue);
 }
 
-double Evaluation::areaUnderROC(int classIndex)
+double Evaluation::areaUnderROC(const int classIndex) const
 {
     // Check if any predictions have been collected
     if (mPredictions.empty()) {
@@ -860,10 +859,10 @@ double Evaluation::areaUnderROC(int classIndex)
     else {
         ThresholdCurve tc;
         Instances *result = tc.getCurve(mPredictions, classIndex);
-        return ThresholdCurve::getROCArea(result);
+        return ThresholdCurve::getROCArea(*result);
     }
 }
-double Evaluation::weightedTruePositiveRate()
+double Evaluation::weightedTruePositiveRate() const
 {
     double_array classCounts = double_array(mNumClasses);
     double classCountSum = 0;
@@ -883,7 +882,7 @@ double Evaluation::weightedTruePositiveRate()
 
     return truePosTotal / classCountSum;
 }
-double Evaluation::weightedFalsePositiveRate()
+double Evaluation::weightedFalsePositiveRate() const
 {
     double_array classCounts = double_array(mNumClasses);
     double classCountSum = 0;
@@ -903,7 +902,7 @@ double Evaluation::weightedFalsePositiveRate()
 
     return falsePosTotal / classCountSum;
 }
-double Evaluation::weightedPrecision()
+double Evaluation::weightedPrecision() const
 {
     double_array classCounts = double_array(mNumClasses);
     double classCountSum = 0;
@@ -923,12 +922,12 @@ double Evaluation::weightedPrecision()
 
     return precisionTotal / classCountSum;
 }
-double Evaluation::weightedRecall()
+double Evaluation::weightedRecall() const
 {
     return weightedTruePositiveRate();
 }
 
-double Evaluation::weightedFMeasure()
+double Evaluation::weightedFMeasure() const
 {
     double_array classCounts = double_array(mNumClasses);
     double classCountSum = 0;
@@ -948,7 +947,7 @@ double Evaluation::weightedFMeasure()
 
     return fMeasureTotal / classCountSum;
 }
-double Evaluation::weightedAreaUnderROC()
+double Evaluation::weightedAreaUnderROC() const
 {
     double_array classCounts = double_array(mNumClasses);
     double classCountSum = 0;
@@ -970,7 +969,7 @@ double Evaluation::weightedAreaUnderROC()
 
     return aucTotal / classCountSum;
 }
-string Evaluation::num2ShortID(int num, const char_array &IDChars, int IDWidth) {
+string Evaluation::num2ShortID(int num, const char_array &IDChars, const int IDWidth) const {
 
     char_array ID(IDWidth);
     int i;

@@ -69,7 +69,7 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
     std::cout << "Instances:    " << totalInst << std::endl;
     std::cout << "Attributes:   " << std::endl;
     for (int i = 0; i<num; i++)
-        std::cout << "              " << instTrain->attribute(i)->name() << std::endl;
+        std::cout << "              " << instTrain->attribute(i).name() << std::endl;
 
     std::cout << "\nTime taken to read data : "
         << difftime(TimeElapsed, startTime)
@@ -78,7 +78,7 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
     std::cout << "Test mode : evaluate on training data" << std::endl;
     C48 *classifier = new C48();
     time(&startTime);
-    classifier->buildClassifier(instTrain);
+    classifier->buildClassifier(*instTrain);
     time(&TimeElapsed);
     std::cout << "=== Classifier model (full training set) ===" << std::endl << std::endl;
     std::cout << classifier->toString(isDumpTree) << std::endl;
@@ -99,8 +99,8 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
         totalInst = instTest->numInstances();
         for (int i = 0; i < totalInst; i++)
         {
-            Instance *instance = instTest->instance(i);
-            eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
+            Instance &instance = instTest->instance(i);
+            eval->evaluateModelOnceAndRecordPrediction(*classifier, instance);
         }
     }
     else
@@ -108,8 +108,8 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
         totalInst = instTrain->numInstances();
         for (int i = 0; i < totalInst; i++)
         {
-            Instance *instance = instTrain->instance(i);
-            eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
+            Instance &instance = instTrain->instance(i);
+            eval->evaluateModelOnceAndRecordPrediction(*classifier, instance);
         }
     }
 

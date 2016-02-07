@@ -15,38 +15,38 @@ double EntropyBasedSplitCrit::lnFunc(double num) const {
     }
 }
 
-double EntropyBasedSplitCrit::oldEnt(Distribution *bags) const {
+double EntropyBasedSplitCrit::oldEnt(Distribution &bags) const {
 
     double returnValue = 0;
     int j;
 
-    for (j = 0; j < bags->numClasses(); j++) {
-        returnValue = returnValue + lnFunc(bags->perClass(j));
+    for (j = 0; j < bags.numClasses(); j++) {
+        returnValue = returnValue + lnFunc(bags.perClass(j));
     }
-    return lnFunc(bags->total()) - returnValue;
+    return lnFunc(bags.total()) - returnValue;
 }
 
-double EntropyBasedSplitCrit::newEnt(Distribution *bags) const {
+double EntropyBasedSplitCrit::newEnt(Distribution &bags) const {
 
     double returnValue = 0;
     int i, j;
 
-    for (i = 0; i < bags->numBags(); i++) {
-        for (j = 0; j < bags->numClasses(); j++) {
-            returnValue = returnValue + lnFunc(bags->perClassPerBag(i, j));
+    for (i = 0; i < bags.numBags(); i++) {
+        for (j = 0; j < bags.numClasses(); j++) {
+            returnValue = returnValue + lnFunc(bags.perClassPerBag(i, j));
         }
-        returnValue = returnValue - lnFunc(bags->perBag(i));
+        returnValue = returnValue - lnFunc(bags.perBag(i));
     }
     return -returnValue;
 }
 
-double EntropyBasedSplitCrit::splitEnt(Distribution *bags) const {
+double EntropyBasedSplitCrit::splitEnt(Distribution &bags) const {
 
     double returnValue = 0;
     int i;
 
-    for (i = 0; i < bags->numBags(); i++) {
-        returnValue = returnValue + lnFunc(bags->perBag(i));
+    for (i = 0; i < bags.numBags(); i++) {
+        returnValue = returnValue + lnFunc(bags.perBag(i));
     }
-    return lnFunc(bags->total()) - returnValue;
+    return lnFunc(bags.total()) - returnValue;
 }

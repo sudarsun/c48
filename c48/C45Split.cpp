@@ -29,18 +29,18 @@ void C45Split::buildClassifier(Instances trainInstances)
 
     // Different treatment for enumerated and numeric
     // attributes.
-    if (trainInstances.attribute(mAttIndex)->isNominal())
+    if (trainInstances.attribute(mAttIndex).isNominal())
     {
-        mComplexityIndex = trainInstances.attribute(mAttIndex)->numValues();
+        mComplexityIndex = trainInstances.attribute(mAttIndex).numValues();
         mIndex = mComplexityIndex;
-        handleEnumeratedAttribute(&trainInstances);
+        handleEnumeratedAttribute(trainInstances);
     }
     else
     {
         mComplexityIndex = 2;
         mIndex = 0;
         trainInstances.Sort(trainInstances.attribute(mAttIndex));
-        handleNumericAttribute(&trainInstances);
+        handleNumericAttribute(trainInstances);
     }
 }
 
@@ -54,7 +54,7 @@ double C45Split::splitPoint() const
     return mSplitPoint;
 }
 
-double C45Split::classProb(const int classIndex, Instance *instance, const int theSubset) const 
+double C45Split::classProb(const int classIndex, Instance &instance, const int theSubset) const 
 {
 
     if (theSubset <= -1)
@@ -97,21 +97,19 @@ double C45Split::gainRatio() const
     return mGainRatio;
 }
 
-void C45Split::handleEnumeratedAttribute(Instances *trainInstances)
+void C45Split::handleEnumeratedAttribute(Instances &trainInstances)
 {
 
-    Instance *instance;
-
-    mDistribution = new Distribution(mComplexityIndex, trainInstances->numClasses());
+    mDistribution = new Distribution(mComplexityIndex, trainInstances.numClasses());
 
     // Only Instances with known values are relevant.
-    int totalInst = trainInstances->numInstances();
+    int totalInst = trainInstances.numInstances();
     for (int i = 0; i < totalInst; i++)
     {
-        instance = trainInstances->instance(i);
-        if (!instance->isMissing(mAttIndex))
+        Instance &instance = trainInstances.instance(i);
+        if (!instance.isMissing(mAttIndex))
         {
-            mDistribution->add(static_cast<int>(instance->value(mAttIndex)), instance);
+            mDistribution->add(static_cast<int>(instance.value(mAttIndex)), instance);
         }
     }
 
@@ -120,12 +118,12 @@ void C45Split::handleEnumeratedAttribute(Instances *trainInstances)
     if (mDistribution->check(mMinNoObj))
     {
         mNumSubsets = mComplexityIndex;
-        mInfoGain = infoGainCrit->splitCritValue(mDistribution, mSumOfWeights);
-        mGainRatio = gainRatioCrit->splitCritValue(mDistribution, mSumOfWeights, mInfoGain);
+        mInfoGain = infoGainCrit->splitCritValue(*mDistribution, mSumOfWeights);
+        mGainRatio = gainRatioCrit->splitCritValue(*mDistribution, mSumOfWeights, mInfoGain);
     }
 }
 
-void C45Split::handleNumericAttribute(Instances *trainInstances)
+void C45Split::handleNumericAttribute(Instances &trainInstances)
 {
 
     int firstMiss;
@@ -135,19 +133,18 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
     double currentInfoGain;
     double defaultEnt;
     double minSplit;
-    Instance *instance;
     int i;
 
     // Current attribute is a numeric attribute.
-    mDistribution = new Distribution(2, trainInstances->numClasses());
+    mDistribution = new Distribution(2, trainInstances.numClasses());
 
     // Only Instances with known values are relevant.
-    int totalInst = trainInstances->numInstances();
+    int totalInst = trainInstances.numInstances();
     i = 0;
     for (int j = 0; j < totalInst; j++)
     {
-        instance = trainInstances->instance(j);
-        if (instance->isMissing(mAttIndex))
+        Instance &instance = trainInstances.instance(j);
+        if (instance.isMissing(mAttIndex))
         {
             break;
         }
@@ -158,7 +155,7 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
 
     // Compute minimum number of Instances required in each
     // subset.
-    minSplit = 0.1 * (mDistribution->total()) / (trainInstances->numClasses());
+    minSplit = 0.1 * (mDistribution->total()) / (trainInstances.numClasses());
     if (Utils::smOrEq(minSplit, mMinNoObj))
     {
         minSplit = mMinNoObj;
@@ -177,10 +174,10 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
 
     // Compute values of criteria for all possible split
     // indices.
-    defaultEnt = infoGainCrit->oldEnt(mDistribution);
+    defaultEnt = infoGainCrit->oldEnt(*mDistribution);
     while (next < firstMiss)
     {
-        if ( trainInstances->instance(next - 1)->value(mAttIndex)+ 1e-5 < trainInstances->instance(next)->value(mAttIndex))
+        if ( trainInstances.instance(next - 1).value(mAttIndex)+ 1e-5 < trainInstances.instance(next).value(mAttIndex))
         {
 
             // Move class values for all Instances up to next
@@ -191,7 +188,7 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
             // values for criteria.
             if (Utils::grOrEq(mDistribution->perBag(0), minSplit) && Utils::grOrEq(mDistribution->perBag(1), minSplit))
             {
-                currentInfoGain = infoGainCrit->splitCritValue(mDistribution, mSumOfWeights, defaultEnt);
+                currentInfoGain = infoGainCrit->splitCritValue(*mDistribution, mSumOfWeights, defaultEnt);
                 if (Utils::gr(currentInfoGain, mInfoGain))
                 {
                     mInfoGain = currentInfoGain;
@@ -223,22 +220,22 @@ void C45Split::handleNumericAttribute(Instances *trainInstances)
     // Set instance variables' values to values for
     // best split.
     mNumSubsets = 2;
-    mSplitPoint = (trainInstances->instance(splitIndex + 1)->value(mAttIndex) + trainInstances->instance(splitIndex)->value(mAttIndex)) / 2;
+    mSplitPoint = (trainInstances.instance(splitIndex + 1).value(mAttIndex) + trainInstances.instance(splitIndex).value(mAttIndex)) / 2;
 
     // In case we have a numerical precision problem we need to choose the
     // smaller value
-    if (mSplitPoint == trainInstances->instance(splitIndex + 1)->value(mAttIndex))
+    if (mSplitPoint == trainInstances.instance(splitIndex + 1).value(mAttIndex))
     {
-        mSplitPoint = trainInstances->instance(splitIndex)->value(mAttIndex);
+        mSplitPoint = trainInstances.instance(splitIndex).value(mAttIndex);
     }
 
     // Restore distributioN for best split.
-    mDistribution = new Distribution(2, trainInstances->numClasses());
+    mDistribution = new Distribution(2, trainInstances.numClasses());
     mDistribution->addRange(0, trainInstances, 0, splitIndex + 1);
     mDistribution->addRange(1, trainInstances, splitIndex + 1, firstMiss);
 
     // Compute modified gain ratio for best split.
-    mGainRatio = gainRatioCrit->splitCritValue(mDistribution, mSumOfWeights, mInfoGain);
+    mGainRatio = gainRatioCrit->splitCritValue(*mDistribution, mSumOfWeights, mInfoGain);
 }
 
 double C45Split::infoGain() const
@@ -246,20 +243,20 @@ double C45Split::infoGain() const
     return mInfoGain;
 }
 
-string C45Split::leftSide(Instances *data) const
+string C45Split::leftSide(Instances &data) const
 {
-    return data->attribute(mAttIndex)->name();
+    return data.attribute(mAttIndex).name();
 }
 
-string C45Split::rightSide(const int index, Instances *data) const 
+string C45Split::rightSide(const int index, Instances &data) const 
 {
 
     string text;
 
     text = "";
-    if (data->attribute(mAttIndex)->isNominal())
+    if (data.attribute(mAttIndex).isNominal())
     {
-        text.append(string(" = ") + data->attribute(mAttIndex)->value(index));
+        text.append(string(" = ") + data.attribute(mAttIndex).value(index));
     }
     else if (index == 0)
     {
@@ -273,22 +270,21 @@ string C45Split::rightSide(const int index, Instances *data) const
     return text;
 }
 
-void C45Split::setSplitPoint(Instances *allInstances)
+void C45Split::setSplitPoint(Instances &allInstances)
 {
 
     double newSplitPoint = -std::numeric_limits<double>::max();
     double tempValue;
-    Instance *instance;
 
-    if ((allInstances->attribute(mAttIndex)->isNumeric()) && (mNumSubsets > 1))
+    if ((allInstances.attribute(mAttIndex).isNumeric()) && (mNumSubsets > 1))
     {
-        int totalInst = allInstances->numInstances();
+        int totalInst = allInstances.numInstances();
         for (int i = 0; i < totalInst; i++)
         {
-            instance = allInstances->instance(i);
-            if (!instance->isMissing(mAttIndex))
+            Instance &instance = allInstances.instance(i);
+            if (!instance.isMissing(mAttIndex))
             {
-                tempValue = instance->value(mAttIndex);
+                tempValue = instance.value(mAttIndex);
                 if (Utils::gr(tempValue, newSplitPoint) && Utils::smOrEq(tempValue, mSplitPoint))
                 {
                     newSplitPoint = tempValue;
@@ -299,18 +295,18 @@ void C45Split::setSplitPoint(Instances *allInstances)
     }
 }
 
-double_2D_array C45Split::minsAndMaxs(Instances *data, const double_2D_array &minsAndMaxs, int index) const
+double_2D_array C45Split::minsAndMaxs(Instances &data, const double_2D_array &minsAndMaxs, int index) const
 {
 
-    double_2D_array newMinsAndMaxs(data->numAttributes(), double_array(2, 0));
+    double_2D_array newMinsAndMaxs(data.numAttributes(), double_array(2, 0));
 
-    for (int i = 0; i < data->numAttributes(); i++)
+    for (int i = 0; i < data.numAttributes(); i++)
     {
         newMinsAndMaxs[i][0] = minsAndMaxs[i][0];
         newMinsAndMaxs[i][1] = minsAndMaxs[i][1];
         if (i == mAttIndex)
         {
-            if (data->attribute(mAttIndex)->isNominal())
+            if (data.attribute(mAttIndex).isNominal())
             {
                 newMinsAndMaxs[mAttIndex][1] = 1;
             }
@@ -324,29 +320,29 @@ double_2D_array C45Split::minsAndMaxs(Instances *data, const double_2D_array &mi
     return newMinsAndMaxs;
 }
 
-void C45Split::resetDistribution(Instances *data)
+void C45Split::resetDistribution(Instances &data)
 {
 
-    Instances *insts = new Instances(data, 0);
-    for (int i = 0; i < data->numInstances(); i++)
+    Instances *insts = new Instances(&data, 0);
+    for (int i = 0; i < data.numInstances(); i++)
     {
-        if (whichSubset(data->instance(i)) > -1)
+        if (whichSubset(data.instance(i)) > -1)
         {
-            insts->add(data->instance(i));
+            insts->add(data.instance(i));
         }
     }
-    Distribution *newD = new Distribution(insts, this);
+    Distribution *newD = new Distribution(*insts, *this);
     newD->addInstWithUnknown(data, mAttIndex);
     mDistribution = newD;
 }
 
-double_array C45Split::weights(Instance *instance) const
+double_array C45Split::weights(Instance &instance) const
 {
 
     double_array weights;
     int i;
 
-    if (instance->isMissing(mAttIndex))
+    if (instance.isMissing(mAttIndex))
     {
         weights = double_array(mNumSubsets);
         for (i = 0; i < mNumSubsets; i++)
@@ -361,20 +357,20 @@ double_array C45Split::weights(Instance *instance) const
     }
 }
 
-const int C45Split::whichSubset(Instance *instance) const
+const int C45Split::whichSubset(Instance &instance) const
 {
 
-    if (instance->isMissing(mAttIndex))
+    if (instance.isMissing(mAttIndex))
     {
         return -1;
     }
     else
     {
-        if (instance->attribute(mAttIndex)->isNominal())
+        if (instance.attribute(mAttIndex).isNominal())
         {
-            return static_cast<int>(instance->value(mAttIndex));
+            return static_cast<int>(instance.value(mAttIndex));
         }
-        else if (Utils::smOrEq(instance->value(mAttIndex), mSplitPoint))
+        else if (Utils::smOrEq(instance.value(mAttIndex), mSplitPoint))
         {
             return 0;
         }

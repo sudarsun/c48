@@ -46,7 +46,7 @@ int CostMatrix::numRows() const {
     return size();
 }
 
-bool CostMatrix::replaceStrings(Instances *dataset) const {
+bool CostMatrix::replaceStrings(Instances &dataset) const {
     bool nonDouble = false;
 
     for (int i = 0; i < mSize; i++) {
@@ -229,9 +229,9 @@ double CostMatrix::getMaxCost(const int classVal) const {
     return maxCost;
 }
 
-double CostMatrix::getMaxCost(const int classVal, Instance *inst) const {
+double CostMatrix::getMaxCost(const int classVal, Instance &inst) const {
 
-    if (!replaceStrings(inst->getDataset())) {
+    if (!replaceStrings(*(inst.getDataset()))) {
         return getMaxCost(classVal);
     }
 
@@ -281,7 +281,7 @@ double CostMatrix::getElement(const int rowIndex, const int columnIndex) const {
     return *(static_cast<double*>(cell));
 }
 
-double CostMatrix::getElement(const int rowIndex, const int columnIndex, Instance *inst) const {
+double CostMatrix::getElement(const int rowIndex, const int columnIndex, Instance &inst) const {
 
     auto cell = mMatrix[rowIndex][columnIndex];
     if (static_cast<double*>(cell) != nullptr) {

@@ -5,14 +5,14 @@
 #include "core/Consts.h"
 #include "core/Utils.h"
 
-double AbstractClassifier::classifyInstance(Instance *instance) const
+double AbstractClassifier::classifyInstance(Instance &instance) const
 {
 
     double_array dist = distributionForInstance(instance);
     if (dist.empty()) {
         throw "Null distribution predicted";
     }
-    switch (instance->classAttribute()->type()) {
+    switch (instance.classAttribute().type()) {
     case ATTRIBUTE::NOMINAL: {
         double max = 0;
         int maxIndex = 0;
@@ -38,11 +38,11 @@ double AbstractClassifier::classifyInstance(Instance *instance) const
     }
 }
 
-double_array AbstractClassifier::distributionForInstance(Instance *instance) const
+double_array AbstractClassifier::distributionForInstance(Instance &instance) const
 {
 
-    double_array dist(instance->numClasses());
-    switch (instance->classAttribute()->type()) {
+    double_array dist(instance.numClasses());
+    switch (instance.classAttribute().type()) {
     case ATTRIBUTE::NOMINAL: {
         double classification = classifyInstance(instance);
         if (Utils::isMissingValue(classification)) {
@@ -98,11 +98,11 @@ bool AbstractClassifier::implementsMoreEfficientBatchPrediction() const
     return false;
 }
 
-double_2D_array AbstractClassifier::distributionsForInstances(Instances *batch) const
+double_2D_array AbstractClassifier::distributionsForInstances(Instances &batch) const
 {
-    double_2D_array batchPreds(batch->numInstances());
-    for (int i = 0; i < batch->numInstances(); i++) {
-        batchPreds[i] = distributionForInstance(batch->instance(i));
+    double_2D_array batchPreds(batch.numInstances());
+    for (int i = 0; i < batch.numInstances(); i++) {
+        batchPreds[i] = distributionForInstance(batch.instance(i));
     }
 
     return batchPreds;

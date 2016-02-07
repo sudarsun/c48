@@ -48,7 +48,7 @@ public:
      * @param value the value that has just been seen
      * @param count the number of times the value appeared
      */
-    virtual void addDistinct(double value, int count, double weight);
+    virtual void addDistinct(const double value, const int count, const double weight);
 
 };
 

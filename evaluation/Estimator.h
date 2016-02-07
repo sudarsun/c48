@@ -40,7 +40,7 @@ public:
      * @param attrIndex attribute the estimator is for
      * @exception Exception if building of estimator goes wrong
      */
-    virtual void addValues(Instances *data, const int attrIndex);
+    virtual void addValues(Instances &data, const int attrIndex);
 
     /**
      * Initialize the estimator with all values of one attribute of a dataset.
@@ -53,7 +53,7 @@ public:
      * @param factor number of instances has been reduced to that factor
      * @exception Exception if building of estimator goes wrong
      */
-    virtual void addValues(Instances *data, const int attrIndex, const double min, const double max, const double factor);
+    virtual void addValues(Instances &data, const int attrIndex, const double min, const double max, const double factor);
 
     /**
     * Initialize the estimator using only the instance of one class.
@@ -65,7 +65,7 @@ public:
     * @param classValue the class value
     * @exception Exception if building of estimator goes wrong
     */
-    virtual void addValues(Instances *data, const int attrIndex, const int classIndex, const int classValue);
+    virtual void addValues(Instances &data, const int attrIndex, const int classIndex, const int classValue);
 
     /**
      * Initialize the estimator using only the instance of one class.
@@ -79,7 +79,7 @@ public:
      * @param max maximal value of this attribute
      * @exception Exception if building of estimator goes wrong
      */
-    virtual void addValues(Instances *data, const int attrIndex, const int classIndex, const int classValue, const double min, const double max);
+    virtual void addValues(Instances &data, const int attrIndex, const int classIndex, const int classValue, const double min, const double max);
 
     /**
      * Get a probability estimate for a value.
@@ -117,7 +117,7 @@ private:
      * @param classValue the relevant class value
      * @return a dataset with only
      */
-    double getInstancesFromClass(Instances *data, const int attrIndex, const int classIndex, const double classValue, Instances *workData);
+    double getInstancesFromClass(Instances &data, const int attrIndex, const int classIndex, const double classValue, Instances &workData);
 
     /**
      * Class to support a building process of an estimator.

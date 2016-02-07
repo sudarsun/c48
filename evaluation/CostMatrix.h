@@ -110,7 +110,7 @@ public:
      * @return the maximum cost.
      * @exception Exception if cost matrix contains non-fixed costs
      */
-    double getMaxCost(const int classVal, Instance *inst) const;
+    double getMaxCost(const int classVal, Instance &inst) const;
 
     /**
      * Normalizes the matrix so that the diagonal contains zeros.
@@ -156,7 +156,7 @@ public:
      * @return the value from a particular cell
      * @exception Exception if something goes wrong
      */
-    double getElement(const int rowIndex, const int columnIndex, Instance *inst) const;
+    double getElement(const int rowIndex, const int columnIndex, Instance &inst) const;
 
     /**
     * Set the value of a cell as a double
@@ -168,8 +168,10 @@ public:
     void setElement(const int rowIndex, const int columnIndex, double value);
 
 private:
+
     int mSize = 0;
-    bool replaceStrings(Instances *dataset) const;
+
+    bool replaceStrings(Instances &dataset) const;
 };
 
 

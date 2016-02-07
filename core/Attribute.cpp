@@ -101,7 +101,7 @@ int Attribute::type() const
     return mType;
 }
 
-string Attribute::value(int valIndex) const
+string Attribute::value(const int &valIndex) const
 {
 
     if (!isNominal() && !isString())
@@ -148,13 +148,13 @@ int Attribute::addStringValue(const string &value)
 //    }
 //}
 
-int Attribute::addStringValue(Attribute *src, int index) const
+int Attribute::addStringValue(const Attribute &src, const int &index) const
 {
     if (!isString())
     {
         return -1;
     }
-    auto store = (static_cast<NominalAttributeInfo*>(src->mAttributeInfo))->getAttributeValue(index);
+    auto store = (static_cast<NominalAttributeInfo*>(src.mAttributeInfo))->getAttributeValue(index);
     try
     {
         return (static_cast<NominalAttributeInfo*>(mAttributeInfo))->getAttributeIndex(store);
@@ -185,7 +185,7 @@ Attribute *Attribute::copy(const string &newName) const
     return copy;
 }
 
-void Attribute::Delete(int index)
+void Attribute::Delete(const int &index)
 {
 
     if (!isNominal() && !isString() && !isRelationValued())
@@ -224,12 +224,12 @@ void Attribute::forceAddValue(const string &value)
     (static_cast<NominalAttributeInfo*>(mAttributeInfo))->addAttribute(store, int((static_cast<NominalAttributeInfo*>(mAttributeInfo))->getSize() - 1));
 }
 
-void Attribute::setIndex(int index)
+void Attribute::setIndex(const int index)
 {
     mIndex = index;
 }
 
-void Attribute::setValue(int index, const string &stringName)
+void Attribute::setValue(const int index, const string &stringName)
 {
     NominalAttributeInfo* nominal = static_cast<NominalAttributeInfo*>(mAttributeInfo);
     switch (mType)
@@ -238,7 +238,7 @@ void Attribute::setValue(int index, const string &stringName)
     case ATTRIBUTE::STRING:
     {
         nominal->removeHashTable(nominal->getAttributeValue(index));
-        nominal->addAttribute(stringName.c_str(), int(index), true);
+        nominal->addAttribute(stringName.c_str(), index, true);
         break;
     }
     default:
@@ -251,7 +251,7 @@ double Attribute::weight() const
     return mWeight;
 }
 
-void Attribute::setWeight(double value)
+void Attribute::setWeight(const double value)
 {
     mWeight = value;
 }

@@ -20,7 +20,7 @@ public:
      * This method is a straightforward implementation of the information
      * gain criterion for the given distribution.
      */
-    double splitCritValue(Distribution *bags) const;
+    double splitCritValue(Distribution &bags) const;
 
     /**
      * This method computes the information gain in the same way
@@ -30,7 +30,7 @@ public:
      * @param totalNoInst weight of ALL instances (including the
      * ones with missing values).
      */
-    double splitCritValue(Distribution *bags, double totalNoInst) const;
+    double splitCritValue(Distribution &bags, double totalNoInst) const;
 
     /**
      * This method computes the information gain in the same way
@@ -40,7 +40,7 @@ public:
      * @param totalNoInst weight of ALL instances
      * @param oldEnt entropy with respect to "no-split"-model.
      */
-    double splitCritValue(Distribution *bags, double totalNoInst, double oldEnt) const;
+    double splitCritValue(Distribution &bags, double totalNoInst, double oldEnt) const;
 
 };
 

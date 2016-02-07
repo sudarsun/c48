@@ -65,7 +65,7 @@ protected:
      * @return the generated tree
      * @throws Exception if something goes wrong
      */
-    virtual ClassifierTree *getNewTree(Instances *data) const;
+    virtual ClassifierTree *getNewTree(Instances &data) const;
 
     /**
      * Returns a newly created tree.
@@ -75,7 +75,7 @@ protected:
      * @return the generated tree
      * @throws Exception if something goes wrong
      */
-    virtual ClassifierTree *getNewTree(Instances *train, Instances *test) const;
+    virtual ClassifierTree *getNewTree(Instances &train, Instances &test) const;
 
 public:
 
@@ -95,7 +95,7 @@ public:
      * @param data the data to build the tree from
      * @throws Exception if something goes wrong
      */
-    virtual void buildClassifier(Instances *data);
+    virtual void buildClassifier(Instances &data);
 
     /**
      * Builds the tree structure.
@@ -104,7 +104,7 @@ public:
      * @param keepData is training data to be kept?
      * @throws Exception if something goes wrong
      */
-    virtual void buildTree(Instances *data, bool keepData);
+    virtual void buildTree(Instances &data, bool keepData);
 
     /**
      * Builds the tree structure with hold out set
@@ -114,7 +114,7 @@ public:
      * @param keepData is training Data to be kept?
      * @throws Exception if something goes wrong
      */
-    virtual void buildTree(Instances *train, Instances *test, bool keepData);
+    virtual void buildTree(Instances &train, Instances &test, bool keepData);
 
     /**
      * Classifies an instance.
@@ -123,14 +123,14 @@ public:
      * @return the classification
      * @throws Exception if something goes wrong
      */
-    virtual double classifyInstance(Instance *instance) const;
+    virtual double classifyInstance(Instance &instance) const;
 
     /**
      * Cleanup in order to save memory.
      *
      * @param justHeaderInfo
      */
-    void cleanup(Instances *justHeaderInfo);
+    void cleanup(Instances &justHeaderInfo);
 
     /**
      * Returns class probabilities for a weighted instance.
@@ -140,7 +140,7 @@ public:
      * @return the distribution
      * @throws Exception if something goes wrong
      */
-    double_array distributionForInstance(Instance *instance, bool useLaplace);
+    double_array distributionForInstance(Instance &instance, bool useLaplace);
 
     /**
      * Assigns a uniqe id to every node in the tree.
@@ -174,7 +174,7 @@ public:
     /**
      * Computes a list that indicates node membership
      */
-    virtual double_array getMembershipValues(Instance *instance);
+    virtual double_array getMembershipValues(Instance &instance);
 
 private:
     /**
@@ -201,7 +201,7 @@ private:
      * @return the laplace probs
      * @throws Exception if something goes wrong
      */
-    double getProbsLaplace(int classIndex, Instance *instance, double weight) const;
+    double getProbsLaplace(int classIndex, Instance &instance, double weight) const;
 
     /**
      * Help method for computing class probabilities of a given instance.
@@ -212,7 +212,7 @@ private:
      * @return the probs
      * @throws Exception if something goes wrong
      */
-    double getProbs(int classIndex, Instance *instance, double weight) const;
+    double getProbs(int classIndex, Instance &instance, double weight) const;
 
     /**
      * Method to the current model.

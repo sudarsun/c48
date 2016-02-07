@@ -31,7 +31,7 @@ Instances *ThresholdCurve::getCurve(std::vector<Prediction*> predictions) {
     return getCurve(predictions, (static_cast<NominalPrediction*>(predictions[0]))->distribution().size() - 1);
 }
 
-Instances *ThresholdCurve::getCurve(std::vector<Prediction*> predictions, int classIndex) {
+Instances *ThresholdCurve::getCurve(std::vector<Prediction*> predictions, const int classIndex) {
 
     if ((predictions.size() == 0) || ((static_cast<NominalPrediction*>(predictions.at(0)))->distribution().size() <= classIndex)) {
         return nullptr;
@@ -73,7 +73,7 @@ Instances *ThresholdCurve::getCurve(std::vector<Prediction*> predictions, int cl
             tc->setFalsePositive(tc->getFalsePositive() - cumulativeNeg);
             tc->setTrueNegative(tc->getTrueNegative() + cumulativeNeg);
             threshold = probs[sorted[i]];
-            insts->add(makeInstance(tc, threshold));
+            insts->add(*makeInstance(tc, threshold));
             cumulativePos = 0;
             cumulativeNeg = 0;
             if (i == sorted.size() - 1) {
@@ -103,34 +103,34 @@ Instances *ThresholdCurve::getCurve(std::vector<Prediction*> predictions, int cl
     if (tc->getFalseNegative() != totPos || tc->getTrueNegative() != totNeg) {
         tc = new TwoClassStats(0, 0, totNeg, totPos);
         threshold = probs[sorted[sorted.size() - 1]] + 10e-6;
-        insts->add(makeInstance(tc, threshold));
+        insts->add(*makeInstance(tc, threshold));
     }
 
     return insts;
 }
 
-double ThresholdCurve::getNPointPrecision(Instances *tcurve, const int n) {
+double ThresholdCurve::getNPointPrecision(Instances &tcurve, const int n) {
 
-    if (RELATION_NAME != tcurve->getRelationName() || (tcurve->numInstances() == 0)) {
+    if (RELATION_NAME != tcurve.getRelationName() || (tcurve.numInstances() == 0)) {
         return std::numeric_limits<double>::quiet_NaN();
     }
-    int recallInd = tcurve->attribute(RECALL_NAME)->index();
-    int precisInd = tcurve->attribute(PRECISION_NAME)->index();
-    double_array recallVals = tcurve->attributeToDoubleArray(recallInd);
+    int recallInd = tcurve.attribute(RECALL_NAME).index();
+    int precisInd = tcurve.attribute(PRECISION_NAME).index();
+    double_array recallVals = tcurve.attributeToDoubleArray(recallInd);
     int_array sorted = Utils::Sort(recallVals);
     double isize = 1.0 / (n - 1);
     double psum = 0;
     for (int i = 0; i < n; i++) {
         int pos = binarySearch(sorted, recallVals, i * isize);
         double recall = recallVals[sorted[pos]];
-        double precis = tcurve->instance(sorted[pos])->value(precisInd);
+        double precis = tcurve.instance(sorted[pos]).value(precisInd);
 
         // interpolate figures for non-endpoints
         while ((pos != 0) && (pos < sorted.size() - 1)) {
             pos++;
             double recall2 = recallVals[sorted[pos]];
             if (recall2 != recall) {
-                double precis2 = tcurve->instance(sorted[pos])->value(precisInd);
+                double precis2 = tcurve.instance(sorted[pos]).value(precisInd);
                 double slope = (precis2 - precis) / (recall2 - recall);
                 double offset = precis - recall * slope;
                 precis = isize * i * slope + offset;
@@ -143,16 +143,16 @@ double ThresholdCurve::getNPointPrecision(Instances *tcurve, const int n) {
     return psum / n;
 }
 
-double ThresholdCurve::getROCArea(Instances *tcurve) {
+double ThresholdCurve::getROCArea(Instances &tcurve) {
 
-    const int n = tcurve->numInstances();
-    if (RELATION_NAME != tcurve->getRelationName() || (n == 0)) {
+    const int n = tcurve.numInstances();
+    if (RELATION_NAME != tcurve.getRelationName() || (n == 0)) {
         return std::numeric_limits<double>::quiet_NaN();
     }
-    const int tpInd = tcurve->attribute(TRUE_POS_NAME)->index();
-    const int fpInd = tcurve->attribute(FALSE_POS_NAME)->index();
-    const double_array tpVals = tcurve->attributeToDoubleArray(tpInd);
-    const double_array fpVals = tcurve->attributeToDoubleArray(fpInd);
+    const int tpInd = tcurve.attribute(TRUE_POS_NAME).index();
+    const int fpInd = tcurve.attribute(FALSE_POS_NAME).index();
+    const double_array tpVals = tcurve.attributeToDoubleArray(tpInd);
+    const double_array fpVals = tcurve.attributeToDoubleArray(fpInd);
 
     double area = 0.0, cumNeg = 0.0;
     const double totalPos = tpVals[0];
@@ -175,15 +175,15 @@ double ThresholdCurve::getROCArea(Instances *tcurve) {
     return area;
 }
 
-int ThresholdCurve::getThresholdInstance(Instances *tcurve, const double threshold) {
+int ThresholdCurve::getThresholdInstance(Instances &tcurve, const double threshold) {
 
-    if (RELATION_NAME != tcurve->getRelationName() || (tcurve->numInstances() == 0) || (threshold < 0) || (threshold > 1.0)) {
+    if (RELATION_NAME != tcurve.getRelationName() || (tcurve.numInstances() == 0) || (threshold < 0) || (threshold > 1.0)) {
         return -1;
     }
-    if (tcurve->numInstances() == 1) {
+    if (tcurve.numInstances() == 1) {
         return 0;
     }
-    double_array tvals = tcurve->attributeToDoubleArray(tcurve->numAttributes() - 1);
+    double_array tvals = tcurve.attributeToDoubleArray(tcurve.numAttributes() - 1);
     int_array sorted = Utils::Sort(tvals);
     return binarySearch(sorted, tvals, threshold);
 }

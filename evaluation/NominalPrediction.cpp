@@ -4,7 +4,7 @@ NominalPrediction::NominalPrediction(double actual, double_array &distribution) 
 
 }
 
-NominalPrediction::NominalPrediction(double actual, double_array &distribution, double weight) {
+NominalPrediction::NominalPrediction(double actual, const double_array &distribution, double weight) {
 
     if (distribution.empty()) {
         throw "Null distribution in NominalPrediction.";

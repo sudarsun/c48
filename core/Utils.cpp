@@ -2,7 +2,7 @@
 
 const double Utils::SMALL = 1e-6;
 
-bool Utils::isMissingValue(double val) {
+bool Utils::isMissingValue(const double val) {
 
     return std::isnan(val);
 }
@@ -230,7 +230,7 @@ double Utils::getLog2(double a)
     return log(a) / log(2);
 }
 
-int Utils::maxIndex(double_array &doubles)
+int Utils::maxIndex(const double_array &doubles)
 {
 
     double maximum = 0;

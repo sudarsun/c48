@@ -51,7 +51,7 @@ public:
  *
  * @exception Exception if something goes wrong
  */
-    Distribution(Instances *source);
+    Distribution(Instances &source);
 
     /**
      * Creates a distribution according to given instances and
@@ -59,7 +59,7 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    Distribution(Instances *source, ClassifierSplitModel *modelToUse);
+    Distribution(Instances &source, ClassifierSplitModel &modelToUse);
 
     /**
      * Creates distribution with only one bag by merging all
@@ -93,14 +93,14 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    void add(int bagIndex, Instance *instance);
+    void add(int bagIndex, Instance &instance);
 
     /**
      * Subtracts given instance from given bag.
      *
      * @exception Exception if something goes wrong
      */
-    void sub(int bagIndex, Instance *instance);
+    void sub(int bagIndex, Instance &instance);
 
     /**
      * Adds counts to given bag.
@@ -113,21 +113,21 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    void addInstWithUnknown(Instances *source, int attIndex);
+    void addInstWithUnknown(Instances &source, int attIndex);
 
     /**
      * Adds all instances in given range to given bag.
      *
      * @exception Exception if something goes wrong
      */
-    void addRange(int bagIndex, Instances *source, int startIndex, int lastPlusOne);
+    void addRange(int bagIndex, Instances &source, int startIndex, int lastPlusOne);
 
     /**
      * Adds given instance to all bags weighting it according to given weights.
      *
      * @exception Exception if something goes wrong
      */
-    void addWeights(Instance *instance, double_array &weights);
+    void addWeights(Instance &instance, double_array &weights);
 
     /**
      * Checks if at least two bags contain a minimum number of instances.
@@ -139,14 +139,14 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    void del(int bagIndex, Instance *instance);
+    void del(int bagIndex, Instance &instance);
 
     /**
      * Deletes all instances in given range from given bag.
      *
      * @exception Exception if something goes wrong
      */
-    void delRange(int bagIndex, Instances *source, int startIndex, int lastPlusOne);
+    void delRange(int bagIndex, Instances &source, int startIndex, int lastPlusOne);
 
     /**
      * Prints distribution.
@@ -261,14 +261,14 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    void shift(int from, int to, Instance *instance);
+    void shift(int from, int to, Instance &instance);
 
     /**
      * Shifts all instances in given range from one bag to another one.
      *
      * @exception Exception if something goes wrong
      */
-    void shiftRange(int from, int to, Instances *source, int startIndex, int lastPlusOne);
+    void shiftRange(int from, int to, Instances &source, int startIndex, int lastPlusOne);
 
 };
 

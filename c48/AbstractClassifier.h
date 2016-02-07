@@ -43,7 +43,7 @@ public:
      * @exception Exception if an error occurred during the prediction
      */
 public:
-    virtual double classifyInstance(Instance *instance) const;
+    virtual double classifyInstance(Instance &instance) const;
 
 
     /**
@@ -58,7 +58,7 @@ public:
      *         test instance in each class or the numeric prediction
      * @exception Exception if distribution could not be computed successfully
      */
-    virtual double_array distributionForInstance(Instance *instance) const;
+    virtual double_array distributionForInstance(Instance &instance) const;
 
 
     /**
@@ -128,7 +128,7 @@ public:
      *         batch
      * @throws Exception if a problem occurs.
      */
-    virtual double_2D_array distributionsForInstances(Instances *batch) const;
+    virtual double_2D_array distributionsForInstances(Instances &batch) const;
 };
 
 

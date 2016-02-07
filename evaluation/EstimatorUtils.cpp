@@ -5,9 +5,9 @@
 #include <limits>
 
 
-double EstimatorUtils::findMinDistance(Instances *inst, int attrIndex) {
+double EstimatorUtils::findMinDistance(Instances &inst, const int attrIndex) {
     double min = std::numeric_limits<double>::max();
-    int numInst = inst->numInstances();
+    int numInst = inst.numInstances();
     double diff;
     if (numInst < 2) {
         return min;
@@ -17,14 +17,14 @@ double EstimatorUtils::findMinDistance(Instances *inst, int attrIndex) {
     do {
         begin++;
         if (begin < numInst) {
-            instance = inst->instance(begin);
+            instance = &(inst.instance(begin));
         }
     } while (begin < numInst && instance->isMissing(attrIndex));
 
-    double secondValue = inst->instance(begin)->value(attrIndex);
-    for (int i = begin; i < numInst && !inst->instance(i)->isMissing(attrIndex); i++) {
+    double secondValue = inst.instance(begin).value(attrIndex);
+    for (int i = begin; i < numInst && !inst.instance(i).isMissing(attrIndex); i++) {
         double firstValue = secondValue;
-        secondValue = inst->instance(i)->value(attrIndex);
+        secondValue = inst.instance(i).value(attrIndex);
         if (secondValue != firstValue) {
             diff = secondValue - firstValue;
             if (diff < min && diff > 0.0) {
@@ -35,7 +35,7 @@ double EstimatorUtils::findMinDistance(Instances *inst, int attrIndex) {
     return min;
 }
 
-int EstimatorUtils::getMinMax(Instances *inst, int attrIndex, double_array &minMax) {
+int EstimatorUtils::getMinMax(Instances &inst, const int attrIndex, double_array &minMax) {
     double min = std::numeric_limits<double>::quiet_NaN();;
     double max = std::numeric_limits<double>::quiet_NaN();;
     Instance *instance = nullptr;
@@ -44,11 +44,11 @@ int EstimatorUtils::getMinMax(Instances *inst, int attrIndex, double_array &minM
         throw "Error in Program, privat method getMinMax";
     }
 
-    int i = 0, totInst = inst->numInstances();
+    int i = 0, totInst = inst.numInstances();
     if (totInst != 0)
     {
         do {
-            instance = static_cast<Instance*>(inst->instance(i++));
+            instance = static_cast<Instance*>(&inst.instance(i++));
         } while (instance->isMissing(attrIndex) && i < totInst);
 
         // add values if not  missing
@@ -58,7 +58,7 @@ int EstimatorUtils::getMinMax(Instances *inst, int attrIndex, double_array &minM
             max = instance->value(attrIndex);
         }
         while (i < totInst) {
-            instance = static_cast<Instance*>(inst->instance(i));
+            instance = static_cast<Instance*>(&inst.instance(i));
             if (!instance->isMissing(attrIndex)) {
                 numNotMissing++;
                 if (instance->value(attrIndex) < min) {
@@ -99,28 +99,28 @@ int EstimatorUtils::getMinMax(Instances *inst, int attrIndex, double_array &minM
 //  return dataPlusInfo;
 //}
 
-Instances *EstimatorUtils::getInstancesFromClass(Instances *data, int classIndex, double classValue) {
-    Instances *workData = new Instances(data, 0);
-    for (int i = 0; i < data->numInstances(); i++) {
-        if (data->instance(i)->value(classIndex) == classValue) {
-            workData->add(data->instance(i));
+Instances *EstimatorUtils::getInstancesFromClass(Instances &data, int classIndex, double classValue) {
+    Instances *workData = new Instances(&data, 0);
+    for (int i = 0; i < data.numInstances(); i++) {
+        if (data.instance(i).value(classIndex) == classValue) {
+            workData->add(data.instance(i));
         }
 
     }
     return workData;
 }
 
-Instances *EstimatorUtils::getInstancesFromValue(Instances *data, int index, double v) {
-    Instances *workData = new Instances(data, 0);
-    for (int i = 0; i < data->numInstances(); i++) {
-        if (data->instance(i)->value(index) == v) {
-            workData->add(data->instance(i));
+Instances *EstimatorUtils::getInstancesFromValue(Instances &data, const int index, const double v) {
+    Instances *workData = new Instances(&data, 0);
+    for (int i = 0; i < data.numInstances(); i++) {
+        if (data.instance(i).value(index) == v) {
+            workData->add(data.instance(i));
         }
     }
     return workData;
 }
 
-string EstimatorUtils::cutpointsToString(double_array &cutPoints, bool_array &cutAndLeft) {
+string EstimatorUtils::cutpointsToString(const double_array &cutPoints, const bool_array &cutAndLeft) {
     string text = "";
     if (cutPoints.empty()) {
         text.append("\n# no cutpoints found - attribute \n");

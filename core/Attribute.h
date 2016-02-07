@@ -158,7 +158,7 @@ public:
      * @param valIndex the value's index
      * @return the attribute's value as a string
      */
-    string value(int valIndex) const;
+    string value(const int &valIndex) const;
 
     /**
      * Adds a string value to the list of valid strings for attributes
@@ -189,7 +189,7 @@ public:
           ensures  isString() && 0 <= \result && \result < m_Values.size() ||
                  ! isString() && \result == -1;
       */
-    virtual int addStringValue(Attribute *src, int index) const;
+    virtual int addStringValue(const Attribute &src, const int &index) const;
 
     /**
      * Adds an attribute value. Creates a fresh list of attribute
@@ -222,7 +222,7 @@ public:
       */
       //@ requires isNominal() || isString() || isRelationValued();
       //@ requires 0 <= index && index < m_Values.size();
-    void Delete(int index);
+    void Delete(const int &index);
 
     /**
      * Adds an attribute value.
@@ -241,7 +241,7 @@ public:
      //@ requires 0 <= index;
      //@ assignable m_Index;
      //@ ensures m_Index == index;
-    void setIndex(int index);
+    void setIndex(const int index);
 
     /**
      * Sets a value of a nominal attribute or string attribute.
@@ -255,7 +255,7 @@ public:
      //@ requires string != null;
      //@ requires isNominal() || isString();
      //@ requires 0 <= index && index < m_Values.size();
-    void setValue(int index, const string &string);
+    void setValue(const int index, const string &string);
 
     /**
       * Returns the attribute's weight.
@@ -269,7 +269,7 @@ public:
      *
      * @param value    the new weight
      */
-    void setWeight(double value);
+    void setWeight(const double value);
 
 };
 

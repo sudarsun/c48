@@ -25,7 +25,7 @@ public:
      * @param attrIndex index of the attribute, they are sorted after
      * @return the minimal distance
      */
-    static double findMinDistance(Instances *inst, int attrIndex);
+    static double findMinDistance(Instances &inst, const int attrIndex);
 
     /**
      * Find the minimum and the maximum of the attribute and return it in
@@ -36,7 +36,7 @@ public:
      * @return number of not missing values
      * @exception Exception if parameter minMax wasn't initialized properly
      */
-    static int getMinMax(Instances *inst, int attrIndex, double_array &minMax);
+    static int getMinMax(Instances &inst, const int attrIndex, double_array &minMax);
 
     /**
      * Returns a dataset that contains all instances of a certain class value.
@@ -57,7 +57,7 @@ public:
     * @param classValue the class value
     * @return a dataset with only instances of one class value
     */
-    static Instances *getInstancesFromClass(Instances *data, int classIndex, double classValue);
+    static Instances *getInstancesFromClass(Instances &data, const int classIndex, const double classValue);
 
     /**
      * Returns a dataset that contains of all instances of a certain value
@@ -67,13 +67,13 @@ public:
      * @param v the value
      * @return a subdataset with only instances of one value for the attribute
      */
-    static Instances *getInstancesFromValue(Instances *data, int index, double v);
+    static Instances *getInstancesFromValue(Instances &data, const int index, const double v);
 
 
     /**
      * Returns a string representing the cutpoints
      */
-    static string cutpointsToString(double_array &cutPoints, bool_array &cutAndLeft);
+    static string cutpointsToString(const double_array &cutPoints, const bool_array &cutAndLeft);
 };
 
 

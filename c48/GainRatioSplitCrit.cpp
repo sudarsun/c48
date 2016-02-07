@@ -3,7 +3,7 @@
 //#include "core/ContingencyTables.h"
 #include "core/Utils.h"
 
-double GainRatioSplitCrit::splitCritValue(Distribution *bags) const {
+double GainRatioSplitCrit::splitCritValue(Distribution &bags) const {
 
     double numerator;
     double denumerator;
@@ -27,7 +27,7 @@ double GainRatioSplitCrit::splitCritValue(Distribution *bags) const {
     return denumerator / numerator;
 }
 
-double GainRatioSplitCrit::splitCritValue(Distribution *bags, double totalnoInst, double numerator) const {
+double GainRatioSplitCrit::splitCritValue(Distribution &bags, double totalnoInst, double numerator) const {
 
     double denumerator;
     // Compute split info.
@@ -42,16 +42,16 @@ double GainRatioSplitCrit::splitCritValue(Distribution *bags, double totalnoInst
     return numerator / denumerator;
 }
 
-double GainRatioSplitCrit::splitEnt(Distribution *bags, double totalnoInst) const {
+double GainRatioSplitCrit::splitEnt(Distribution &bags, double totalnoInst) const {
 
     double returnValue = 0;
     double noUnknown;
     int i;
 
-    noUnknown = totalnoInst - bags->total();
-    if (Utils::gr(bags->total(), 0)) {
-        for (i = 0; i < bags->numBags(); i++) {
-            returnValue = returnValue - lnFunc(bags->perBag(i));
+    noUnknown = totalnoInst - bags.total();
+    if (Utils::gr(bags.total(), 0)) {
+        for (i = 0; i < bags.numBags(); i++) {
+            returnValue = returnValue - lnFunc(bags.perBag(i));
         }
         returnValue = returnValue - lnFunc(noUnknown);
         returnValue = returnValue + lnFunc(totalnoInst);

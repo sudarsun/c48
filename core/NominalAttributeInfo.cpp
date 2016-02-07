@@ -26,7 +26,7 @@ NominalAttributeInfo::NominalAttributeInfo(string_array &attributeValues, const 
     }
 }
 
-int NominalAttributeInfo::getAttributeIndex(const string key) const
+int NominalAttributeInfo::getAttributeIndex(const string &key) const
 {
     try
     {
@@ -48,7 +48,7 @@ size_t NominalAttributeInfo::getHashTableSize(void) const
     return mHashtable.size();
 }
 
-void NominalAttributeInfo::setAttributeValue(int key, string value)
+void NominalAttributeInfo::setAttributeValue(const int key, const string &value)
 {
     mValues.assign(key, value);
 }
@@ -58,7 +58,7 @@ string NominalAttributeInfo::getAttributeValue(const int key) const
     return mValues[key];
 }
 
-void NominalAttributeInfo::addAttribute(const string key, int index, bool overwriteIndex)
+void NominalAttributeInfo::addAttribute(const string &key, int index, bool overwriteIndex)
 {
     if (overwriteIndex)
         mValues.push_back(key);
@@ -73,7 +73,7 @@ void NominalAttributeInfo::setHashTable(string_hashtable hashtable)
     mHashtable = hashtable;
 }
 
-void NominalAttributeInfo::removeHashTable(string key)
+void NominalAttributeInfo::removeHashTable(const string &key)
 {
     mHashtable.erase(key);
 }

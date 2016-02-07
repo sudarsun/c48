@@ -104,7 +104,7 @@ public:
     * @param classIndex index of the class of interest.
     * @return datapoints as a set of instances.
     */
-    Instances *getCurve(std::vector<Prediction*> predictions, int classIndex);
+    Instances *getCurve(std::vector<Prediction*> predictions, const int classIndex);
 
     /**
      * Calculates the n point precision result, which is the precision averaged
@@ -114,7 +114,7 @@ public:
      * @param n the number of points to average over.
      * @return the n-point precision.
      */
-    static double getNPointPrecision(Instances *tcurve, const int n);
+    static double getNPointPrecision(Instances &tcurve, const int n);
 
     /**
      * Calculates the area under the ROC curve as the Wilcoxon-Mann-Whitney
@@ -124,7 +124,7 @@ public:
      * @return the ROC area, or Double.NaN if you don't pass in a ThresholdCurve
      *         generated Instances.
      */
-    static double getROCArea(Instances *tcurve);
+    static double getROCArea(Instances &tcurve);
 
     /**
     * Gets the index of the instance with the closest threshold value to the
@@ -136,7 +136,7 @@ public:
     *         or -1 if this could not be found (i.e. no data, or bad threshold
     *         target)
     */
-    static int getThresholdInstance(Instances *tcurve, const double threshold);
+    static int getThresholdInstance(Instances &tcurve, const double threshold);
 
 private:
     /**

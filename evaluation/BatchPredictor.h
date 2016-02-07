@@ -42,7 +42,7 @@ public:
      *
      * @exception Exception if a problem occurs
      */
-    virtual double_2D_array distributionsForInstances(Instances *insts) const = 0;
+    virtual double_2D_array distributionsForInstances(Instances &insts) const = 0;
 
     /**
      * Returns true if this BatchPredictor can generate batch predictions

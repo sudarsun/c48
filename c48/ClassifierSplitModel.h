@@ -42,21 +42,21 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    double classifyInstance(Instance *instance) const;
+    double classifyInstance(Instance &instance) const;
 
     /**
      * Gets class probability for instance.
      *
      * @exception Exception if something goes wrong
      */
-    virtual double classProb(const int classIndex, Instance *instance, const int theSubset) const;
+    virtual double classProb(const int classIndex, Instance &instance, const int theSubset) const;
 
     /**
      * Gets class probability for instance.
      *
      * @exception Exception if something goes wrong
      */
-    virtual double classProbLaplace(const int classIndex, Instance *instance, const int theSubset) const;
+    virtual double classProbLaplace(const int classIndex, Instance &instance, const int theSubset) const;
 
     /**
      * Returns coding costs of model. Returns 0 if not overwritten.
@@ -68,26 +68,26 @@ public:
      *
      * @param data the data.
      */
-    virtual string leftSide(Instances *data) const = 0;
+    virtual string leftSide(Instances &data) const = 0;
 
     /**
      * Prints left side of condition satisfied by instances in subset index.
      */
-    virtual string rightSide(const int index, Instances *data) const = 0;
+    virtual string rightSide(const int index, Instances &data) const = 0;
 
     /**
      * Prints label for subset index of instances (eg class).
      *
      * @exception Exception if something goes wrong
      */
-    string dumpLabel(const int index, Instances *data) const;
+    string dumpLabel(const int index, Instances &data) const;
 
     /**
      * Prints the split model.
      *
      * @exception Exception if something goes wrong
      */
-    string dumpModel(Instances *data) const;
+    string dumpModel(Instances &data) const;
 
     /*
      * Returns the number of created subsets for the split.
@@ -98,20 +98,20 @@ public:
     /**
      * Returns the number of created subsets for the split.
      */
-    virtual void resetDistribution(Instances *data);
+    virtual void resetDistribution(Instances &data);
 
     /**
      * Splits the given set of instances into subsets.
      *
      * @exception Exception if something goes wrong
      */
-    std::vector<Instances*> split(Instances *data) const;
+    std::vector<Instances*> split(Instances &data) const;
 
     /**
      * Returns weights if instance is assigned to more than one subset.
      * Returns null if instance is only assigned to one subset.
      */
-    virtual double_array weights(Instance *instance) const = 0;
+    virtual double_array weights(Instance &instance) const = 0;
 
     /**
      * Returns index of subset instance is assigned to.
@@ -119,7 +119,7 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    virtual const int whichSubset(Instance *instance) const = 0;
+    virtual const int whichSubset(Instance &instance) const = 0;
 
     /**
      * Get the distribution opbject
@@ -129,7 +129,7 @@ public:
     /**
     * Set the distribution object
     */
-    void setDistribution(Distribution*);
+    void setDistribution(Distribution* dist);
 };
 
 #endif    // _CLASSIFIERSPLITMODEL_

@@ -12,7 +12,7 @@ void Estimator::addValue(double data, double weight) {
     }
 }
 
-void Estimator::addValues(Instances *data, int attrIndex) {
+void Estimator::addValues(Instances &data, const int attrIndex) {
     double_array minMax(2);
 
     try {
@@ -29,18 +29,18 @@ void Estimator::addValues(Instances *data, int attrIndex) {
     addValues(data, attrIndex, min, max, 1.0);
 }
 
-void Estimator::addValues(Instances *data, const int attrIndex, const double min, const double max, const double factor) {
+void Estimator::addValues(Instances &data, const int attrIndex, const double min, const double max, const double factor) {
     // no handling of factor, would have to be overridden
 
     // no handling of min and max, would have to be overridden
 
-    int numInst = data->numInstances();
+    int numInst = data.numInstances();
     for (int i = 1; i < numInst; i++) {
-        addValue(data->instance(i)->value(attrIndex), 1.0);
+        addValue(data.instance(i).value(attrIndex), 1.0);
     }
 }
 
-void Estimator::addValues(Instances *data, const int attrIndex, const int classIndex, const int classValue) {
+void Estimator::addValues(Instances &data, const int attrIndex, const int classIndex, const int classValue) {
     // can estimator handle the data?
     mNoClass = false;
 
@@ -59,8 +59,8 @@ void Estimator::addValues(Instances *data, const int attrIndex, const int classI
     double max = minMax[1];
 
     // extract the instances with the given class value
-    Instances *workData = new Instances(data, 0);
-    double factor = getInstancesFromClass(data, attrIndex, classIndex, static_cast<double>(classValue), workData);
+    Instances *workData = new Instances(&data, 0);
+    double factor = getInstancesFromClass(data, attrIndex, classIndex, static_cast<double>(classValue), *workData);
 
     // if no data return
     if (workData->numInstances() == 0) {
@@ -70,11 +70,11 @@ void Estimator::addValues(Instances *data, const int attrIndex, const int classI
     addValues(data, attrIndex, min, max, factor);
 }
 
-void Estimator::addValues(Instances *data, const int attrIndex, const int classIndex, const int classValue, const double min, const double max) {
+void Estimator::addValues(Instances &data, const int attrIndex, const int classIndex, const int classValue, const double min, const double max) {
 
     // extract the instances with the given class value
-    Instances *workData = new Instances(data, 0);
-    double factor = getInstancesFromClass(data, attrIndex, classIndex, static_cast<double>(classValue), workData);
+    Instances *workData = new Instances(&data, 0);
+    double factor = getInstancesFromClass(data, attrIndex, classIndex, static_cast<double>(classValue), *workData);
 
     // if no data return
     if (workData->numInstances() == 0) {
@@ -84,15 +84,15 @@ void Estimator::addValues(Instances *data, const int attrIndex, const int classI
     addValues(data, attrIndex, min, max, factor);
 }
 
-double Estimator::getInstancesFromClass(Instances *data, const int attrIndex, const int classIndex, const double classValue, Instances *workData) {
+double Estimator::getInstancesFromClass(Instances &data, const int attrIndex, const int classIndex, const double classValue, Instances &workData) {
 
     int num = 0;
     int numClassValue = 0;
-    for (int i = 0; i < data->numInstances(); i++) {
-        if (!data->instance(i)->isMissing(attrIndex)) {
+    for (int i = 0; i < data.numInstances(); i++) {
+        if (!data.instance(i).isMissing(attrIndex)) {
             num++;
-            if (data->instance(i)->value(classIndex) == classValue) {
-                workData->add(data->instance(i));
+            if (data.instance(i).value(classIndex) == classValue) {
+                workData.add(data.instance(i));
                 numClassValue++;
             }
         }

@@ -86,7 +86,7 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    double classProb(const int classIndex, Instance *instance, const int theSubset) const;
+    double classProb(const int classIndex, Instance &instance, const int theSubset) const;
 
     /**
      * Returns coding cost for split (used in rule learner).
@@ -108,7 +108,7 @@ public:
      *
      * @param data training set.
      */
-    string leftSide(Instances *data) const override;
+    string leftSide(Instances &data) const override;
 
     /**
      * Prints the condition satisfied by instances in a subset.
@@ -116,7 +116,7 @@ public:
      * @param index of subset
      * @param data training set.
      */
-    string rightSide(const int index, Instances *data) const override;
+    string rightSide(const int index, Instances &data) const override;
 
     /**
      * Sets split point to greatest value in given data smaller or equal to old
@@ -124,7 +124,7 @@ public:
      *
      * @param data training set.
      */
-    void setSplitPoint(Instances *allInstances);
+    void setSplitPoint(Instances &allInstances);
 
     /**
      * Returns the minsAndMaxs of the index.th subset.
@@ -133,18 +133,18 @@ public:
      * @param minsAndMaxs min and max in 2D array.
      * @param index index.
      */
-    double_2D_array minsAndMaxs(Instances *data, const double_2D_array &minsAndMaxs, int index) const;
+    double_2D_array minsAndMaxs(Instances &data, const double_2D_array &minsAndMaxs, int index) const;
 
     /**
      * Sets distribution associated with model.
      */
-    virtual void resetDistribution(Instances *data);
+    virtual void resetDistribution(Instances &data);
 
     /**
      * Returns weights if instance is assigned to more than one subset. Returns
      * null if instance is only assigned to one subset.
      */
-    double_array weights(Instance *instance) const;
+    double_array weights(Instance &instance) const;
 
     /**
      * Returns index of subset instance is assigned to. Returns -1 if instance is
@@ -152,7 +152,7 @@ public:
      *
      * @exception Exception if something goes wrong
      */
-    const int whichSubset(Instance *instance) const;
+    const int whichSubset(Instance &instance) const;
 
 private:
     /**
@@ -160,14 +160,14 @@ private:
      *
      * @exception Exception if something goes wrong
      */
-    void handleEnumeratedAttribute(Instances *trainInstances);
+    void handleEnumeratedAttribute(Instances &trainInstances);
 
     /**
      * Creates split on numeric attribute.
      *
      * @exception Exception if something goes wrong
      */
-    void handleNumericAttribute(Instances *trainInstances);
+    void handleNumericAttribute(Instances &trainInstances);
 
 };
 

@@ -32,22 +32,22 @@ public:
     /**
      * Always returns 0 because only there is only one subset.
      */
-    const int whichSubset(Instance *instance) const override;
+    const int whichSubset(Instance &instance) const override;
 
     /**
      * Always returns null because there is only one subset.
      */
-    double_array weights(Instance *instance) const override;
+    double_array weights(Instance &instance) const override;
 
     /**
      * Does nothing because no condition has to be satisfied.
      */
-    string leftSide(Instances *instances) const override;
+    string leftSide(Instances &instances) const override;
 
     /**
      * Does nothing because no condition has to be satisfied.
      */
-    string rightSide(const int index, Instances *instances) const override;
+    string rightSide(const int index, Instances &instances) const override;
 
     /**
      * Returns a string containing java source code equivalent to the test
@@ -57,7 +57,7 @@ public:
      * @param data the data containing instance structure info
      * @return a value of type 'String'
      */
-    string sourceExpression(const int index, Instances *data);
+    string sourceExpression(const int index, Instances &data);
 
 };
 

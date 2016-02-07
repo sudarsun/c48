@@ -74,7 +74,7 @@ Instances *DataSource::getStructure()
     return mStructure;
 }
 
-Instances *DataSource::getStructure(int classIndex)
+Instances *DataSource::getStructure(const int &classIndex)
 {
     Instances *result;
     result = getStructure();
@@ -232,7 +232,7 @@ string DataSource::removeTrailingPeriod(string &val) const
     return val;
 }
 
-Instance *DataSource::getInstance(string inData) const
+Instance *DataSource::getInstance(const string &inData) const
 {
     double_array instance = double_array(mStructure->numAttributes());
 
@@ -252,16 +252,16 @@ Instance *DataSource::getInstance(string inData) const
             }
             else
             {
-                if (mStructure->attribute(counter)->isNominal())
+                if (mStructure->attribute(counter).isNominal())
                 {
-                    int index = mStructure->attribute(counter)->indexOfValue(value);
+                    int index = mStructure->attribute(counter).indexOfValue(value);
                     if (index == -1)
                     {
                         throw string("nominal value not declared in header :") + value + string(" column ") + std::to_string(i);
                     }
                     instance[counter++] = index;
                 }
-                else if (mStructure->attribute(counter)->isNumeric())
+                else if (mStructure->attribute(counter).isNumeric())
                 {
                     instance[counter++] = std::stod(value);
 
@@ -311,7 +311,7 @@ Instances *DataSource::getInstance(std::fstream& inDataStream) const
         {
             continue;
         }
-        result->add(getInstance(line));
+        result->add(*getInstance(line));
     }
     return result;
 }

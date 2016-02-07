@@ -25,7 +25,7 @@ C48::~C48()
         delete mRoot;
 }
 
-void C48::buildClassifier(Instances *instances)
+void C48::buildClassifier(Instances &instances)
 {
 
     ModelSelection *modSelection = nullptr;
@@ -40,12 +40,12 @@ void C48::buildClassifier(Instances *instances)
     mRoot->buildClassifier(instances);
 }
 
-double C48::classifyInstance(Instance *instance) const
+double C48::classifyInstance(Instance &instance) const
 {
     return mRoot->classifyInstance(instance);
 }
 
-double_array C48::distributionForInstance(Instance *instance) const
+double_array C48::distributionForInstance(Instance &instance) const
 {
     return mRoot->distributionForInstance(instance, mUseLaplace);
 }
@@ -204,12 +204,12 @@ void C48::setDoNotMakeSplitPointActualValue(bool mDoNotMakeSplitPointActualValue
     this->mDoNotMakeSplitPointActualValue = mDoNotMakeSplitPointActualValue;
 }
 
-void C48::generatePartition(Instances *data)
+void C48::generatePartition(Instances &data)
 {
     buildClassifier(data);
 }
 
-double_array C48::getMembershipValues(Instance *inst) const
+double_array C48::getMembershipValues(Instance &inst) const
 {
     return mRoot->getMembershipValues(inst);
 }
