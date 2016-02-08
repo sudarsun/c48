@@ -136,7 +136,7 @@ ClassifierTree *C45PruneableClassifierTree::getNewTree(Instances &data) const
 {
 
     C45PruneableClassifierTree *newTree = new C45PruneableClassifierTree(mToSelectModel, mPruneTheTree, mCF, mSubtreeRaising, mCleanup, mCollapseTheTree);
-    newTree->buildTree(static_cast<Instances>(data), mSubtreeRaising || !mCleanup);
+    newTree->buildTree(data, mSubtreeRaising || !mCleanup);
 
     return newTree;
 }
