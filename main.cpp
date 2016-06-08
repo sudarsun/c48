@@ -9,47 +9,53 @@
 #include <ctime>
 #include <string.h>
 
-void classify(char *trainFile, char *testFile, bool isDumpTree = false);
+void classify(C48 &, char *, char *, bool isDumpTree = false);
 
 int main( int argc, char *argv[]  )
 {
     char *trainFile = nullptr, *testFile = nullptr;
     bool isDumpTree;
-
-    if (argc < 4)
+    C48 *classifier = new C48();
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-train") == 0) {
+            // We know the next argument *should* be the filename:
+            trainFile = argv[i++];
+        }
+        else if (strcmp(argv[i], "-test") == 0) {
+            testFile = argv[i++];
+        }
+        else if (strcmp(argv[i], "-D") == 0) {
+            isDumpTree = true;
+        }
+    }
+    // Assign Command line 
+    if (!classifier->setParameters(argc, argv))
     {
         std::cout << "C++ 4.8 Decision Tree Tool" << std::endl;
-        std::cout << "-train <training data> - fileStem.names|fileStem.data" << std::endl;
-        std::cout << "-test <testing data> - fileStem.test (optional)" << std::endl;
-        std::cout << "-display <0|1> - dump tree structure for classification" << std::endl;
-        std::cout << "Example: " << argv[0] << " -train sample.names -display 0" << std::endl;
-        std::cout << "Example: " << argv[0] << " -train sample.data -test sample.test -display 1" << std::endl;
+        std::cout << argv[0] << " <source> <flag> <options> " << std::endl;
+        std::cout << "  SOURCE:" << std::endl;
+        std::cout << "\t-train <training data> - fileStem.names|fileStem.data" << std::endl;
+        std::cout << "\t-test <testing data> - fileStem.test (optional)" << std::endl;
+        std::cout << "  FLAG:" << std::endl;
+        std::cout << "\t-D - To dump tree structure for classification" << std::endl;
+        std::cout << "\t-U - To use unpruned tree" << std::endl;
+        std::cout << "\t-R - To use reduced error pruning" << std::endl;
+        std::cout << "\t-S - Don't perform subtree raising" << std::endl;
+        std::cout << "\t-L - Do not clean up after the tree has been built" << std::endl;
+        std::cout << "\t-A - Laplace smoothing for predicted probabilities" << std::endl;
+        std::cout << "  OPTIONS:" << std::endl;
+        std::cout << "\t-C <pruning confidence> - Set confidence threshold for pruning" << std::endl;
+        std::cout << "\t-M <minimum number of instances> - Set minimum number of instances per leaf" << std::endl;
+        std::cout << "\t-N <number of folds> - Set number of folds for reduced error pruning. One fold is used as pruning set (default 3)" << std::endl;
         std::cout << std::endl;
         exit(0);
     }
-    else
-    {
-        for (int i = 1; i < argc; i++) {
-            if (strcmp(argv[i],"-train") == 0) {
-                // We know the next argument *should* be the filename:
-                trainFile = argv[i + 1];
-            }
-            else if (strcmp(argv[i],"-test") == 0) {
-                testFile = argv[i + 1];
-            }
-            else if (strcmp(argv[i], "-display") == 0) {
-                isDumpTree = atoi(argv[i + 1]) == 0 ? false : true;;
-            }
-            else {
-            }
-        }
-    }
-
-    classify(trainFile, testFile, isDumpTree);
+    exit(0);
+    classify(*classifier, trainFile, testFile, isDumpTree);
     return 0;
 }
 
-void classify(char *trainFile, char *testFile, bool isDumpTree)
+void classify(C48 &classifier, char *trainFile, char *testFile, bool isDumpTree)
 {
     time_t startTime, TimeElapsed;
     
@@ -76,12 +82,12 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
         << " seconds"
         << std::endl << std::endl;
     std::cout << "Test mode : evaluate on training data" << std::endl;
-    C48 *classifier = new C48();
+    //C48 *classifier = new C48();
     time(&startTime);
-    classifier->buildClassifier(*instTrain);
+    classifier.buildClassifier(*instTrain);
     time(&TimeElapsed);
     std::cout << "=== Classifier model (full training set) ===" << std::endl << std::endl;
-    std::cout << classifier->toString(isDumpTree) << std::endl;
+    std::cout << classifier.toString(isDumpTree) << std::endl;
     std::cout << "\nTime taken to build model : "
          << difftime(TimeElapsed, startTime)
          << " seconds\n\n";
@@ -100,7 +106,7 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
         for (int i = 0; i < totalInst; i++)
         {
             Instance &instance = instTest->instance(i);
-            eval->evaluateModelOnceAndRecordPrediction(*classifier, instance);
+            eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
         }
     }
     else
@@ -109,7 +115,7 @@ void classify(char *trainFile, char *testFile, bool isDumpTree)
         for (int i = 0; i < totalInst; i++)
         {
             Instance &instance = instTrain->instance(i);
-            eval->evaluateModelOnceAndRecordPrediction(*classifier, instance);
+            eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
         }
     }
 

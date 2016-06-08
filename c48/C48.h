@@ -301,6 +301,8 @@ public:
      * Returns the number of elements in the partition.
      */
     virtual int numElements() const;
+
+    bool setParameters(const int, char **inParameters);
 };
 
 #endif    //#ifndef _J48_
