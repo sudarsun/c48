@@ -15,21 +15,29 @@ int main( int argc, char *argv[]  )
 {
     char *trainFile = nullptr, *testFile = nullptr;
     bool isDumpTree;
+    bool minArg = false;
     C48 *classifier = new C48();
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-train") == 0) {
-            // We know the next argument *should* be the filename:
+            minArg = true;
+            // We know the next argument *should* be the filename
+            if (i+1 < argc)
             trainFile = argv[i++];
+            else
+            minArg = false;
         }
         else if (strcmp(argv[i], "-test") == 0) {
+          if (i+1 < argc)
             testFile = argv[i++];
+          else
+            minArg = false;
         }
         else if (strcmp(argv[i], "-D") == 0) {
             isDumpTree = true;
         }
     }
     // Assign Command line 
-    if (!classifier->setParameters(argc, argv))
+    if (!classifier->setParameters(argc, argv) || !minArg)
     {
         std::cout << "C++ 4.8 Decision Tree Tool" << std::endl;
         std::cout << argv[0] << " <source> <flag> <options> " << std::endl;
@@ -44,8 +52,8 @@ int main( int argc, char *argv[]  )
         std::cout << "\t-L - Do not clean up after the tree has been built" << std::endl;
         std::cout << "\t-A - Laplace smoothing for predicted probabilities" << std::endl;
         std::cout << "  OPTIONS:" << std::endl;
-        std::cout << "\t-C <pruning confidence> - Set confidence threshold for pruning" << std::endl;
-        std::cout << "\t-M <minimum number of instances> - Set minimum number of instances per leaf" << std::endl;
+        std::cout << "\t-C <pruning confidence> - Set confidence threshold for pruning (default .25)" << std::endl;
+        std::cout << "\t-M <minimum number of instances> - Set minimum number of instances per leaf (default 2)" << std::endl;
         std::cout << "\t-N <number of folds> - Set number of folds for reduced error pruning. One fold is used as pruning set (default 3)" << std::endl;
         std::cout << std::endl;
         exit(0);
