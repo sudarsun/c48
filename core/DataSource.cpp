@@ -9,17 +9,18 @@
 DataSource::DataSource(const string &location)
 {
     mNumAttribs = 0;
-    FILE *file = fopen(location.c_str(), "r");;
+	string location_ = location;
+    FILE *file = fopen(location.c_str(), "r");
     mStructure = nullptr;
 
-    if (file == nullptr)
-    {
-        throw  "Source file is not found";
-    }
-
-    string fname = location.substr(location.find_last_of("/\\") + 1, location.length());
+	if (file == nullptr)
+	{
+		std::cout << "Source file is not found:" << location  << std::endl;
+		throw -1;
+	}
+    string fname = location_.substr(location_.find_last_of("/\\") + 1, location_.length());
     string fileStem;
-    string path = location.substr(0, location.find_last_of("/\\"));
+    string path = location_.substr(0, location_.find_last_of("/\\"));
 
     if (fname.find('.') < 0)
     {

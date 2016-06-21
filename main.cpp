@@ -64,71 +64,82 @@ int main( int argc, char *argv[]  )
 
 void classify(C48 &classifier, char *trainFile, char *testFile, bool isDumpTree)
 {
-    time_t startTime, TimeElapsed;
-    
-    string trainFilePpath(trainFile);
+	try
+	{
+		time_t startTime, TimeElapsed;
 
-    // Set data source
-    DataSource trainSource(trainFilePpath);
-    Instances *instTrain = nullptr;
-    time(&startTime);
-    instTrain = trainSource.getDataSet(); // Read data from *.data file
-    time(&TimeElapsed);
+		string trainFilePpath(trainFile);
 
-    int num = instTrain->numAttributes(); // Get total number of attributes
-    int totalInst = instTrain->numInstances();
-    std::cout << "Schema:       " << "C++ 4.8 Decision Tree Implementation" << std::endl;
-    std::cout << "Relation:     " << instTrain->getRelationName() << std::endl;
-    std::cout << "Instances:    " << totalInst << std::endl;
-    std::cout << "Attributes:   " << std::endl;
-    for (int i = 0; i<num; i++)
-        std::cout << "              " << instTrain->attribute(i).name() << std::endl;
+		// Set data source
+		DataSource trainSource(trainFilePpath);
+		Instances *instTrain = nullptr;
+		time(&startTime);
+		instTrain = trainSource.getDataSet(); // Read data from *.data file
+		time(&TimeElapsed);
 
-    std::cout << "\nTime taken to read data : "
-        << difftime(TimeElapsed, startTime)
-        << " seconds"
-        << std::endl << std::endl;
-    std::cout << "Test mode : evaluate on training data" << std::endl;
-    //C48 *classifier = new C48();
-    time(&startTime);
-    classifier.buildClassifier(*instTrain);
-    time(&TimeElapsed);
-    std::cout << "=== Classifier model (full training set) ===" << std::endl << std::endl;
-    std::cout << classifier.toString(isDumpTree) << std::endl;
-    std::cout << "\nTime taken to build model : "
-         << difftime(TimeElapsed, startTime)
-         << " seconds\n\n";
-    Evaluation *eval = nullptr;
-    CostMatrix *costMatrix = nullptr;
-    eval = new Evaluation(*instTrain, costMatrix);
+		int num = instTrain->numAttributes(); // Get total number of attributes
+		int totalInst = instTrain->numInstances();
+		std::cout << "Schema:       " << "C++ 4.8 Decision Tree Implementation" << std::endl;
+		std::cout << "Relation:     " << instTrain->getRelationName() << std::endl;
+		std::cout << "Instances:    " << totalInst << std::endl;
+		std::cout << "Attributes:   " << std::endl;
+		for (int i = 0; i < num; i++)
+			std::cout << "              " << instTrain->attribute(i).name() << std::endl;
 
-    if (testFile != nullptr)
-    {
-        string testFilePath(testFile);
-        DataSource testSource(testFilePath);
-        Instances *instTest = nullptr;
-        instTest = testSource.getDataSet(); // Read data from *.test file
+		std::cout << "\nTime taken to read data : "
+			<< difftime(TimeElapsed, startTime)
+			<< " seconds"
+			<< std::endl << std::endl;
+		std::cout << "Test mode : evaluate on training data" << std::endl;
+		//C48 *classifier = new C48();
+		time(&startTime);
+		classifier.buildClassifier(*instTrain);
+		time(&TimeElapsed);
+		std::cout << "=== Classifier model (full training set) ===" << std::endl << std::endl;
+		std::cout << classifier.toString(isDumpTree) << std::endl;
+		std::cout << "\nTime taken to build model : "
+			<< difftime(TimeElapsed, startTime)
+			<< " seconds\n\n";
+		Evaluation *eval = nullptr;
+		CostMatrix *costMatrix = nullptr;
+		eval = new Evaluation(*instTrain, costMatrix);
 
-        totalInst = instTest->numInstances();
-        for (int i = 0; i < totalInst; i++)
-        {
-            Instance &instance = instTest->instance(i);
-            eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
-        }
-    }
-    else
-    {
-        totalInst = instTrain->numInstances();
-        for (int i = 0; i < totalInst; i++)
-        {
-            Instance &instance = instTrain->instance(i);
-            eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
-        }
-    }
+		if (testFile != nullptr)
+		{
+			string testFilePath(testFile);
+			DataSource testSource(testFilePath);
+			Instances *instTest = nullptr;
+			instTest = testSource.getDataSet(); // Read data from *.test file
 
-    
-    std::cout << " === Evaluation on training set ===" << std::endl;
-    std::cout << eval->toSummaryString(true);
-    std::cout << eval->toClassDetailsString() << std::endl;
-    std::cout << eval->toMatrixString() << std::endl;
+			totalInst = instTest->numInstances();
+			for (int i = 0; i < totalInst; i++)
+			{
+				Instance &instance = instTest->instance(i);
+				eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
+			}
+		}
+		else
+		{
+			totalInst = instTrain->numInstances();
+			for (int i = 0; i < totalInst; i++)
+			{
+				Instance &instance = instTrain->instance(i);
+				eval->evaluateModelOnceAndRecordPrediction(classifier, instance);
+			}
+		}
+
+
+		std::cout << " === Evaluation on training set ===" << std::endl;
+		std::cout << eval->toSummaryString(true);
+		std::cout << eval->toClassDetailsString() << std::endl;
+		std::cout << eval->toMatrixString() << std::endl;
+	}
+	catch (int ex)
+	{
+		;
+	}
+	catch (std::exception ex)
+	{
+		std::cout << ex.what() << std::endl;
+	}
 }
