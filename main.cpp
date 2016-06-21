@@ -14,7 +14,7 @@ void classify(C48 &, char *, char *, bool isDumpTree = false);
 int main( int argc, char *argv[]  )
 {
     char *trainFile = nullptr, *testFile = nullptr;
-    bool isDumpTree;
+    bool isDumpTree = false;
     bool minArg = false;
     C48 *classifier = new C48();
     for (int i = 1; i < argc; i++) {
@@ -22,13 +22,13 @@ int main( int argc, char *argv[]  )
             minArg = true;
             // We know the next argument *should* be the filename
             if (i+1 < argc)
-            trainFile = argv[i++];
+            trainFile = argv[++i];
             else
             minArg = false;
         }
         else if (strcmp(argv[i], "-test") == 0) {
           if (i+1 < argc)
-            testFile = argv[i++];
+            testFile = argv[++i];
           else
             minArg = false;
         }
@@ -45,7 +45,7 @@ int main( int argc, char *argv[]  )
         std::cout << "\t-train <training data> - fileStem.names|fileStem.data" << std::endl;
         std::cout << "\t-test <testing data> - fileStem.test (optional)" << std::endl;
         std::cout << "  FLAG:" << std::endl;
-        std::cout << "\t-D - To dump tree structure for classification" << std::endl;
+		std::cout << "\t-D - To dump tree structure for classification" << std::endl << std::endl;;
         std::cout << "\t-U - To use unpruned tree" << std::endl;
         std::cout << "\t-R - To use reduced error pruning" << std::endl;
         std::cout << "\t-S - Don't perform subtree raising" << std::endl;
@@ -58,7 +58,6 @@ int main( int argc, char *argv[]  )
         std::cout << std::endl;
         exit(0);
     }
-    exit(0);
     classify(*classifier, trainFile, testFile, isDumpTree);
     return 0;
 }

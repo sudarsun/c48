@@ -58,19 +58,19 @@ bool C48::setParameters(const int argc, char **inParameters)
             }
             else if (strcmp(inParameters[i], "-C") == 0) {
                 if (i + 1 < argc && inParameters[i + 1][0] != '-')
-                    mCF = atof(inParameters[i++]);
+                    mCF = atof(inParameters[++i]);
                 else
                     isOkay = false;
             }
             else if (strcmp(inParameters[i], "-N") == 0) {
                 if (i + 1 < argc && inParameters[i + 1][0] != '-')
-                    mNumFolds = atoi(inParameters[i++]);
+                    mNumFolds = atoi(inParameters[++i]);
                 else
                     isOkay = false;
             }
             else if (strcmp(inParameters[i], "-M") == 0) {
                 if (i + 1 < argc && inParameters[i + 1][0] != '-')
-                    mMinNumObj = atoi(inParameters[i++]);
+                    mMinNumObj = atoi(inParameters[++i]);
                 else
                     isOkay = false;
             }

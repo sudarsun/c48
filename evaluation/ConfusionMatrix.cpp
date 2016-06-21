@@ -4,7 +4,7 @@
 #include "core/Utils.h"
 
 ConfusionMatrix::ConfusionMatrix(string_array classNames) :
-    Matrix::Matrix((int)classNames.size(), (int)classNames.size()) {
+    Matrix((int)classNames.size(), (int)classNames.size()) {
     mClassNames = classNames;
 
 }
