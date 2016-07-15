@@ -159,4 +159,7 @@ ClassifierSplitModel *C45ModelSelection::selectModel(Instances &train, Instances
     return selectModel(train);
 }
 
-
+void C45ModelSelection::serialize(std::ostream &os)
+{
+	os << mUseMDLcorrection << '\0' << mDoNotMakeSplitPointActualValue << '\0' << mMinNoObj << '\0';
+}

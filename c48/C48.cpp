@@ -34,9 +34,10 @@ void C48::buildClassifier(Instances &instances)
     
     modSelection = new C45ModelSelection(mMinNumObj, instances, mUseMDLcorrection, mDoNotMakeSplitPointActualValue);
 
-    if (!mReducedErrorPruning)
+    if (!mReducedErrorPruning) 
     {
-        mRoot = new C45PruneableClassifierTree(modSelection, !mUnpruned, mCF, mSubtreeRaising, !mNoCleanup, mCollapseTree);
+		//mRoot = std::make_unique<C45PruneableClassifierTree>(modSelection, !mUnpruned, mCF, mSubtreeRaising, !mNoCleanup, mCollapseTree);
+		mRoot = new C45PruneableClassifierTree(modSelection, !mUnpruned, mCF, mSubtreeRaising, !mNoCleanup, mCollapseTree);
     }
 
     mRoot->buildClassifier(instances);
@@ -58,7 +59,7 @@ bool C48::setParameters(const int argc, char **inParameters)
             }
             else if (strcmp(inParameters[i], "-C") == 0) {
                 if (i + 1 < argc && inParameters[i + 1][0] != '-')
-                    mCF = atof(inParameters[++i]);
+                    mCF = (float) atof(inParameters[++i]);
                 else
                     isOkay = false;
             }
@@ -76,7 +77,7 @@ bool C48::setParameters(const int argc, char **inParameters)
             }
             else if (inParameters[i][0] == '-')
             {
-                int length = strlen(inParameters[i]);
+                int length = (int)strlen(inParameters[i]);
                 for (int j = 1; j < length; j++) {
                     if (inParameters[i][j] == 'A') {
                         mUseLaplace = true;
@@ -117,7 +118,7 @@ double C48::classifyInstance(Instance &instance) const
 
 double_array C48::distributionForInstance(Instance &instance) const
 {
-    return mRoot->distributionForInstance(instance, mUseLaplace);
+	return mRoot->distributionForInstance(instance, mUseLaplace);
 }
 
 bool C48::getUseLaplace() const
@@ -142,7 +143,7 @@ void C48::setUseMDLcorrection(bool newuseMDLcorrection)
 
 string C48::toString(bool isDumpTree) const
 {
-    if (mRoot == nullptr)
+	if (mRoot == nullptr)
     {
         return "No classifier built";
     }
@@ -163,17 +164,17 @@ string C48::toSummaryString() const
 
 double C48::measureTreeSize() const
 {
-    return mRoot->numNodes();
+	return mRoot->numNodes();
 }
 
 double C48::measureNumLeaves() const
 {
-    return mRoot->numLeaves();
+	return mRoot->numLeaves();
 }
 
 double C48::measureNumRules() const
 {
-    return mRoot->numLeaves();
+	return mRoot->numLeaves();
 }
 
 bool C48::getUnpruned() const
@@ -281,10 +282,11 @@ void C48::generatePartition(Instances &data)
 
 double_array C48::getMembershipValues(Instance &inst) const
 {
-    return mRoot->getMembershipValues(inst);
+	return mRoot->getMembershipValues(inst);
 }
 
 int C48::numElements() const
 {
-    return mRoot->numNodes();
+	return mRoot->numNodes();
 }
+

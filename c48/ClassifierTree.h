@@ -176,6 +176,8 @@ public:
      */
     virtual double_array getMembershipValues(Instance &instance);
 
+	virtual void serialize(std::ostream &os);
+
 private:
     /**
      * For getting a unique ID when outputting the tree (hashcode isn't guaranteed

@@ -62,6 +62,7 @@ public:
      */
     virtual ClassifierSplitModel *selectModel(Instances &train, Instances &test) const override;
 
+	virtual void serialize(std::ostream &os);
 };
 
 #endif    //#ifndef _C45MODELSELECTION_

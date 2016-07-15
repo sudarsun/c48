@@ -2,11 +2,14 @@
 #define _C48_
 
 #include "AbstractClassifier.h"
+#include "C45PruneableClassifierTree.h"
+#include "ClassifierTree.h"
 #include "core/Instance.h"
 #include "core/Instances.h"
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <memory>
 
 class ClassifierTree;
 class ModelSelection;
@@ -24,7 +27,8 @@ class C48 : public AbstractClassifier
 protected:
 
     /** The decision tree */
-    ClassifierTree *mRoot;
+	//std::unique_ptr<ClassifierTree> mRoot;
+	ClassifierTree *mRoot;
 
     /** Unpruned tree? */
     bool mUnpruned;
@@ -303,6 +307,13 @@ public:
     virtual int numElements() const;
 
     bool setParameters(const int, char **inParameters);
+	friend std::ostream & operator << (std::ostream &os, const C48 &c48)
+	{
+		c48.mRoot->serialize(os);
+		return os << '\0' << c48.mUnpruned << '\0' << c48.mCollapseTree << '\0' << c48.mCF << '\0' << c48.mMinNumObj << '\0'
+			<< c48.mUseMDLcorrection << '\0' << c48.mUseLaplace << '\0' << c48.mReducedErrorPruning << '\0'
+			<< c48.mNumFolds << '\0' << c48.mSubtreeRaising << '\0' << c48.mNoCleanup << '\0' << c48.mDoNotMakeSplitPointActualValue << '\0';
+	}
 };
 
 #endif    //#ifndef _J48_

@@ -254,6 +254,12 @@ void C45PruneableClassifierTree::newDistribution(Instances &data)
 
 C45PruneableClassifierTree *C45PruneableClassifierTree::son(int index) const
 {
-
     return static_cast<C45PruneableClassifierTree*>(mSons[index]);
+}
+
+void C45PruneableClassifierTree::serialize(std::ostream &os)
+{
+	ClassifierTree::serialize(os);
+	os << mPruneTheTree << '\0' << mCollapseTheTree << '\0' << mSubtreeRaising
+		<< '\0' << mCleanup << '\0' << mCF << '\0';
 }

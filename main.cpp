@@ -133,6 +133,9 @@ void classify(C48 &classifier, char *trainFile, char *testFile, bool isDumpTree)
 		std::cout << eval->toSummaryString(true);
 		std::cout << eval->toClassDetailsString() << std::endl;
 		std::cout << eval->toMatrixString() << std::endl;
+		std::cout << sizeof(classifier) << std::endl;
+		std::ofstream ss("./sample_serialization.model", std::ios::binary);
+		ss << classifier;
 	}
 	catch (int ex)
 	{

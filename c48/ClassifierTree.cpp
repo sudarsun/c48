@@ -368,3 +368,7 @@ double_array ClassifierTree::getMembershipValues(Instance &instance) {
     return a;
 }
 
+void ClassifierTree::serialize(std::ostream &os)
+{
+	os << mIsLeaf << '\0' << mIsEmpty << '\0' << mID << '\0';
+}

@@ -77,6 +77,8 @@ public:
      */
     virtual void prune();
 
+	void serialize(std::ostream &os) override;
+
 private:
     /**
      * Computes estimated errors for tree.
@@ -129,7 +131,6 @@ private:
      * Method just exists to make program easier to read.
      */
     C45PruneableClassifierTree *son(int index) const;
-
 };
 
 #endif    // _C45PRUNEABLECLASSIFIERTREE_
